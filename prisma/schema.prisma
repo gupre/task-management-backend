@@ -1,0 +1,217 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model TimeZone {
+  timezoneId Int @id @default(autoincrement()) @map("timezone_id")
+
+  name   String @unique // Например: "Europe/Moscow"
+  offset Int    @map("timezone_offset") // Смещение в минутах, например: 180 (UTC+3)
+  users  User[]
+
+  @@map("time_zone")
+}
+
+model Department {
+  departmentId Int @id @default(autoincrement()) @map("department_id")
+
+  name String
+
+  users   User[]
+  history History[]
+  Task    Task[]
+
+  @@map("department")
+}
+
+model User {
+  userId Int @id @default(autoincrement()) @map("user_id")
+
+  timezoneId Int      @map("timezone_id")
+  timezone   TimeZone @relation(fields: [timezoneId], references: [timezoneId])
+
+  departmentId Int        @map("department_id")
+  department   Department @relation(fields: [departmentId], references: [departmentId])
+
+  name     String
+  email    String @unique
+  password String
+
+  roleId Int?
+  role   Role? @relation(fields: [roleId], references: [roleId])
+
+  tasks    Task[]
+  history  History[]
+  projects ProjectUser[]
+
+  isAdmin  Boolean @default(false)
+  isActive Boolean @default(false)
+
+  @@index([email])
+  @@map("user")
+}
+
+model Project {
+  projectId Int @id @default(autoincrement()) @map("project_id")
+
+  name        String
+  description String?
+  startDate   DateTime  @map("start_date")
+  endDate     DateTime? @map("end_date")
+
+  status Status
+
+  users   ProjectUser[]
+  tasks   Task[]
+  reports ReportProject[]
+
+  @@map("project")
+}
+
+model ProjectUser {
+  userId Int
+  user   User @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  projectId Int
+  project   Project @relation(fields: [projectId], references: [projectId], onDelete: Cascade)
+
+  @@unique([userId, projectId])
+  @@map("project_user")
+}
+
+model Task {
+  taskId Int @id @default(autoincrement()) @map("task_id")
+
+  projectId Int     @map("project_id")
+  project   Project @relation(fields: [projectId], references: [projectId], onDelete: Cascade)
+
+  userId Int?  @map("user_id")
+  user   User? @relation(fields: [userId], references: [userId], onDelete: SetNull)
+
+  departmentId Int?        @map("department_id")
+  department   Department? @relation(fields: [departmentId], references: [departmentId], onDelete: SetNull)
+
+  name           String
+  description    String?
+  assignmentDate DateTime? @map("assignment_date")
+  hoursSpent     Int?      @map("hours_spent")
+  dueDate        DateTime? @map("due_date")
+  estimatedHours Int?      @map("estimated_hours")
+
+  priority Priority
+  status   Status
+
+  history History[]
+  reports ReportTask[]
+
+  @@index([projectId])
+  @@index([userId])
+  @@index([departmentId])
+  @@map("task")
+}
+
+model Role {
+  roleId Int    @id @default(autoincrement()) @map("role_id")
+  name   String @unique
+
+  users       User[]
+  permissions RolePermissions[]
+
+  @@map("role")
+}
+
+model RolePermissions {
+  roleId Int
+  role   Role @relation(fields: [roleId], references: [roleId], onDelete: Cascade)
+
+  permissionsId Int
+  permission    Permissions @relation(fields: [permissionsId], references: [permissionsId], onDelete: Cascade)
+
+  @@id([roleId, permissionsId]) // Композитный ключ
+  @@map("role_permissions")
+}
+
+model Permissions {
+  permissionsId Int    @id @default(autoincrement()) @map("permissions_id")
+  name          String @unique
+
+  roles RolePermissions[]
+
+  @@map("permissions")
+}
+
+model History {
+  historyId Int @id @default(autoincrement()) @map("history_id")
+
+  taskId Int  @map("task_id")
+  task   Task @relation(fields: [taskId], references: [taskId], onDelete: Cascade)
+
+  userId Int?  @map("user_id")
+  user   User? @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  departmentId Int?        @map("department_id")
+  department   Department? @relation(fields: [departmentId], references: [departmentId])
+
+  comment String?
+
+  @@index([taskId])
+  @@index([userId])
+  @@index([departmentId])
+  @@map("history")
+}
+
+model ReportTask {
+  reportId Int @id @default(autoincrement()) @map("report_id")
+
+  taskId Int  @map("task_id")
+  task   Task @relation(fields: [taskId], references: [taskId], onDelete: Cascade)
+
+  reportProjectId Int           @map("report_project_id")
+  reportProject   ReportProject @relation(fields: [reportProjectId], references: [reportId])
+
+  generatedDate       DateTime @default(now()) @map("generated_date")
+  content             String?
+  performanceAnalysis String?  @map("performance_analysis")
+
+  @@map("report_task")
+}
+
+model ReportProject {
+  reportId Int @id @default(autoincrement()) @map("report_id")
+
+  projectId Int     @map("project_id")
+  project   Project @relation(fields: [projectId], references: [projectId], onDelete: Cascade)
+
+  generatedDate DateTime @default(now()) @map("generated_date")
+
+  content             String?
+  performanceAnalysis String? @map("performance_analysis")
+  completedTasks      Int?    @map("completed_tasks")
+  averageTimePerTask  Float?  @map("average_time_per_task")
+  completionRate      String? @map("completion_rate")
+  teamEfficiency      String? @map("team_efficiency")
+  totalTasks          Int?    @map("total_tasks")
+
+  reports ReportTask[]
+
+  @@map("report_project")
+}
+
+enum Status {
+  planned
+  progress
+  end
+}
+
+enum Priority {
+  urgently
+  high
+  normal
+  low
+}

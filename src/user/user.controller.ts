@@ -1,0 +1,102 @@
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  UsePipes,
+  ValidationPipe
+} from '@nestjs/common'
+import { User } from 'prisma/generated/client'
+import { Auth } from 'src/auth/decorators/auth.decorator'
+import { CurrentUser } from 'src/auth/decorators/user.decorator'
+import { RegistrationDto } from 'src/auth/dto/auth.dto'
+import { Roles } from 'src/role/decorator/roles.decorator'
+import { UserDto } from './user.dto'
+import { UserService } from './user.service'
+
+@Controller('users')
+export class UserController {
+  constructor(private readonly userService: UserService) {}
+
+  @UsePipes(new ValidationPipe())
+  @HttpCode(200)
+  @Auth()
+  @Post()
+  async create(@Body() createUserDto: RegistrationDto): Promise<User> {
+    return this.userService.create(createUserDto)
+  }
+
+  @Get()
+  @Auth()
+  async findAll(): Promise<User[]> {
+    return this.userService.findAll()
+  }
+
+  @UsePipes(new ValidationPipe())
+  @Get(':id')
+  @Auth()
+  async findId(
+    @CurrentUser('userId', ParseIntPipe) id: number
+  ): Promise<User | null> {
+    return this.userService.getById(id)
+  }
+
+  // Получение пользователя по email
+  @UsePipes(new ValidationPipe())
+  @Get('email/:email')
+  @Auth()
+  async getByEmail(@Param('email') email: string): Promise<User | null> {
+    return this.userService.getByEmail(email)
+  }
+
+  @UsePipes(new ValidationPipe())
+  @HttpCode(200)
+  @Patch(':id')
+  @Auth()
+  async update(
+    @CurrentUser('userId', ParseIntPipe) id: number,
+    @Body() updateUserDto: UserDto
+  ): Promise<User> {
+    return this.userService.update(id, updateUserDto)
+  }
+
+  @UsePipes(new ValidationPipe())
+  @HttpCode(200)
+  @Auth()
+  @Delete(':id')
+  remove(@CurrentUser('userId', ParseIntPipe) id: number): Promise<User> {
+    return this.userService.remove(id)
+  }
+
+  @Roles('admin')
+  @Patch(':id/activate')
+  async changeActivateUser(
+    @Param('id') id: number,
+    @Param('status') status: boolean
+  ) {
+    return this.userService.activateUser(id, status)
+  }
+
+  @Patch(':id/department/:departmentId')
+  @Roles('admin')
+  async assignDepartment(
+    @Param('id', ParseIntPipe) userId: number,
+    @Param('departmentId', ParseIntPipe) departmentId: number
+  ) {
+    return this.userService.assignDepartment(userId, departmentId)
+  }
+
+  @Patch(':id/role/:roleId')
+  @Roles('admin')
+  async changeUserRole(
+    @Param('id', ParseIntPipe) userId: number,
+    @Param('roleId', ParseIntPipe) roleId: number
+  ) {
+    return this.userService.changeUserRole(userId, roleId)
+  }
+}
