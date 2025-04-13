@@ -28,7 +28,7 @@ export class AuthService {
       throw new UnauthorizedException('User is not activated')
     }
 
-    const tokens = this.issueTokens(user.userId)
+    const tokens = this.issueTokens(user.userId, user.roleId)
 
     return {
       user,
@@ -46,7 +46,7 @@ export class AuthService {
       ...dto
     })
 
-    const tokens = this.issueTokens(user.userId)
+    const tokens = this.issueTokens(user.userId, user.roleId)
     return {
       user,
       ...tokens
@@ -60,7 +60,7 @@ export class AuthService {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...user } = await this.userService.getById(result.id)
 
-    const tokens = this.issueTokens(user.userId)
+    const tokens = this.issueTokens(user.userId, user.roleId)
 
     return {
       user,
@@ -68,8 +68,8 @@ export class AuthService {
     }
   }
 
-  private issueTokens(userId: number) {
-    const data = { id: userId.toString() }
+  private issueTokens(userId: number, roleId: number) {
+    const data = { id: userId.toString(), roleId }
 
     const accessToken = this.jwt.sign(data, {
       expiresIn: '1h'

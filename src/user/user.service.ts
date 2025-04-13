@@ -27,12 +27,13 @@ export class UserService {
       timezone: {
         connect: { timezoneId: dto.timezoneId }
       },
-      role: { connect: { roleId: isFirstUser ? 1 : 2 } }, // 1 - Администратор, 2 - Обычный пользователь,
+      role: { connect: { roleId: isFirstUser ? 1 : 2 } }, // 1 - Администратор, 2 - Обычный пользователь
       isActive: isFirstUser ? true : false,
       isAdmin: isFirstUser ? true : false,
-      department: dto.departmentId
-        ? { connect: { departmentId: dto.departmentId } }
-        : undefined
+      // Если департамент существует, подключаем его
+      department: {
+        connect: { departmentId: isFirstUser ? 1 : dto.departmentId }
+      }
     }
 
     return this.prisma.user.create({
@@ -48,7 +49,8 @@ export class UserService {
     if (!this.prisma.user) throw new NotFoundException('User not found')
 
     return this.prisma.user.findUnique({
-      where: { userId: id }
+      where: { userId: id },
+      include: { role: true }
     })
   }
 
@@ -86,7 +88,7 @@ export class UserService {
       throw new NotFoundException('Пользователь не найден')
     }
 
-    if (user.isActive) {
+    if (user.isActive && status) {
       throw new BadRequestException('Пользователь уже активирован')
     }
 

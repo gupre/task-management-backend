@@ -116,6 +116,7 @@ export class ProjectService {
       ...taskData,
       projectId,
       status: Status.planned,
+      order: 0,
       priority: Priority.normal
     })
   }
@@ -123,6 +124,22 @@ export class ProjectService {
   // Получение всех отчётов проекта
   async getProjectReports(projectId: number) {
     return this.reportProjectService.getReportsByProjectId(projectId)
+  }
+
+  async getProjectUsers(projectId: number) {
+    return this.prisma.projectUser.findMany({
+      where: { projectId },
+      include: {
+        user: {
+          select: {
+            userId: true,
+            name: true,
+            email: true,
+            role: true
+          }
+        }
+      }
+    })
   }
 
   async remove(id: number) {

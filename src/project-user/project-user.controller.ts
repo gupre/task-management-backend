@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   HttpCode,
   Param,
   ParseIntPipe,
@@ -11,12 +12,27 @@ import {
   ValidationPipe
 } from '@nestjs/common'
 import { Auth } from 'src/auth/decorators/auth.decorator'
+import { CurrentUser } from 'src/auth/decorators/user.decorator'
 import { CreateProjectUserDto } from './project-user.dto'
 import { ProjectUserService } from './project-user.service'
 
 @Controller('project-user')
 export class ProjectUserController {
   constructor(private readonly projectUserService: ProjectUserService) {}
+
+  @UsePipes(new ValidationPipe())
+  @Auth()
+  @Get('/users/:userId')
+  async getMyProjects(@CurrentUser('userId', ParseIntPipe) userId: number) {
+    return this.projectUserService.getUserProjects(+userId)
+  }
+
+  @UsePipes(new ValidationPipe())
+  @Auth()
+  @Get('project/:projectId')
+  async getProjectUsers(@Param('projectId', ParseIntPipe) projectId: number) {
+    return this.projectUserService.getProjectUsers(projectId)
+  }
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)

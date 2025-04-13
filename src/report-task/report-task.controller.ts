@@ -36,13 +36,13 @@ export class ReportTaskController {
   @Auth()
   @Get(':id')
   async findById(@Param('id', ParseIntPipe) id: number) {
-    return this.reportTaskService.getById(id)
+    return this.reportTaskService.getById(+id)
   }
 
   @Auth()
   @Get('task/:taskId')
   async getReportsByTask(@Param('taskId') taskId: number) {
-    return this.reportTaskService.getById(taskId)
+    return this.reportTaskService.getById(+taskId)
   }
 
   @UsePipes(new ValidationPipe())
@@ -53,7 +53,7 @@ export class ReportTaskController {
     @Param('id') id: number,
     @Body() updateReportTaskDto: ReportTaskDto
   ) {
-    return this.reportTaskService.update(id, updateReportTaskDto)
+    return this.reportTaskService.update(+id, updateReportTaskDto)
   }
 
   @UsePipes(new ValidationPipe())
@@ -61,6 +61,6 @@ export class ReportTaskController {
   @Auth()
   @Delete(':id')
   async remove(@Param('id') id: number) {
-    return this.reportTaskService.remove(id)
+    return this.reportTaskService.remove(+id)
   }
 }

@@ -6,6 +6,7 @@ import {
   IsEnum,
   IsInt,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString
 } from 'class-validator'
@@ -65,6 +66,35 @@ export class CreateTaskDto {
   @IsOptional()
   @IsInt({ each: true })
   reportIds?: number[]
+
+  @IsNumber()
+  order: number
 }
 
 export class UpdateTaskDto extends PartialType(CreateTaskDto) {}
+
+export class UpdateTaskOrderDto {
+  @IsArray()
+  @IsInt({ each: true })
+  taskIds: number[] // массив taskId в новом порядке
+}
+
+// class TaskOrderDto {
+//   @IsInt()
+//   @Type(() => Number)
+//   taskId: number
+
+//   @IsInt()
+//   @Type(() => Number)
+//   order: number
+// }
+
+// export class UpdateTaskOrderDto {
+//   @IsString()
+//   status: string
+
+//   @IsArray()
+//   @ValidateNested({ each: true })
+//   @Type(() => TaskOrderDto)
+//   reorderedTasks: TaskOrderDto[]
+// }

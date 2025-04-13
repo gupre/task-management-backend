@@ -166,7 +166,8 @@ exports.Prisma.TaskScalarFieldEnum = {
   dueDate: 'dueDate',
   estimatedHours: 'estimatedHours',
   priority: 'priority',
-  status: 'status'
+  status: 'status',
+  order: 'order'
 };
 
 exports.Prisma.RoleScalarFieldEnum = {

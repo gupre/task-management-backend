@@ -39,7 +39,7 @@ export class PermissionsController {
   @Auth()
   @Get(':id')
   async getById(@Param('id', ParseIntPipe) id: number) {
-    return this.permissionsService.getById(id)
+    return this.permissionsService.getById(+id)
   }
 
   @UsePipes(new ValidationPipe())
@@ -50,7 +50,7 @@ export class PermissionsController {
     @Param('id', ParseIntPipe) id: number,
     @Param('roleId', ParseIntPipe) roleId: number
   ) {
-    return this.permissionsService.addRoleToPermission(id, roleId)
+    return this.permissionsService.addRoleToPermission(+id, +roleId)
   }
 
   @UsePipes(new ValidationPipe())
@@ -61,7 +61,7 @@ export class PermissionsController {
     @Param('id', ParseIntPipe) id: number,
     @Param('roleId', ParseIntPipe) roleId: number
   ) {
-    return this.permissionsService.removeRoleFromPermission(id, roleId)
+    return this.permissionsService.removeRoleFromPermission(+id, +roleId)
   }
 
   @UsePipes(new ValidationPipe())
@@ -72,7 +72,7 @@ export class PermissionsController {
     @Param('id', ParseIntPipe) id: number,
     @Body() roleIds: number[]
   ) {
-    return this.permissionsService.setRolesForPermission(id, roleIds)
+    return this.permissionsService.setRolesForPermission(+id, roleIds)
   }
 
   // Обновление разрешения
@@ -84,7 +84,7 @@ export class PermissionsController {
     @Param('id', ParseIntPipe) id: number,
     @Body() data: UpdatePermissionsDto
   ) {
-    return this.permissionsService.update(id, data)
+    return this.permissionsService.update(+id, data)
   }
 
   // Удаление разрешения
@@ -96,6 +96,6 @@ export class PermissionsController {
     @Param('id', ParseIntPipe) id: number,
     @Param('roleId', ParseIntPipe) roleId: number
   ) {
-    return this.permissionsService.remove(id, roleId)
+    return this.permissionsService.remove(+id, roleId)
   }
 }

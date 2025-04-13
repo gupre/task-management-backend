@@ -38,7 +38,7 @@ export class RoleController {
   @Auth()
   @Get(':id')
   async findId(@Param('id', ParseIntPipe) id: number) {
-    return this.roleService.getById(id)
+    return this.roleService.getById(+id)
   }
 
   @UsePipes(new ValidationPipe())
@@ -49,7 +49,7 @@ export class RoleController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateRoleDto: UpdateRoleDto
   ) {
-    return this.roleService.update(id, updateRoleDto)
+    return this.roleService.update(+id, updateRoleDto)
   }
 
   @UsePipes(new ValidationPipe())
@@ -57,6 +57,6 @@ export class RoleController {
   @Auth()
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number) {
-    return this.roleService.remove(id)
+    return this.roleService.remove(+id)
   }
 }

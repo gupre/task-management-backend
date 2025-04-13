@@ -6,6 +6,24 @@ import { CreateProjectUserDto } from './project-user.dto'
 export class ProjectUserService {
   constructor(private prisma: PrismaService) {}
 
+  async getProjectUsers(projectId: number) {
+    return await this.prisma.projectUser.findMany({
+      where: { projectId },
+      include: {
+        user: true // добавляем информацию о пользователе
+      }
+    })
+  }
+
+  async getUserProjects(userId: number) {
+    return await this.prisma.projectUser.findMany({
+      where: { userId },
+      include: {
+        project: true
+      }
+    })
+  }
+
   async addUserToProject(dto: CreateProjectUserDto) {
     const userExists = await this.prisma.user.findUnique({
       where: { userId: dto.userId }

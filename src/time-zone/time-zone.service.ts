@@ -30,6 +30,7 @@ export class TimeZoneService {
     })
 
     return timeZones.map(timeZone => ({
+      id: timeZone.timezoneId,
       name: timeZone.name,
       offset: timeZone.offset,
       users: timeZone.users.map(user => user.userId)

@@ -39,13 +39,13 @@ export class ReportProjectController {
   @Auth()
   @Get(':id')
   async findId(@Param('id', ParseIntPipe) id: number) {
-    return this.reportProjectService.getById(id)
+    return this.reportProjectService.getById(+id)
   }
 
   @Auth()
   @Get('project/:projectId')
   async findByProjectId(@Param('projectId', ParseIntPipe) projectId: number) {
-    return this.reportProjectService.getReportsByProjectId(projectId)
+    return this.reportProjectService.getReportsByProjectId(+projectId)
   }
 
   @UsePipes(new ValidationPipe())
@@ -56,7 +56,7 @@ export class ReportProjectController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateReportProjectDto: UpdateReportProjectDto
   ) {
-    return this.reportProjectService.update(id, updateReportProjectDto)
+    return this.reportProjectService.update(+id, updateReportProjectDto)
   }
 
   @UsePipes(new ValidationPipe())
@@ -64,6 +64,6 @@ export class ReportProjectController {
   @Auth()
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number) {
-    return this.reportProjectService.remove(id)
+    return this.reportProjectService.remove(+id)
   }
 }

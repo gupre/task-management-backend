@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
-import axios from 'axios'
+import { Prisma } from 'prisma/generated/client'
 import { HistoryService } from 'src/history/history.service'
 import { PrismaService } from 'src/prisma.service'
 import { ReportTaskService } from 'src/report-task/report-task.service'
@@ -19,10 +19,27 @@ export class TaskService {
 
   // Создание задачи с добавлением записи в историю и автоматическим распределением
   async create(createTaskDto: CreateTaskDto) {
-    const { historyIds, reportIds, ...taskData } = createTaskDto
+    const { historyIds, reportIds, assignmentDate, dueDate, ...taskData } =
+      createTaskDto
+
+    const tasksInStatus = await this.prisma.task.findMany({
+      where: {
+        status: createTaskDto.status,
+        projectId: createTaskDto.projectId
+      },
+      orderBy: { order: 'desc' },
+      take: 1
+    })
+
+    const nextOrder = tasksInStatus.length > 0 ? tasksInStatus[0].order + 1 : 0
 
     const task = await this.prisma.task.create({
-      data: taskData
+      data: {
+        ...taskData,
+        assignmentDate: new Date(assignmentDate),
+        dueDate: new Date(dueDate),
+        order: nextOrder
+      }
     })
 
     // Добавляем запись в историю о создании задачи
@@ -31,6 +48,7 @@ export class TaskService {
       comment: `Задача создана ${task.name}`
     })
 
+    /*
     // Получаем всех сотрудников для распределения задач
     const employeesWithAssignedHours = await this.prisma.user.findMany({
       select: {
@@ -98,7 +116,7 @@ export class TaskService {
         })
       }
     }
-
+*/
     return task
   }
 
@@ -125,6 +143,7 @@ export class TaskService {
       status,
       priority,
       departmentId,
+      projectId,
       ...taskData
     } = updateTaskDto
 
@@ -146,13 +165,46 @@ export class TaskService {
       }
     }
 
-    // Обновляем задачу только если есть изменения
-    const updatedTask = Object.keys(taskData).length
-      ? await this.prisma.task.update({
-          where: { taskId },
-          data: taskData
-        })
-      : oldTask // Если не обновляли саму задачу, возвращаем старую
+    // Обновляем задачу с учетом всех изменений
+    const updatedTask = await this.prisma.task.update({
+      where: { taskId },
+      data: Prisma.validator<Prisma.TaskUpdateInput>()({
+        ...taskData,
+        status: status ?? oldTask.status,
+        priority: priority ?? oldTask.priority,
+        user:
+          userId !== undefined && userId !== null
+            ? { connect: { userId } }
+            : undefined,
+        department:
+          departmentId !== undefined && departmentId !== null
+            ? { connect: { departmentId } }
+            : undefined,
+        project:
+          updateTaskDto.projectId !== undefined &&
+          updateTaskDto.projectId !== null
+            ? { connect: { projectId: updateTaskDto.projectId } }
+            : undefined,
+        history: updateTaskDto.historyIds?.length
+          ? {
+              connect: updateTaskDto.historyIds.map(historyId => ({
+                historyId
+              }))
+            }
+          : undefined,
+        reports: updateTaskDto.reportIds?.length
+          ? {
+              connect: updateTaskDto.reportIds.map(reportId => ({ reportId }))
+            }
+          : undefined
+      }),
+      include: {
+        user: true,
+        history: true,
+        reports: true,
+        project: true
+      }
+    })
 
     // Если есть изменения, добавляем их в историю
     if (changes.length > 0) {
@@ -210,4 +262,47 @@ export class TaskService {
   async getHistoryByTaskId(taskId: number) {
     return this.historyService.getByTaskId(taskId)
   }
+
+  async getTasksByProject(projectId: number) {
+    const tasks = await this.prisma.task.findMany({
+      where: { projectId },
+      include: {
+        user: true,
+        history: true,
+        reports: true
+      }
+    })
+
+    return tasks
+  }
+
+  async updateTaskOrder(taskIds: number[]) {
+    const updatePromises = taskIds.map((taskId, index) =>
+      this.prisma.task.update({
+        where: { taskId },
+        data: { order: index }
+      })
+    )
+
+    await Promise.all(updatePromises)
+    return { message: 'Порядок задач обновлён' }
+  }
+
+  // async updateTaskOrder(body: {
+  //   status: string
+  //   tasks: { taskId: number; order: number }[]
+  // }) {
+  //   const updatePromises = body.tasks.map(task =>
+  //     this.prisma.task.update({
+  //       where: { taskId: task.taskId },
+  //       data: {
+  //         order: task.order
+  //         // status: body.status,
+  //       }
+  //     })
+  //   )
+
+  //   await Promise.all(updatePromises)
+  //   return { message: 'Порядок задач обновлён' }
+  // }
 }

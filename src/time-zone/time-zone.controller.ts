@@ -29,7 +29,7 @@ export class TimeZoneController {
   }
 
   // Получение всех временных зон
-  @Auth()
+  // @Auth()
   @Get()
   async getAll() {
     return this.timeZoneService.getAll()
@@ -50,7 +50,7 @@ export class TimeZoneController {
     @Param('id', ParseIntPipe) id: number,
     @Param('userId', ParseIntPipe) userId: number
   ) {
-    return this.timeZoneService.addUserToTimeZone(id, userId)
+    return this.timeZoneService.addUserToTimeZone(+id, +userId)
   }
 
   // Удаление пользователя из временной зоны
@@ -61,7 +61,7 @@ export class TimeZoneController {
     @Param('id', ParseIntPipe) id: number,
     @Param('userId', ParseIntPipe) userId: number
   ) {
-    return this.timeZoneService.removeUserFromTimeZone(id, userId)
+    return this.timeZoneService.removeUserFromTimeZone(+id, +userId)
   }
 
   // Установка пользователей для временной зоны
@@ -72,7 +72,7 @@ export class TimeZoneController {
     @Param('id', ParseIntPipe) id: number,
     @Body() userIds: { userIds: number[] }
   ) {
-    return this.timeZoneService.setUsersForTimeZone(id, userIds.userIds)
+    return this.timeZoneService.setUsersForTimeZone(+id, userIds.userIds)
   }
 
   // Обновление временной зоны
@@ -84,7 +84,7 @@ export class TimeZoneController {
     @Param('id', ParseIntPipe) id: number,
     @Body() data: UpdateTimeZoneDto
   ) {
-    return this.timeZoneService.update(id, data)
+    return this.timeZoneService.update(+id, data)
   }
 
   // Удаление временной зоны
@@ -93,6 +93,6 @@ export class TimeZoneController {
   @Auth()
   @Delete(':id')
   async delete(@Param('id, ParseIntPipe') id: number) {
-    return this.timeZoneService.remove(id)
+    return this.timeZoneService.remove(+id)
   }
 }

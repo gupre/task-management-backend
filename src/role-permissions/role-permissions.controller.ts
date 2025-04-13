@@ -34,7 +34,7 @@ export class RolePermissionsController {
   @Auth()
   @Get(':id')
   async getPermissionsForRole(@Param('id', ParseIntPipe) id: number) {
-    return await this.rolePermissionsService.getPermissionsForRole(id)
+    return await this.rolePermissionsService.getPermissionsForRole(+id)
   }
 
   // Метод для удаления разрешений с роли
@@ -44,6 +44,6 @@ export class RolePermissionsController {
     @Param('id', ParseIntPipe) id: number, // ID роли из URL
     @Body() permissions: CreateRolePermissionsDto[] // Массив разрешений из тела запроса
   ) {
-    return await this.rolePermissionsService.remove(id, permissions)
+    return await this.rolePermissionsService.remove(+id, permissions)
   }
 }

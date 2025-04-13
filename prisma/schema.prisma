@@ -110,6 +110,8 @@ model Task {
   history History[]
   reports ReportTask[]
 
+  order Int @default(0) // новое поле
+
   @@index([projectId])
   @@index([userId])
   @@index([departmentId])

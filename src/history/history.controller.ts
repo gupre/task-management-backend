@@ -31,7 +31,7 @@ export class HistoryController {
   @Auth()
   @Get('task/:taskId')
   async getHistoryByTask(@Param('taskId') taskId: number) {
-    return this.historyService.getByTaskId(taskId)
+    return this.historyService.getByTaskId(+taskId)
   }
 
   // Обновить запись в истории
@@ -43,7 +43,7 @@ export class HistoryController {
     @Param('id') id: number,
     @Body() updateHistoryDto: HistoryDto
   ) {
-    return this.historyService.update(id, updateHistoryDto)
+    return this.historyService.update(+id, updateHistoryDto)
   }
 
   // Удалить запись в истории
@@ -52,6 +52,6 @@ export class HistoryController {
   @Auth()
   @Delete(':id')
   async deleteHistory(@Param('id') id: number) {
-    return this.historyService.remove(id)
+    return this.historyService.remove(+id)
   }
 }

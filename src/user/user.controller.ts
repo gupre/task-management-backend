@@ -8,6 +8,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
   UsePipes,
   ValidationPipe
 } from '@nestjs/common'
@@ -43,7 +44,7 @@ export class UserController {
   async findId(
     @CurrentUser('userId', ParseIntPipe) id: number
   ): Promise<User | null> {
-    return this.userService.getById(id)
+    return this.userService.getById(+id)
   }
 
   // Получение пользователя по email
@@ -62,7 +63,7 @@ export class UserController {
     @CurrentUser('userId', ParseIntPipe) id: number,
     @Body() updateUserDto: UserDto
   ): Promise<User> {
-    return this.userService.update(id, updateUserDto)
+    return this.userService.update(+id, updateUserDto)
   }
 
   @UsePipes(new ValidationPipe())
@@ -70,20 +71,20 @@ export class UserController {
   @Auth()
   @Delete(':id')
   remove(@CurrentUser('userId', ParseIntPipe) id: number): Promise<User> {
-    return this.userService.remove(id)
+    return this.userService.remove(+id)
   }
 
   @Roles('admin')
   @Patch(':id/activate')
   async changeActivateUser(
     @Param('id') id: number,
-    @Param('status') status: boolean
+    @Query('status') status: boolean
   ) {
-    return this.userService.activateUser(id, status)
+    return this.userService.activateUser(+id, status)
   }
 
-  @Patch(':id/department/:departmentId')
   @Roles('admin')
+  @Patch(':id/department/:departmentId')
   async assignDepartment(
     @Param('id', ParseIntPipe) userId: number,
     @Param('departmentId', ParseIntPipe) departmentId: number
@@ -91,8 +92,8 @@ export class UserController {
     return this.userService.assignDepartment(userId, departmentId)
   }
 
-  @Patch(':id/role/:roleId')
   @Roles('admin')
+  @Patch(':id/role/:roleId')
   async changeUserRole(
     @Param('id', ParseIntPipe) userId: number,
     @Param('roleId', ParseIntPipe) roleId: number

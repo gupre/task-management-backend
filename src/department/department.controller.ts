@@ -27,7 +27,7 @@ export class departmentController {
     return this.departmentService.create(createDepartmentDto)
   }
 
-  @Auth()
+  // @Auth()
   @Get()
   async getAllDepartments() {
     return this.departmentService.getAll()
@@ -36,7 +36,7 @@ export class departmentController {
   @Auth()
   @Get(':id')
   async getDepartmentById(@Param('id', ParseIntPipe) id: number) {
-    return this.departmentService.getById(id)
+    return this.departmentService.getById(+id)
   }
 
   @UsePipes(new ValidationPipe())
@@ -47,7 +47,7 @@ export class departmentController {
     @Param('id', ParseIntPipe) id: number,
     @Param('userId', ParseIntPipe) userId: number
   ) {
-    return this.departmentService.addUserToDepartment(id, userId)
+    return this.departmentService.addUserToDepartment(+id, +userId)
   }
 
   @UsePipes(new ValidationPipe())
@@ -58,13 +58,13 @@ export class departmentController {
     @Param('id', ParseIntPipe) id: number,
     @Param('userId', ParseIntPipe) userId: number
   ) {
-    return this.departmentService.removeUserFromDepartment(id, userId)
+    return this.departmentService.removeUserFromDepartment(+id, +userId)
   }
 
   @Auth()
   @Get(':id/users')
   async getUsersById(@Param('id', ParseIntPipe) id: number) {
-    return this.departmentService.getUsersById(id)
+    return this.departmentService.getUsersById(+id)
   }
 
   @UsePipes(new ValidationPipe())
@@ -75,7 +75,7 @@ export class departmentController {
     @Param('id', ParseIntPipe) id: number,
     @Body() userIds: number[]
   ) {
-    return this.departmentService.setUsersForDepartment(id, userIds)
+    return this.departmentService.setUsersForDepartment(+id, userIds)
   }
 
   @UsePipes(new ValidationPipe())
@@ -86,7 +86,7 @@ export class departmentController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateDepartmentDto: UpdateDepartmentDto
   ) {
-    return this.departmentService.update(id, updateDepartmentDto)
+    return this.departmentService.update(+id, updateDepartmentDto)
   }
 
   @UsePipes(new ValidationPipe())
@@ -94,6 +94,6 @@ export class departmentController {
   @Auth()
   @Delete(':id')
   async deleteDepartment(@Param('id', ParseIntPipe) id: number) {
-    return this.departmentService.remove(id)
+    return this.departmentService.remove(+id)
   }
 }

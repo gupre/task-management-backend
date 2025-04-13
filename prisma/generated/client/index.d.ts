@@ -7955,6 +7955,7 @@ export namespace Prisma {
     departmentId: number | null
     hoursSpent: number | null
     estimatedHours: number | null
+    order: number | null
   }
 
   export type TaskSumAggregateOutputType = {
@@ -7964,6 +7965,7 @@ export namespace Prisma {
     departmentId: number | null
     hoursSpent: number | null
     estimatedHours: number | null
+    order: number | null
   }
 
   export type TaskMinAggregateOutputType = {
@@ -7979,6 +7981,7 @@ export namespace Prisma {
     estimatedHours: number | null
     priority: $Enums.Priority | null
     status: $Enums.Status | null
+    order: number | null
   }
 
   export type TaskMaxAggregateOutputType = {
@@ -7994,6 +7997,7 @@ export namespace Prisma {
     estimatedHours: number | null
     priority: $Enums.Priority | null
     status: $Enums.Status | null
+    order: number | null
   }
 
   export type TaskCountAggregateOutputType = {
@@ -8009,6 +8013,7 @@ export namespace Prisma {
     estimatedHours: number
     priority: number
     status: number
+    order: number
     _all: number
   }
 
@@ -8020,6 +8025,7 @@ export namespace Prisma {
     departmentId?: true
     hoursSpent?: true
     estimatedHours?: true
+    order?: true
   }
 
   export type TaskSumAggregateInputType = {
@@ -8029,6 +8035,7 @@ export namespace Prisma {
     departmentId?: true
     hoursSpent?: true
     estimatedHours?: true
+    order?: true
   }
 
   export type TaskMinAggregateInputType = {
@@ -8044,6 +8051,7 @@ export namespace Prisma {
     estimatedHours?: true
     priority?: true
     status?: true
+    order?: true
   }
 
   export type TaskMaxAggregateInputType = {
@@ -8059,6 +8067,7 @@ export namespace Prisma {
     estimatedHours?: true
     priority?: true
     status?: true
+    order?: true
   }
 
   export type TaskCountAggregateInputType = {
@@ -8074,6 +8083,7 @@ export namespace Prisma {
     estimatedHours?: true
     priority?: true
     status?: true
+    order?: true
     _all?: true
   }
 
@@ -8176,6 +8186,7 @@ export namespace Prisma {
     estimatedHours: number | null
     priority: $Enums.Priority
     status: $Enums.Status
+    order: number
     _count: TaskCountAggregateOutputType | null
     _avg: TaskAvgAggregateOutputType | null
     _sum: TaskSumAggregateOutputType | null
@@ -8210,6 +8221,7 @@ export namespace Prisma {
     estimatedHours?: boolean
     priority?: boolean
     status?: boolean
+    order?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     user?: boolean | Task$userArgs<ExtArgs>
     department?: boolean | Task$departmentArgs<ExtArgs>
@@ -8231,6 +8243,7 @@ export namespace Prisma {
     estimatedHours?: boolean
     priority?: boolean
     status?: boolean
+    order?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     user?: boolean | Task$userArgs<ExtArgs>
     department?: boolean | Task$departmentArgs<ExtArgs>
@@ -8249,6 +8262,7 @@ export namespace Prisma {
     estimatedHours?: boolean
     priority?: boolean
     status?: boolean
+    order?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     user?: boolean | Task$userArgs<ExtArgs>
     department?: boolean | Task$departmentArgs<ExtArgs>
@@ -8267,9 +8281,10 @@ export namespace Prisma {
     estimatedHours?: boolean
     priority?: boolean
     status?: boolean
+    order?: boolean
   }
 
-  export type TaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"taskId" | "projectId" | "userId" | "departmentId" | "name" | "description" | "assignmentDate" | "hoursSpent" | "dueDate" | "estimatedHours" | "priority" | "status", ExtArgs["result"]["task"]>
+  export type TaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"taskId" | "projectId" | "userId" | "departmentId" | "name" | "description" | "assignmentDate" | "hoursSpent" | "dueDate" | "estimatedHours" | "priority" | "status" | "order", ExtArgs["result"]["task"]>
   export type TaskInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     user?: boolean | Task$userArgs<ExtArgs>
@@ -8311,6 +8326,7 @@ export namespace Prisma {
       estimatedHours: number | null
       priority: $Enums.Priority
       status: $Enums.Status
+      order: number
     }, ExtArgs["result"]["task"]>
     composites: {}
   }
@@ -8751,6 +8767,7 @@ export namespace Prisma {
     readonly estimatedHours: FieldRef<"Task", 'Int'>
     readonly priority: FieldRef<"Task", 'Priority'>
     readonly status: FieldRef<"Task", 'Status'>
+    readonly order: FieldRef<"Task", 'Int'>
   }
     
 
@@ -16034,7 +16051,8 @@ export namespace Prisma {
     dueDate: 'dueDate',
     estimatedHours: 'estimatedHours',
     priority: 'priority',
-    status: 'status'
+    status: 'status',
+    order: 'order'
   };
 
   export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum]
@@ -16543,6 +16561,7 @@ export namespace Prisma {
     estimatedHours?: IntNullableFilter<"Task"> | number | null
     priority?: EnumPriorityFilter<"Task"> | $Enums.Priority
     status?: EnumStatusFilter<"Task"> | $Enums.Status
+    order?: IntFilter<"Task"> | number
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     department?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
@@ -16563,6 +16582,7 @@ export namespace Prisma {
     estimatedHours?: SortOrderInput | SortOrder
     priority?: SortOrder
     status?: SortOrder
+    order?: SortOrder
     project?: ProjectOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
     department?: DepartmentOrderByWithRelationInput
@@ -16586,6 +16606,7 @@ export namespace Prisma {
     estimatedHours?: IntNullableFilter<"Task"> | number | null
     priority?: EnumPriorityFilter<"Task"> | $Enums.Priority
     status?: EnumStatusFilter<"Task"> | $Enums.Status
+    order?: IntFilter<"Task"> | number
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     department?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
@@ -16606,6 +16627,7 @@ export namespace Prisma {
     estimatedHours?: SortOrderInput | SortOrder
     priority?: SortOrder
     status?: SortOrder
+    order?: SortOrder
     _count?: TaskCountOrderByAggregateInput
     _avg?: TaskAvgOrderByAggregateInput
     _max?: TaskMaxOrderByAggregateInput
@@ -16629,6 +16651,7 @@ export namespace Prisma {
     estimatedHours?: IntNullableWithAggregatesFilter<"Task"> | number | null
     priority?: EnumPriorityWithAggregatesFilter<"Task"> | $Enums.Priority
     status?: EnumStatusWithAggregatesFilter<"Task"> | $Enums.Status
+    order?: IntWithAggregatesFilter<"Task"> | number
   }
 
   export type RoleWhereInput = {
@@ -17269,6 +17292,7 @@ export namespace Prisma {
     estimatedHours?: number | null
     priority: $Enums.Priority
     status: $Enums.Status
+    order?: number
     project: ProjectCreateNestedOneWithoutTasksInput
     user?: UserCreateNestedOneWithoutTasksInput
     department?: DepartmentCreateNestedOneWithoutTaskInput
@@ -17289,6 +17313,7 @@ export namespace Prisma {
     estimatedHours?: number | null
     priority: $Enums.Priority
     status: $Enums.Status
+    order?: number
     history?: HistoryUncheckedCreateNestedManyWithoutTaskInput
     reports?: ReportTaskUncheckedCreateNestedManyWithoutTaskInput
   }
@@ -17302,6 +17327,7 @@ export namespace Prisma {
     estimatedHours?: NullableIntFieldUpdateOperationsInput | number | null
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    order?: IntFieldUpdateOperationsInput | number
     project?: ProjectUpdateOneRequiredWithoutTasksNestedInput
     user?: UserUpdateOneWithoutTasksNestedInput
     department?: DepartmentUpdateOneWithoutTaskNestedInput
@@ -17322,6 +17348,7 @@ export namespace Prisma {
     estimatedHours?: NullableIntFieldUpdateOperationsInput | number | null
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    order?: IntFieldUpdateOperationsInput | number
     history?: HistoryUncheckedUpdateManyWithoutTaskNestedInput
     reports?: ReportTaskUncheckedUpdateManyWithoutTaskNestedInput
   }
@@ -17339,6 +17366,7 @@ export namespace Prisma {
     estimatedHours?: number | null
     priority: $Enums.Priority
     status: $Enums.Status
+    order?: number
   }
 
   export type TaskUpdateManyMutationInput = {
@@ -17350,6 +17378,7 @@ export namespace Prisma {
     estimatedHours?: NullableIntFieldUpdateOperationsInput | number | null
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    order?: IntFieldUpdateOperationsInput | number
   }
 
   export type TaskUncheckedUpdateManyInput = {
@@ -17365,6 +17394,7 @@ export namespace Prisma {
     estimatedHours?: NullableIntFieldUpdateOperationsInput | number | null
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    order?: IntFieldUpdateOperationsInput | number
   }
 
   export type RoleCreateInput = {
@@ -18162,6 +18192,7 @@ export namespace Prisma {
     estimatedHours?: SortOrder
     priority?: SortOrder
     status?: SortOrder
+    order?: SortOrder
   }
 
   export type TaskAvgOrderByAggregateInput = {
@@ -18171,6 +18202,7 @@ export namespace Prisma {
     departmentId?: SortOrder
     hoursSpent?: SortOrder
     estimatedHours?: SortOrder
+    order?: SortOrder
   }
 
   export type TaskMaxOrderByAggregateInput = {
@@ -18186,6 +18218,7 @@ export namespace Prisma {
     estimatedHours?: SortOrder
     priority?: SortOrder
     status?: SortOrder
+    order?: SortOrder
   }
 
   export type TaskMinOrderByAggregateInput = {
@@ -18201,6 +18234,7 @@ export namespace Prisma {
     estimatedHours?: SortOrder
     priority?: SortOrder
     status?: SortOrder
+    order?: SortOrder
   }
 
   export type TaskSumOrderByAggregateInput = {
@@ -18210,6 +18244,7 @@ export namespace Prisma {
     departmentId?: SortOrder
     hoursSpent?: SortOrder
     estimatedHours?: SortOrder
+    order?: SortOrder
   }
 
   export type EnumPriorityWithAggregatesFilter<$PrismaModel = never> = {
@@ -19833,6 +19868,7 @@ export namespace Prisma {
     estimatedHours?: number | null
     priority: $Enums.Priority
     status: $Enums.Status
+    order?: number
     project: ProjectCreateNestedOneWithoutTasksInput
     user?: UserCreateNestedOneWithoutTasksInput
     history?: HistoryCreateNestedManyWithoutTaskInput
@@ -19851,6 +19887,7 @@ export namespace Prisma {
     estimatedHours?: number | null
     priority: $Enums.Priority
     status: $Enums.Status
+    order?: number
     history?: HistoryUncheckedCreateNestedManyWithoutTaskInput
     reports?: ReportTaskUncheckedCreateNestedManyWithoutTaskInput
   }
@@ -19940,6 +19977,7 @@ export namespace Prisma {
     estimatedHours?: IntNullableFilter<"Task"> | number | null
     priority?: EnumPriorityFilter<"Task"> | $Enums.Priority
     status?: EnumStatusFilter<"Task"> | $Enums.Status
+    order?: IntFilter<"Task"> | number
   }
 
   export type TimeZoneCreateWithoutUsersInput = {
@@ -20001,6 +20039,7 @@ export namespace Prisma {
     estimatedHours?: number | null
     priority: $Enums.Priority
     status: $Enums.Status
+    order?: number
     project: ProjectCreateNestedOneWithoutTasksInput
     department?: DepartmentCreateNestedOneWithoutTaskInput
     history?: HistoryCreateNestedManyWithoutTaskInput
@@ -20019,6 +20058,7 @@ export namespace Prisma {
     estimatedHours?: number | null
     priority: $Enums.Priority
     status: $Enums.Status
+    order?: number
     history?: HistoryUncheckedCreateNestedManyWithoutTaskInput
     reports?: ReportTaskUncheckedCreateNestedManyWithoutTaskInput
   }
@@ -20225,6 +20265,7 @@ export namespace Prisma {
     estimatedHours?: number | null
     priority: $Enums.Priority
     status: $Enums.Status
+    order?: number
     user?: UserCreateNestedOneWithoutTasksInput
     department?: DepartmentCreateNestedOneWithoutTaskInput
     history?: HistoryCreateNestedManyWithoutTaskInput
@@ -20243,6 +20284,7 @@ export namespace Prisma {
     estimatedHours?: number | null
     priority: $Enums.Priority
     status: $Enums.Status
+    order?: number
     history?: HistoryUncheckedCreateNestedManyWithoutTaskInput
     reports?: ReportTaskUncheckedCreateNestedManyWithoutTaskInput
   }
@@ -20956,6 +20998,7 @@ export namespace Prisma {
     estimatedHours?: number | null
     priority: $Enums.Priority
     status: $Enums.Status
+    order?: number
     project: ProjectCreateNestedOneWithoutTasksInput
     user?: UserCreateNestedOneWithoutTasksInput
     department?: DepartmentCreateNestedOneWithoutTaskInput
@@ -20975,6 +21018,7 @@ export namespace Prisma {
     estimatedHours?: number | null
     priority: $Enums.Priority
     status: $Enums.Status
+    order?: number
     reports?: ReportTaskUncheckedCreateNestedManyWithoutTaskInput
   }
 
@@ -21053,6 +21097,7 @@ export namespace Prisma {
     estimatedHours?: NullableIntFieldUpdateOperationsInput | number | null
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    order?: IntFieldUpdateOperationsInput | number
     project?: ProjectUpdateOneRequiredWithoutTasksNestedInput
     user?: UserUpdateOneWithoutTasksNestedInput
     department?: DepartmentUpdateOneWithoutTaskNestedInput
@@ -21072,6 +21117,7 @@ export namespace Prisma {
     estimatedHours?: NullableIntFieldUpdateOperationsInput | number | null
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    order?: IntFieldUpdateOperationsInput | number
     reports?: ReportTaskUncheckedUpdateManyWithoutTaskNestedInput
   }
 
@@ -21146,6 +21192,7 @@ export namespace Prisma {
     estimatedHours?: number | null
     priority: $Enums.Priority
     status: $Enums.Status
+    order?: number
     project: ProjectCreateNestedOneWithoutTasksInput
     user?: UserCreateNestedOneWithoutTasksInput
     department?: DepartmentCreateNestedOneWithoutTaskInput
@@ -21165,6 +21212,7 @@ export namespace Prisma {
     estimatedHours?: number | null
     priority: $Enums.Priority
     status: $Enums.Status
+    order?: number
     history?: HistoryUncheckedCreateNestedManyWithoutTaskInput
   }
 
@@ -21223,6 +21271,7 @@ export namespace Prisma {
     estimatedHours?: NullableIntFieldUpdateOperationsInput | number | null
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    order?: IntFieldUpdateOperationsInput | number
     project?: ProjectUpdateOneRequiredWithoutTasksNestedInput
     user?: UserUpdateOneWithoutTasksNestedInput
     department?: DepartmentUpdateOneWithoutTaskNestedInput
@@ -21242,6 +21291,7 @@ export namespace Prisma {
     estimatedHours?: NullableIntFieldUpdateOperationsInput | number | null
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    order?: IntFieldUpdateOperationsInput | number
     history?: HistoryUncheckedUpdateManyWithoutTaskNestedInput
   }
 
@@ -21459,6 +21509,7 @@ export namespace Prisma {
     estimatedHours?: number | null
     priority: $Enums.Priority
     status: $Enums.Status
+    order?: number
   }
 
   export type UserUpdateWithoutDepartmentInput = {
@@ -21528,6 +21579,7 @@ export namespace Prisma {
     estimatedHours?: NullableIntFieldUpdateOperationsInput | number | null
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    order?: IntFieldUpdateOperationsInput | number
     project?: ProjectUpdateOneRequiredWithoutTasksNestedInput
     user?: UserUpdateOneWithoutTasksNestedInput
     history?: HistoryUpdateManyWithoutTaskNestedInput
@@ -21546,6 +21598,7 @@ export namespace Prisma {
     estimatedHours?: NullableIntFieldUpdateOperationsInput | number | null
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    order?: IntFieldUpdateOperationsInput | number
     history?: HistoryUncheckedUpdateManyWithoutTaskNestedInput
     reports?: ReportTaskUncheckedUpdateManyWithoutTaskNestedInput
   }
@@ -21562,6 +21615,7 @@ export namespace Prisma {
     estimatedHours?: NullableIntFieldUpdateOperationsInput | number | null
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    order?: IntFieldUpdateOperationsInput | number
   }
 
   export type TaskCreateManyUserInput = {
@@ -21576,6 +21630,7 @@ export namespace Prisma {
     estimatedHours?: number | null
     priority: $Enums.Priority
     status: $Enums.Status
+    order?: number
   }
 
   export type HistoryCreateManyUserInput = {
@@ -21598,6 +21653,7 @@ export namespace Prisma {
     estimatedHours?: NullableIntFieldUpdateOperationsInput | number | null
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    order?: IntFieldUpdateOperationsInput | number
     project?: ProjectUpdateOneRequiredWithoutTasksNestedInput
     department?: DepartmentUpdateOneWithoutTaskNestedInput
     history?: HistoryUpdateManyWithoutTaskNestedInput
@@ -21616,6 +21672,7 @@ export namespace Prisma {
     estimatedHours?: NullableIntFieldUpdateOperationsInput | number | null
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    order?: IntFieldUpdateOperationsInput | number
     history?: HistoryUncheckedUpdateManyWithoutTaskNestedInput
     reports?: ReportTaskUncheckedUpdateManyWithoutTaskNestedInput
   }
@@ -21632,6 +21689,7 @@ export namespace Prisma {
     estimatedHours?: NullableIntFieldUpdateOperationsInput | number | null
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    order?: IntFieldUpdateOperationsInput | number
   }
 
   export type HistoryUpdateWithoutUserInput = {
@@ -21682,6 +21740,7 @@ export namespace Prisma {
     estimatedHours?: number | null
     priority: $Enums.Priority
     status: $Enums.Status
+    order?: number
   }
 
   export type ReportProjectCreateManyProjectInput = {
@@ -21717,6 +21776,7 @@ export namespace Prisma {
     estimatedHours?: NullableIntFieldUpdateOperationsInput | number | null
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    order?: IntFieldUpdateOperationsInput | number
     user?: UserUpdateOneWithoutTasksNestedInput
     department?: DepartmentUpdateOneWithoutTaskNestedInput
     history?: HistoryUpdateManyWithoutTaskNestedInput
@@ -21735,6 +21795,7 @@ export namespace Prisma {
     estimatedHours?: NullableIntFieldUpdateOperationsInput | number | null
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    order?: IntFieldUpdateOperationsInput | number
     history?: HistoryUncheckedUpdateManyWithoutTaskNestedInput
     reports?: ReportTaskUncheckedUpdateManyWithoutTaskNestedInput
   }
@@ -21751,6 +21812,7 @@ export namespace Prisma {
     estimatedHours?: NullableIntFieldUpdateOperationsInput | number | null
     priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    order?: IntFieldUpdateOperationsInput | number
   }
 
   export type ReportProjectUpdateWithoutProjectInput = {
