@@ -69,9 +69,9 @@ export class ReportTaskService {
     })
   }
 
-  async remove(id: number) {
-    return this.prisma.reportTask.delete({
-      where: { reportId: id }
+  async remove(reportId: number) {
+    return this.prisma.reportTask.deleteMany({
+      where: { reportId }
     })
   }
 }

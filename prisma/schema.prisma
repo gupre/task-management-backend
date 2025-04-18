@@ -60,7 +60,7 @@ model User {
 model Project {
   projectId Int @id @default(autoincrement()) @map("project_id")
 
-  name        String
+  name        String    @unique
   description String?
   startDate   DateTime  @map("start_date")
   endDate     DateTime? @map("end_date")

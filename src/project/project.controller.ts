@@ -55,6 +55,16 @@ export class ProjectController {
 
   @HttpCode(200)
   @Auth()
+  @Delete(':id/users/:userId')
+  async removeUserFromProject(
+    @Param('id', ParseIntPipe) projectId: number,
+    @Param('userId', ParseIntPipe) userId: number
+  ) {
+    return this.projectService.removeUserFromProject(projectId, userId)
+  }
+
+  @HttpCode(200)
+  @Auth()
   @Get(':id/users')
   async getProjectUsers(@Param('id', ParseIntPipe) id: number) {
     return this.projectService.getProjectUsers(id)
@@ -89,7 +99,10 @@ export class ProjectController {
     return this.projectService.getProjectReports(+projectId)
   }
 
-  @UsePipes(new ValidationPipe())
+  // @UsePipes(new ValidationPipe())
+  @UsePipes(
+    new ValidationPipe({ whitelist: true, forbidNonWhitelisted: false })
+  )
   @HttpCode(200)
   @Auth()
   @Patch(':id')

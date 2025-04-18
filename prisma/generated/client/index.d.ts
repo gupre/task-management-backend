@@ -16460,10 +16460,10 @@ export namespace Prisma {
 
   export type ProjectWhereUniqueInput = Prisma.AtLeast<{
     projectId?: number
+    name?: string
     AND?: ProjectWhereInput | ProjectWhereInput[]
     OR?: ProjectWhereInput[]
     NOT?: ProjectWhereInput | ProjectWhereInput[]
-    name?: StringFilter<"Project"> | string
     description?: StringNullableFilter<"Project"> | string | null
     startDate?: DateTimeFilter<"Project"> | Date | string
     endDate?: DateTimeNullableFilter<"Project"> | Date | string | null
@@ -16471,7 +16471,7 @@ export namespace Prisma {
     users?: ProjectUserListRelationFilter
     tasks?: TaskListRelationFilter
     reports?: ReportProjectListRelationFilter
-  }, "projectId">
+  }, "projectId" | "name">
 
   export type ProjectOrderByWithAggregationInput = {
     projectId?: SortOrder

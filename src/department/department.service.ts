@@ -24,6 +24,9 @@ export class departmentService {
       include: {
         users: true
         // history: true
+      },
+      orderBy: {
+        name: 'asc'
       }
     })
   }

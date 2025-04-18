@@ -45,7 +45,7 @@ export class TimeZoneController {
   // Добавление пользователя в временную зону
   @HttpCode(200)
   @Auth()
-  @Patch(':id/users/:userId/add')
+  @Post(':id/users/:userId/add')
   async addUserToTimeZone(
     @Param('id', ParseIntPipe) id: number,
     @Param('userId', ParseIntPipe) userId: number
@@ -56,7 +56,7 @@ export class TimeZoneController {
   // Удаление пользователя из временной зоны
   @HttpCode(200)
   @Auth()
-  @Patch(':id/users/:userId/remove')
+  @Delete(':id/users/:userId/remove')
   async removeUserFromTimeZone(
     @Param('id', ParseIntPipe) id: number,
     @Param('userId', ParseIntPipe) userId: number
@@ -92,7 +92,7 @@ export class TimeZoneController {
   @UsePipes(new ValidationPipe())
   @Auth()
   @Delete(':id')
-  async delete(@Param('id, ParseIntPipe') id: number) {
+  async delete(@Param('id', ParseIntPipe) id: number) {
     return this.timeZoneService.remove(+id)
   }
 }

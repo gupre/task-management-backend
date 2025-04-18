@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
+import axios from 'axios'
 import { Prisma } from 'prisma/generated/client'
 import { HistoryService } from 'src/history/history.service'
 import { PrismaService } from 'src/prisma.service'
@@ -36,8 +37,12 @@ export class TaskService {
     const task = await this.prisma.task.create({
       data: {
         ...taskData,
-        assignmentDate: new Date(assignmentDate),
-        dueDate: new Date(dueDate),
+        assignmentDate: createTaskDto.assignmentDate
+          ? new Date(createTaskDto.assignmentDate)
+          : new Date(),
+        dueDate: createTaskDto.dueDate
+          ? new Date(createTaskDto.dueDate)
+          : undefined,
         order: nextOrder
       }
     })
@@ -48,7 +53,6 @@ export class TaskService {
       comment: `Задача создана ${task.name}`
     })
 
-    /*
     // Получаем всех сотрудников для распределения задач
     const employeesWithAssignedHours = await this.prisma.user.findMany({
       select: {
@@ -73,8 +77,16 @@ export class TaskService {
       assigned_hours: employee.tasks.reduce(
         (sum, task) => sum + (task.hoursSpent || 0),
         0
-      )
+      ),
+      department_id: employee.departmentId
     }))
+
+    // const pendingTasks = await this.prisma.task.findMany({
+    //   where: {
+    //     userId: null,
+    //     status: { in: ['created', 'todo'] }
+    //   }
+    // });
 
     // Получаем все задачи для распределения
     const tasks = [
@@ -82,41 +94,49 @@ export class TaskService {
         id: task.taskId,
         deadline: task.dueDate,
         priority: task.priority,
-        estimated_hours: task.hoursSpent,
-        started: task.status === 'progress' || task.status === 'end'
+        estimated_hours: task.estimatedHours ?? task.hoursSpent ?? 0,
+        started: task.status === 'progress' || task.status === 'end',
+        department_id: task.departmentId
       }
     ] // В данном случае это только что созданная задача, можно добавить другие
 
-    // Отправляем данные на Python-API для распределения
-    const response = await axios.post(process.env.PYTHON_API_URL, {
-      employees,
-      tasks
-    })
+    if (!task.dueDate) throw new Error('Не указан дедлайн для задачи')
 
-    // После получения данных о распределении обновляем задачи
-    const updatedTasks = response.data.assigned_tasks
+    try {
+      const response = await axios.post(process.env.PYTHON_API_URL, {
+        employees,
+        tasks
+      })
 
-    // Обновляем задачи в базе данных, назначая сотрудников
-    for (const updatedTask of updatedTasks) {
-      if (updatedTask.assigned_to) {
-        await this.prisma.task.update({
-          where: { taskId: updatedTask.id },
-          data: { userId: updatedTask.assigned_to }
-        })
+      console.log('Ответ от Python API:', response.data)
 
-        // Добавляем в историю, что задача была назначена пользователю
-        const user = await this.prisma.user.findUnique({
-          where: { userId: updatedTask.assigned_to }
-        })
-        await this.historyService.create({
-          taskId: updatedTask.id,
-          userId: updatedTask.assigned_to,
-          departmentId: updatedTask.departmentId,
-          comment: `Задача назначена пользователю: ${user?.name}`
-        })
+      // После получения данных о распределении обновляем задачи
+      const updatedTasks = response.data.assigned_tasks
+
+      // Обновляем задачи в базе данных, назначая сотрудников
+      for (const updatedTask of updatedTasks) {
+        if (updatedTask.assigned_to) {
+          await this.prisma.task.update({
+            where: { taskId: updatedTask.id },
+            data: { userId: updatedTask.assigned_to }
+          })
+
+          // Добавляем в историю, что задача была назначена пользователю
+          const user = await this.prisma.user.findUnique({
+            where: { userId: updatedTask.assigned_to }
+          })
+          await this.historyService.create({
+            taskId: updatedTask.id,
+            userId: updatedTask.assigned_to,
+            departmentId: updatedTask.departmentId,
+            comment: `Задача назначена пользователю: ${user?.name}`
+          })
+        }
       }
+    } catch (e) {
+      console.error('Ошибка при распределении задач:', e)
     }
-*/
+
     return task
   }
 

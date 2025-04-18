@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { PrismaService } from 'src/prisma.service'
 import { HistoryDto } from './history.dto'
 
@@ -34,14 +34,7 @@ export class HistoryService {
 
   // Удаление записи истории
   async remove(historyId: number) {
-    const history = await this.prisma.history.findUnique({
-      where: { historyId }
-    })
-    if (!history) {
-      throw new NotFoundException('History record not found')
-    }
-
-    return this.prisma.history.delete({
+    return this.prisma.history.deleteMany({
       where: { historyId }
     })
   }

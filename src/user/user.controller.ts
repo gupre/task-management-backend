@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  NotFoundException,
   Param,
   ParseIntPipe,
   Patch,
@@ -12,12 +13,13 @@ import {
   UsePipes,
   ValidationPipe
 } from '@nestjs/common'
+import * as bcrypt from 'bcrypt'
 import { User } from 'prisma/generated/client'
 import { Auth } from 'src/auth/decorators/auth.decorator'
 import { CurrentUser } from 'src/auth/decorators/user.decorator'
 import { RegistrationDto } from 'src/auth/dto/auth.dto'
 import { Roles } from 'src/role/decorator/roles.decorator'
-import { UserDto } from './user.dto'
+import { CheckPasswordDto, UserDto } from './user.dto'
 import { UserService } from './user.service'
 
 @Controller('users')
@@ -53,6 +55,24 @@ export class UserController {
   @Auth()
   async getByEmail(@Param('email') email: string): Promise<User | null> {
     return this.userService.getByEmail(email)
+  }
+
+  @UsePipes(new ValidationPipe())
+  @Post(':id/check-password')
+  @Auth()
+  async checkPassword(
+    @CurrentUser('userId', ParseIntPipe) id: number,
+    @Body() { password }: CheckPasswordDto
+  ) {
+    const user = await this.userService.getById(id)
+
+    if (!user) {
+      throw new NotFoundException('Пользователь не найден')
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password)
+
+    return { success: isMatch }
   }
 
   @UsePipes(new ValidationPipe())

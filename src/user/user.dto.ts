@@ -63,3 +63,18 @@ export class UserDto {
   @IsBoolean()
   isAdmin?: boolean
 }
+
+export class CheckPasswordDto {
+  @IsString()
+  @MinLength(8, { message: 'Пароль должен быть не менее 8 символов' })
+  @Matches(/^(?=.*[A-Z])/, {
+    message: 'Пароль должен содержать хотя бы одну заглавную букву'
+  })
+  @Matches(/^(?=.*\d)/, {
+    message: 'Пароль должен содержать хотя бы одну цифру'
+  })
+  @Matches(/^(?=.*[@$!%*?&^#()_+\-=\[\]{};:\'",.<>\/\\|`~])/, {
+    message: 'Пароль должен содержать хотя бы один специальный символ'
+  })
+  password: string
+}

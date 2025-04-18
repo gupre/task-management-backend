@@ -24,17 +24,16 @@ export class TimeZoneService {
   }
 
   // Получение всех временных зон
-  async getAll(): Promise<CreateTimeZoneDto[]> {
-    const timeZones = await this.prisma.timeZone.findMany({
-      include: { users: true }
+  async getAll() {
+    return this.prisma.timeZone.findMany({
+      include: {
+        users: true
+        // history: true
+      },
+      orderBy: {
+        name: 'asc'
+      }
     })
-
-    return timeZones.map(timeZone => ({
-      id: timeZone.timezoneId,
-      name: timeZone.name,
-      offset: timeZone.offset,
-      users: timeZone.users.map(user => user.userId)
-    }))
   }
 
   // Получение временной зоны по ID
@@ -94,33 +93,30 @@ export class TimeZoneService {
     timezoneId: number,
     data: UpdateTimeZoneDto
   ): Promise<UpdateTimeZoneDto> {
-    return this.prisma.timeZone
-      .update({
-        where: { timezoneId },
-        data: {
-          name: data.name,
-          offset: data.offset
-        },
-        include: { users: true }
-      })
-      .then(timeZone => ({
-        name: timeZone.name,
-        offset: timeZone.offset,
-        users: timeZone.users.map(user => user.userId)
-      }))
+    return this.prisma.timeZone.update({
+      where: { timezoneId },
+      data: {
+        name: data.name,
+        offset: data.offset,
+        users: data.users?.length
+          ? { set: data.users.map(userId => ({ userId })) }
+          : undefined
+      }
+      // include: { users: true }
+    })
+    // .then(timeZone => ({
+    //   name: timeZone.name,
+    //   offset: timeZone.offset,
+    //   users: timeZone.users.map(user => user.userId)
+    // }))
   }
 
   // Удаление временной зоны
-  async remove(timezoneId: number): Promise<CreateTimeZoneDto> {
-    const timeZone = await this.prisma.timeZone.delete({
+  async remove(timezoneId: number) {
+    // Теперь можно безопасно удалить временную зону
+    return this.prisma.timeZone.delete({
       where: { timezoneId },
       include: { users: true }
     })
-
-    return {
-      name: timeZone.name,
-      offset: timeZone.offset,
-      users: timeZone.users.map(user => user.userId)
-    }
   }
 }

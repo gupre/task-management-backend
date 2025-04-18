@@ -100,4 +100,16 @@ export class ProjectUserService {
       }
     })
   }
+
+  // project-user.service.ts
+  // async removeUserFromProject(projectId: number, userId: number) {
+  //   return this.prisma.projectUser.delete({
+  //     where: {
+  //       userId_projectId: {
+  //         projectId,
+  //         userId
+  //       }
+  //     }
+  //   })
+  // }
 }

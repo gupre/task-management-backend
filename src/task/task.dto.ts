@@ -67,8 +67,9 @@ export class CreateTaskDto {
   @IsInt({ each: true })
   reportIds?: number[]
 
+  @IsOptional()
   @IsNumber()
-  order: number
+  order?: number
 }
 
 export class UpdateTaskDto extends PartialType(CreateTaskDto) {}
