@@ -80,23 +80,11 @@ export class TaskController {
     return this.taskService.getTasksByProject(+projectId)
   }
 
-  @UsePipes(new ValidationPipe())
+  @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
   @HttpCode(200)
   @Auth()
   @Patch('order')
   async updateOrder(@Body() body: UpdateTaskOrderDto) {
-    console.log('Тело запроса:', JSON.stringify(body))
     return this.taskService.updateTaskOrder(body.taskIds)
   }
-  // @UsePipes(new ValidationPipe())
-  // @HttpCode(200)
-  // @Auth()
-  // @Patch('order')
-  // async updateOrder(@Body() body: UpdateTaskOrderDto) {
-  //   console.log('Тело запроса:', JSON.stringify(body))
-  //   return this.taskService.updateTaskOrder({
-  //     status: body.status,
-  //     tasks: body.reorderedTasks
-  //   })
-  // }
 }

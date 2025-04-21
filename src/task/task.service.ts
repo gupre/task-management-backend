@@ -307,22 +307,4 @@ export class TaskService {
     await Promise.all(updatePromises)
     return { message: 'Порядок задач обновлён' }
   }
-
-  // async updateTaskOrder(body: {
-  //   status: string
-  //   tasks: { taskId: number; order: number }[]
-  // }) {
-  //   const updatePromises = body.tasks.map(task =>
-  //     this.prisma.task.update({
-  //       where: { taskId: task.taskId },
-  //       data: {
-  //         order: task.order
-  //         // status: body.status,
-  //       }
-  //     })
-  //   )
-
-  //   await Promise.all(updatePromises)
-  //   return { message: 'Порядок задач обновлён' }
-  // }
 }
