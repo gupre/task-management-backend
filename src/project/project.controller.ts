@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  NotFoundException,
   Param,
   ParseIntPipe,
   Patch,
@@ -12,12 +13,14 @@ import {
   ValidationPipe
 } from '@nestjs/common'
 import { Auth } from 'src/auth/decorators/auth.decorator'
+import { CurrentUser } from 'src/auth/decorators/user.decorator'
 import { CreateReportProjectDto } from 'src/report-project/report-project.dto'
 import { CreateProjectDto, UpdateProjectDto } from './project.dto'
 import { ProjectService } from './project.service'
 
 @Controller('projects')
 export class ProjectController {
+  userService: any
   constructor(private projectService: ProjectService) {}
 
   @UsePipes(new ValidationPipe())
@@ -84,12 +87,20 @@ export class ProjectController {
   // Создание задачи в проекте
   @HttpCode(200)
   @Auth()
-  @Post(':id/tasks')
+  @Post(':id/tasks/user/:userId')
   async createProjectTask(
     @Param('id', ParseIntPipe) projectId: number,
-    @Body() taskData: { name: string; description: string }
+    @Body() taskData: { name: string; description: string },
+    @CurrentUser('userId', ParseIntPipe) userId: number
   ) {
-    return this.projectService.createProjectTask(+projectId, taskData)
+    const user = await this.userService.getById(+userId)
+    if (!user) {
+      throw new NotFoundException('Пользователь не найден')
+    }
+    return this.projectService.createProjectTask(+projectId, taskData, {
+      userId: user.userId,
+      departmentId: user.departmentId
+    })
   }
 
   // Получение отчётов по проекту

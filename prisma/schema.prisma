@@ -23,9 +23,10 @@ model Department {
 
   name String
 
-  users   User[]
-  history History[]
-  Task    Task[]
+  users            User[]
+  history          History[]
+  createdHistories History[] @relation("CreatedByDepartment")
+  Task             Task[]
 
   @@map("department")
 }
@@ -46,9 +47,10 @@ model User {
   roleId Int?
   role   Role? @relation(fields: [roleId], references: [roleId])
 
-  tasks    Task[]
-  history  History[]
-  projects ProjectUser[]
+  tasks            Task[]
+  history          History[]
+  projects         ProjectUser[]
+  createdHistories History[]     @relation("CreatedByUser")
 
   isAdmin  Boolean @default(false)
   isActive Boolean @default(false)
@@ -162,6 +164,16 @@ model History {
 
   comment String?
 
+  createdAt DateTime @default(now()) @map("created_at")
+
+  createdByUserId Int?  @map("created_by_user_id")
+  createdByUser   User? @relation("CreatedByUser", fields: [createdByUserId], references: [userId])
+
+  createdByDepartmentId Int?        @map("created_by_department_id")
+  createdByDepartment   Department? @relation("CreatedByDepartment", fields: [createdByDepartmentId], references: [departmentId])
+
+  hoursSpent Float?
+
   @@index([taskId])
   @@index([userId])
   @@index([departmentId])
@@ -170,6 +182,9 @@ model History {
 
 model ReportTask {
   reportId Int @id @default(autoincrement()) @map("report_id")
+
+  title String?
+  type  String?
 
   taskId Int  @map("task_id")
   task   Task @relation(fields: [taskId], references: [taskId], onDelete: Cascade)
@@ -191,6 +206,9 @@ model ReportProject {
   project   Project @relation(fields: [projectId], references: [projectId], onDelete: Cascade)
 
   generatedDate DateTime @default(now()) @map("generated_date")
+
+  title String?
+  type  String?
 
   content             String?
   performanceAnalysis String? @map("performance_analysis")

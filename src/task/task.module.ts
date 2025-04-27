@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
 import { HistoryService } from 'src/history/history.service'
 import { PrismaService } from 'src/prisma.service'
-import { ReportTaskService } from 'src/report-task/report-task.service'
+// import { ReportTaskService } from 'src/report-task/report-task.service'
 import { UserModule } from 'src/user/user.module'
 import { UserService } from 'src/user/user.service'
 import { TaskController } from './task.controller'
@@ -15,7 +15,8 @@ import { TaskService } from './task.service'
     PrismaService,
     HistoryService,
     UserService,
-    ReportTaskService
+    // ReportTaskService,
+    UserService
   ],
   exports: [TaskService]
 })

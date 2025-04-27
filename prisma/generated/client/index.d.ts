@@ -1932,12 +1932,14 @@ export namespace Prisma {
   export type DepartmentCountOutputType = {
     users: number
     history: number
+    createdHistories: number
     Task: number
   }
 
   export type DepartmentCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | DepartmentCountOutputTypeCountUsersArgs
     history?: boolean | DepartmentCountOutputTypeCountHistoryArgs
+    createdHistories?: boolean | DepartmentCountOutputTypeCountCreatedHistoriesArgs
     Task?: boolean | DepartmentCountOutputTypeCountTaskArgs
   }
 
@@ -1969,6 +1971,13 @@ export namespace Prisma {
   /**
    * DepartmentCountOutputType without action
    */
+  export type DepartmentCountOutputTypeCountCreatedHistoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: HistoryWhereInput
+  }
+
+  /**
+   * DepartmentCountOutputType without action
+   */
   export type DepartmentCountOutputTypeCountTaskArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TaskWhereInput
   }
@@ -1982,12 +1991,14 @@ export namespace Prisma {
     tasks: number
     history: number
     projects: number
+    createdHistories: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tasks?: boolean | UserCountOutputTypeCountTasksArgs
     history?: boolean | UserCountOutputTypeCountHistoryArgs
     projects?: boolean | UserCountOutputTypeCountProjectsArgs
+    createdHistories?: boolean | UserCountOutputTypeCountCreatedHistoriesArgs
   }
 
   // Custom InputTypes
@@ -2020,6 +2031,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountProjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProjectUserWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCreatedHistoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: HistoryWhereInput
   }
 
 
@@ -3476,6 +3494,7 @@ export namespace Prisma {
     name?: boolean
     users?: boolean | Department$usersArgs<ExtArgs>
     history?: boolean | Department$historyArgs<ExtArgs>
+    createdHistories?: boolean | Department$createdHistoriesArgs<ExtArgs>
     Task?: boolean | Department$TaskArgs<ExtArgs>
     _count?: boolean | DepartmentCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["department"]>
@@ -3499,6 +3518,7 @@ export namespace Prisma {
   export type DepartmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | Department$usersArgs<ExtArgs>
     history?: boolean | Department$historyArgs<ExtArgs>
+    createdHistories?: boolean | Department$createdHistoriesArgs<ExtArgs>
     Task?: boolean | Department$TaskArgs<ExtArgs>
     _count?: boolean | DepartmentCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -3510,6 +3530,7 @@ export namespace Prisma {
     objects: {
       users: Prisma.$UserPayload<ExtArgs>[]
       history: Prisma.$HistoryPayload<ExtArgs>[]
+      createdHistories: Prisma.$HistoryPayload<ExtArgs>[]
       Task: Prisma.$TaskPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -3911,6 +3932,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     users<T extends Department$usersArgs<ExtArgs> = {}>(args?: Subset<T, Department$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", ClientOptions> | Null>
     history<T extends Department$historyArgs<ExtArgs> = {}>(args?: Subset<T, Department$historyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HistoryPayload<ExtArgs>, T, "findMany", ClientOptions> | Null>
+    createdHistories<T extends Department$createdHistoriesArgs<ExtArgs> = {}>(args?: Subset<T, Department$createdHistoriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HistoryPayload<ExtArgs>, T, "findMany", ClientOptions> | Null>
     Task<T extends Department$TaskArgs<ExtArgs> = {}>(args?: Subset<T, Department$TaskArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", ClientOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -4379,6 +4401,30 @@ export namespace Prisma {
   }
 
   /**
+   * Department.createdHistories
+   */
+  export type Department$createdHistoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the History
+     */
+    select?: HistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the History
+     */
+    omit?: HistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HistoryInclude<ExtArgs> | null
+    where?: HistoryWhereInput
+    orderBy?: HistoryOrderByWithRelationInput | HistoryOrderByWithRelationInput[]
+    cursor?: HistoryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: HistoryScalarFieldEnum | HistoryScalarFieldEnum[]
+  }
+
+  /**
    * Department.Task
    */
   export type Department$TaskArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4669,6 +4715,7 @@ export namespace Prisma {
     tasks?: boolean | User$tasksArgs<ExtArgs>
     history?: boolean | User$historyArgs<ExtArgs>
     projects?: boolean | User$projectsArgs<ExtArgs>
+    createdHistories?: boolean | User$createdHistoriesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -4722,6 +4769,7 @@ export namespace Prisma {
     tasks?: boolean | User$tasksArgs<ExtArgs>
     history?: boolean | User$historyArgs<ExtArgs>
     projects?: boolean | User$projectsArgs<ExtArgs>
+    createdHistories?: boolean | User$createdHistoriesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4744,6 +4792,7 @@ export namespace Prisma {
       tasks: Prisma.$TaskPayload<ExtArgs>[]
       history: Prisma.$HistoryPayload<ExtArgs>[]
       projects: Prisma.$ProjectUserPayload<ExtArgs>[]
+      createdHistories: Prisma.$HistoryPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       userId: number
@@ -5155,6 +5204,7 @@ export namespace Prisma {
     tasks<T extends User$tasksArgs<ExtArgs> = {}>(args?: Subset<T, User$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", ClientOptions> | Null>
     history<T extends User$historyArgs<ExtArgs> = {}>(args?: Subset<T, User$historyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HistoryPayload<ExtArgs>, T, "findMany", ClientOptions> | Null>
     projects<T extends User$projectsArgs<ExtArgs> = {}>(args?: Subset<T, User$projectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectUserPayload<ExtArgs>, T, "findMany", ClientOptions> | Null>
+    createdHistories<T extends User$createdHistoriesArgs<ExtArgs> = {}>(args?: Subset<T, User$createdHistoriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HistoryPayload<ExtArgs>, T, "findMany", ClientOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5677,6 +5727,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ProjectUserScalarFieldEnum | ProjectUserScalarFieldEnum[]
+  }
+
+  /**
+   * User.createdHistories
+   */
+  export type User$createdHistoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the History
+     */
+    select?: HistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the History
+     */
+    omit?: HistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HistoryInclude<ExtArgs> | null
+    where?: HistoryWhereInput
+    orderBy?: HistoryOrderByWithRelationInput | HistoryOrderByWithRelationInput[]
+    cursor?: HistoryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: HistoryScalarFieldEnum | HistoryScalarFieldEnum[]
   }
 
   /**
@@ -12508,6 +12582,9 @@ export namespace Prisma {
     taskId: number | null
     userId: number | null
     departmentId: number | null
+    createdByUserId: number | null
+    createdByDepartmentId: number | null
+    hoursSpent: number | null
   }
 
   export type HistorySumAggregateOutputType = {
@@ -12515,6 +12592,9 @@ export namespace Prisma {
     taskId: number | null
     userId: number | null
     departmentId: number | null
+    createdByUserId: number | null
+    createdByDepartmentId: number | null
+    hoursSpent: number | null
   }
 
   export type HistoryMinAggregateOutputType = {
@@ -12523,6 +12603,10 @@ export namespace Prisma {
     userId: number | null
     departmentId: number | null
     comment: string | null
+    createdAt: Date | null
+    createdByUserId: number | null
+    createdByDepartmentId: number | null
+    hoursSpent: number | null
   }
 
   export type HistoryMaxAggregateOutputType = {
@@ -12531,6 +12615,10 @@ export namespace Prisma {
     userId: number | null
     departmentId: number | null
     comment: string | null
+    createdAt: Date | null
+    createdByUserId: number | null
+    createdByDepartmentId: number | null
+    hoursSpent: number | null
   }
 
   export type HistoryCountAggregateOutputType = {
@@ -12539,6 +12627,10 @@ export namespace Prisma {
     userId: number
     departmentId: number
     comment: number
+    createdAt: number
+    createdByUserId: number
+    createdByDepartmentId: number
+    hoursSpent: number
     _all: number
   }
 
@@ -12548,6 +12640,9 @@ export namespace Prisma {
     taskId?: true
     userId?: true
     departmentId?: true
+    createdByUserId?: true
+    createdByDepartmentId?: true
+    hoursSpent?: true
   }
 
   export type HistorySumAggregateInputType = {
@@ -12555,6 +12650,9 @@ export namespace Prisma {
     taskId?: true
     userId?: true
     departmentId?: true
+    createdByUserId?: true
+    createdByDepartmentId?: true
+    hoursSpent?: true
   }
 
   export type HistoryMinAggregateInputType = {
@@ -12563,6 +12661,10 @@ export namespace Prisma {
     userId?: true
     departmentId?: true
     comment?: true
+    createdAt?: true
+    createdByUserId?: true
+    createdByDepartmentId?: true
+    hoursSpent?: true
   }
 
   export type HistoryMaxAggregateInputType = {
@@ -12571,6 +12673,10 @@ export namespace Prisma {
     userId?: true
     departmentId?: true
     comment?: true
+    createdAt?: true
+    createdByUserId?: true
+    createdByDepartmentId?: true
+    hoursSpent?: true
   }
 
   export type HistoryCountAggregateInputType = {
@@ -12579,6 +12685,10 @@ export namespace Prisma {
     userId?: true
     departmentId?: true
     comment?: true
+    createdAt?: true
+    createdByUserId?: true
+    createdByDepartmentId?: true
+    hoursSpent?: true
     _all?: true
   }
 
@@ -12674,6 +12784,10 @@ export namespace Prisma {
     userId: number | null
     departmentId: number | null
     comment: string | null
+    createdAt: Date
+    createdByUserId: number | null
+    createdByDepartmentId: number | null
+    hoursSpent: number | null
     _count: HistoryCountAggregateOutputType | null
     _avg: HistoryAvgAggregateOutputType | null
     _sum: HistorySumAggregateOutputType | null
@@ -12701,9 +12815,15 @@ export namespace Prisma {
     userId?: boolean
     departmentId?: boolean
     comment?: boolean
+    createdAt?: boolean
+    createdByUserId?: boolean
+    createdByDepartmentId?: boolean
+    hoursSpent?: boolean
     task?: boolean | TaskDefaultArgs<ExtArgs>
     user?: boolean | History$userArgs<ExtArgs>
     department?: boolean | History$departmentArgs<ExtArgs>
+    createdByUser?: boolean | History$createdByUserArgs<ExtArgs>
+    createdByDepartment?: boolean | History$createdByDepartmentArgs<ExtArgs>
   }, ExtArgs["result"]["history"]>
 
   export type HistorySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -12712,9 +12832,15 @@ export namespace Prisma {
     userId?: boolean
     departmentId?: boolean
     comment?: boolean
+    createdAt?: boolean
+    createdByUserId?: boolean
+    createdByDepartmentId?: boolean
+    hoursSpent?: boolean
     task?: boolean | TaskDefaultArgs<ExtArgs>
     user?: boolean | History$userArgs<ExtArgs>
     department?: boolean | History$departmentArgs<ExtArgs>
+    createdByUser?: boolean | History$createdByUserArgs<ExtArgs>
+    createdByDepartment?: boolean | History$createdByDepartmentArgs<ExtArgs>
   }, ExtArgs["result"]["history"]>
 
   export type HistorySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -12723,9 +12849,15 @@ export namespace Prisma {
     userId?: boolean
     departmentId?: boolean
     comment?: boolean
+    createdAt?: boolean
+    createdByUserId?: boolean
+    createdByDepartmentId?: boolean
+    hoursSpent?: boolean
     task?: boolean | TaskDefaultArgs<ExtArgs>
     user?: boolean | History$userArgs<ExtArgs>
     department?: boolean | History$departmentArgs<ExtArgs>
+    createdByUser?: boolean | History$createdByUserArgs<ExtArgs>
+    createdByDepartment?: boolean | History$createdByDepartmentArgs<ExtArgs>
   }, ExtArgs["result"]["history"]>
 
   export type HistorySelectScalar = {
@@ -12734,23 +12866,33 @@ export namespace Prisma {
     userId?: boolean
     departmentId?: boolean
     comment?: boolean
+    createdAt?: boolean
+    createdByUserId?: boolean
+    createdByDepartmentId?: boolean
+    hoursSpent?: boolean
   }
 
-  export type HistoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"historyId" | "taskId" | "userId" | "departmentId" | "comment", ExtArgs["result"]["history"]>
+  export type HistoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"historyId" | "taskId" | "userId" | "departmentId" | "comment" | "createdAt" | "createdByUserId" | "createdByDepartmentId" | "hoursSpent", ExtArgs["result"]["history"]>
   export type HistoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     task?: boolean | TaskDefaultArgs<ExtArgs>
     user?: boolean | History$userArgs<ExtArgs>
     department?: boolean | History$departmentArgs<ExtArgs>
+    createdByUser?: boolean | History$createdByUserArgs<ExtArgs>
+    createdByDepartment?: boolean | History$createdByDepartmentArgs<ExtArgs>
   }
   export type HistoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     task?: boolean | TaskDefaultArgs<ExtArgs>
     user?: boolean | History$userArgs<ExtArgs>
     department?: boolean | History$departmentArgs<ExtArgs>
+    createdByUser?: boolean | History$createdByUserArgs<ExtArgs>
+    createdByDepartment?: boolean | History$createdByDepartmentArgs<ExtArgs>
   }
   export type HistoryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     task?: boolean | TaskDefaultArgs<ExtArgs>
     user?: boolean | History$userArgs<ExtArgs>
     department?: boolean | History$departmentArgs<ExtArgs>
+    createdByUser?: boolean | History$createdByUserArgs<ExtArgs>
+    createdByDepartment?: boolean | History$createdByDepartmentArgs<ExtArgs>
   }
 
   export type $HistoryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -12759,6 +12901,8 @@ export namespace Prisma {
       task: Prisma.$TaskPayload<ExtArgs>
       user: Prisma.$UserPayload<ExtArgs> | null
       department: Prisma.$DepartmentPayload<ExtArgs> | null
+      createdByUser: Prisma.$UserPayload<ExtArgs> | null
+      createdByDepartment: Prisma.$DepartmentPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       historyId: number
@@ -12766,6 +12910,10 @@ export namespace Prisma {
       userId: number | null
       departmentId: number | null
       comment: string | null
+      createdAt: Date
+      createdByUserId: number | null
+      createdByDepartmentId: number | null
+      hoursSpent: number | null
     }, ExtArgs["result"]["history"]>
     composites: {}
   }
@@ -13163,6 +13311,8 @@ export namespace Prisma {
     task<T extends TaskDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TaskDefaultArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions> | Null, Null, ExtArgs, ClientOptions>
     user<T extends History$userArgs<ExtArgs> = {}>(args?: Subset<T, History$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions> | null, null, ExtArgs, ClientOptions>
     department<T extends History$departmentArgs<ExtArgs> = {}>(args?: Subset<T, History$departmentArgs<ExtArgs>>): Prisma__DepartmentClient<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions> | null, null, ExtArgs, ClientOptions>
+    createdByUser<T extends History$createdByUserArgs<ExtArgs> = {}>(args?: Subset<T, History$createdByUserArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions> | null, null, ExtArgs, ClientOptions>
+    createdByDepartment<T extends History$createdByDepartmentArgs<ExtArgs> = {}>(args?: Subset<T, History$createdByDepartmentArgs<ExtArgs>>): Prisma__DepartmentClient<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions> | null, null, ExtArgs, ClientOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -13197,6 +13347,10 @@ export namespace Prisma {
     readonly userId: FieldRef<"History", 'Int'>
     readonly departmentId: FieldRef<"History", 'Int'>
     readonly comment: FieldRef<"History", 'String'>
+    readonly createdAt: FieldRef<"History", 'DateTime'>
+    readonly createdByUserId: FieldRef<"History", 'Int'>
+    readonly createdByDepartmentId: FieldRef<"History", 'Int'>
+    readonly hoursSpent: FieldRef<"History", 'Float'>
   }
     
 
@@ -13631,6 +13785,44 @@ export namespace Prisma {
   }
 
   /**
+   * History.createdByUser
+   */
+  export type History$createdByUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * History.createdByDepartment
+   */
+  export type History$createdByDepartmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Department
+     */
+    select?: DepartmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Department
+     */
+    omit?: DepartmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DepartmentInclude<ExtArgs> | null
+    where?: DepartmentWhereInput
+  }
+
+  /**
    * History without action
    */
   export type HistoryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -13675,6 +13867,8 @@ export namespace Prisma {
 
   export type ReportTaskMinAggregateOutputType = {
     reportId: number | null
+    title: string | null
+    type: string | null
     taskId: number | null
     reportProjectId: number | null
     generatedDate: Date | null
@@ -13684,6 +13878,8 @@ export namespace Prisma {
 
   export type ReportTaskMaxAggregateOutputType = {
     reportId: number | null
+    title: string | null
+    type: string | null
     taskId: number | null
     reportProjectId: number | null
     generatedDate: Date | null
@@ -13693,6 +13889,8 @@ export namespace Prisma {
 
   export type ReportTaskCountAggregateOutputType = {
     reportId: number
+    title: number
+    type: number
     taskId: number
     reportProjectId: number
     generatedDate: number
@@ -13716,6 +13914,8 @@ export namespace Prisma {
 
   export type ReportTaskMinAggregateInputType = {
     reportId?: true
+    title?: true
+    type?: true
     taskId?: true
     reportProjectId?: true
     generatedDate?: true
@@ -13725,6 +13925,8 @@ export namespace Prisma {
 
   export type ReportTaskMaxAggregateInputType = {
     reportId?: true
+    title?: true
+    type?: true
     taskId?: true
     reportProjectId?: true
     generatedDate?: true
@@ -13734,6 +13936,8 @@ export namespace Prisma {
 
   export type ReportTaskCountAggregateInputType = {
     reportId?: true
+    title?: true
+    type?: true
     taskId?: true
     reportProjectId?: true
     generatedDate?: true
@@ -13830,6 +14034,8 @@ export namespace Prisma {
 
   export type ReportTaskGroupByOutputType = {
     reportId: number
+    title: string | null
+    type: string | null
     taskId: number
     reportProjectId: number
     generatedDate: Date
@@ -13858,6 +14064,8 @@ export namespace Prisma {
 
   export type ReportTaskSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     reportId?: boolean
+    title?: boolean
+    type?: boolean
     taskId?: boolean
     reportProjectId?: boolean
     generatedDate?: boolean
@@ -13869,6 +14077,8 @@ export namespace Prisma {
 
   export type ReportTaskSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     reportId?: boolean
+    title?: boolean
+    type?: boolean
     taskId?: boolean
     reportProjectId?: boolean
     generatedDate?: boolean
@@ -13880,6 +14090,8 @@ export namespace Prisma {
 
   export type ReportTaskSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     reportId?: boolean
+    title?: boolean
+    type?: boolean
     taskId?: boolean
     reportProjectId?: boolean
     generatedDate?: boolean
@@ -13891,6 +14103,8 @@ export namespace Prisma {
 
   export type ReportTaskSelectScalar = {
     reportId?: boolean
+    title?: boolean
+    type?: boolean
     taskId?: boolean
     reportProjectId?: boolean
     generatedDate?: boolean
@@ -13898,7 +14112,7 @@ export namespace Prisma {
     performanceAnalysis?: boolean
   }
 
-  export type ReportTaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"reportId" | "taskId" | "reportProjectId" | "generatedDate" | "content" | "performanceAnalysis", ExtArgs["result"]["reportTask"]>
+  export type ReportTaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"reportId" | "title" | "type" | "taskId" | "reportProjectId" | "generatedDate" | "content" | "performanceAnalysis", ExtArgs["result"]["reportTask"]>
   export type ReportTaskInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     task?: boolean | TaskDefaultArgs<ExtArgs>
     reportProject?: boolean | ReportProjectDefaultArgs<ExtArgs>
@@ -13920,6 +14134,8 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       reportId: number
+      title: string | null
+      type: string | null
       taskId: number
       reportProjectId: number
       generatedDate: Date
@@ -14351,6 +14567,8 @@ export namespace Prisma {
    */ 
   interface ReportTaskFieldRefs {
     readonly reportId: FieldRef<"ReportTask", 'Int'>
+    readonly title: FieldRef<"ReportTask", 'String'>
+    readonly type: FieldRef<"ReportTask", 'String'>
     readonly taskId: FieldRef<"ReportTask", 'Int'>
     readonly reportProjectId: FieldRef<"ReportTask", 'Int'>
     readonly generatedDate: FieldRef<"ReportTask", 'DateTime'>
@@ -14802,6 +15020,8 @@ export namespace Prisma {
     reportId: number | null
     projectId: number | null
     generatedDate: Date | null
+    title: string | null
+    type: string | null
     content: string | null
     performanceAnalysis: string | null
     completedTasks: number | null
@@ -14815,6 +15035,8 @@ export namespace Prisma {
     reportId: number | null
     projectId: number | null
     generatedDate: Date | null
+    title: string | null
+    type: string | null
     content: string | null
     performanceAnalysis: string | null
     completedTasks: number | null
@@ -14828,6 +15050,8 @@ export namespace Prisma {
     reportId: number
     projectId: number
     generatedDate: number
+    title: number
+    type: number
     content: number
     performanceAnalysis: number
     completedTasks: number
@@ -14859,6 +15083,8 @@ export namespace Prisma {
     reportId?: true
     projectId?: true
     generatedDate?: true
+    title?: true
+    type?: true
     content?: true
     performanceAnalysis?: true
     completedTasks?: true
@@ -14872,6 +15098,8 @@ export namespace Prisma {
     reportId?: true
     projectId?: true
     generatedDate?: true
+    title?: true
+    type?: true
     content?: true
     performanceAnalysis?: true
     completedTasks?: true
@@ -14885,6 +15113,8 @@ export namespace Prisma {
     reportId?: true
     projectId?: true
     generatedDate?: true
+    title?: true
+    type?: true
     content?: true
     performanceAnalysis?: true
     completedTasks?: true
@@ -14985,6 +15215,8 @@ export namespace Prisma {
     reportId: number
     projectId: number
     generatedDate: Date
+    title: string | null
+    type: string | null
     content: string | null
     performanceAnalysis: string | null
     completedTasks: number | null
@@ -15017,6 +15249,8 @@ export namespace Prisma {
     reportId?: boolean
     projectId?: boolean
     generatedDate?: boolean
+    title?: boolean
+    type?: boolean
     content?: boolean
     performanceAnalysis?: boolean
     completedTasks?: boolean
@@ -15033,6 +15267,8 @@ export namespace Prisma {
     reportId?: boolean
     projectId?: boolean
     generatedDate?: boolean
+    title?: boolean
+    type?: boolean
     content?: boolean
     performanceAnalysis?: boolean
     completedTasks?: boolean
@@ -15047,6 +15283,8 @@ export namespace Prisma {
     reportId?: boolean
     projectId?: boolean
     generatedDate?: boolean
+    title?: boolean
+    type?: boolean
     content?: boolean
     performanceAnalysis?: boolean
     completedTasks?: boolean
@@ -15061,6 +15299,8 @@ export namespace Prisma {
     reportId?: boolean
     projectId?: boolean
     generatedDate?: boolean
+    title?: boolean
+    type?: boolean
     content?: boolean
     performanceAnalysis?: boolean
     completedTasks?: boolean
@@ -15070,7 +15310,7 @@ export namespace Prisma {
     totalTasks?: boolean
   }
 
-  export type ReportProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"reportId" | "projectId" | "generatedDate" | "content" | "performanceAnalysis" | "completedTasks" | "averageTimePerTask" | "completionRate" | "teamEfficiency" | "totalTasks", ExtArgs["result"]["reportProject"]>
+  export type ReportProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"reportId" | "projectId" | "generatedDate" | "title" | "type" | "content" | "performanceAnalysis" | "completedTasks" | "averageTimePerTask" | "completionRate" | "teamEfficiency" | "totalTasks", ExtArgs["result"]["reportProject"]>
   export type ReportProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     reports?: boolean | ReportProject$reportsArgs<ExtArgs>
@@ -15093,6 +15333,8 @@ export namespace Prisma {
       reportId: number
       projectId: number
       generatedDate: Date
+      title: string | null
+      type: string | null
       content: string | null
       performanceAnalysis: string | null
       completedTasks: number | null
@@ -15528,6 +15770,8 @@ export namespace Prisma {
     readonly reportId: FieldRef<"ReportProject", 'Int'>
     readonly projectId: FieldRef<"ReportProject", 'Int'>
     readonly generatedDate: FieldRef<"ReportProject", 'DateTime'>
+    readonly title: FieldRef<"ReportProject", 'String'>
+    readonly type: FieldRef<"ReportProject", 'String'>
     readonly content: FieldRef<"ReportProject", 'String'>
     readonly performanceAnalysis: FieldRef<"ReportProject", 'String'>
     readonly completedTasks: FieldRef<"ReportProject", 'Int'>
@@ -16087,7 +16331,11 @@ export namespace Prisma {
     taskId: 'taskId',
     userId: 'userId',
     departmentId: 'departmentId',
-    comment: 'comment'
+    comment: 'comment',
+    createdAt: 'createdAt',
+    createdByUserId: 'createdByUserId',
+    createdByDepartmentId: 'createdByDepartmentId',
+    hoursSpent: 'hoursSpent'
   };
 
   export type HistoryScalarFieldEnum = (typeof HistoryScalarFieldEnum)[keyof typeof HistoryScalarFieldEnum]
@@ -16095,6 +16343,8 @@ export namespace Prisma {
 
   export const ReportTaskScalarFieldEnum: {
     reportId: 'reportId',
+    title: 'title',
+    type: 'type',
     taskId: 'taskId',
     reportProjectId: 'reportProjectId',
     generatedDate: 'generatedDate',
@@ -16109,6 +16359,8 @@ export namespace Prisma {
     reportId: 'reportId',
     projectId: 'projectId',
     generatedDate: 'generatedDate',
+    title: 'title',
+    type: 'type',
     content: 'content',
     performanceAnalysis: 'performanceAnalysis',
     completedTasks: 'completedTasks',
@@ -16299,6 +16551,7 @@ export namespace Prisma {
     name?: StringFilter<"Department"> | string
     users?: UserListRelationFilter
     history?: HistoryListRelationFilter
+    createdHistories?: HistoryListRelationFilter
     Task?: TaskListRelationFilter
   }
 
@@ -16307,6 +16560,7 @@ export namespace Prisma {
     name?: SortOrder
     users?: UserOrderByRelationAggregateInput
     history?: HistoryOrderByRelationAggregateInput
+    createdHistories?: HistoryOrderByRelationAggregateInput
     Task?: TaskOrderByRelationAggregateInput
   }
 
@@ -16318,6 +16572,7 @@ export namespace Prisma {
     name?: StringFilter<"Department"> | string
     users?: UserListRelationFilter
     history?: HistoryListRelationFilter
+    createdHistories?: HistoryListRelationFilter
     Task?: TaskListRelationFilter
   }, "departmentId">
 
@@ -16358,6 +16613,7 @@ export namespace Prisma {
     tasks?: TaskListRelationFilter
     history?: HistoryListRelationFilter
     projects?: ProjectUserListRelationFilter
+    createdHistories?: HistoryListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -16376,6 +16632,7 @@ export namespace Prisma {
     tasks?: TaskOrderByRelationAggregateInput
     history?: HistoryOrderByRelationAggregateInput
     projects?: ProjectUserOrderByRelationAggregateInput
+    createdHistories?: HistoryOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -16397,6 +16654,7 @@ export namespace Prisma {
     tasks?: TaskListRelationFilter
     history?: HistoryListRelationFilter
     projects?: ProjectUserListRelationFilter
+    createdHistories?: HistoryListRelationFilter
   }, "userId" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -16796,9 +17054,15 @@ export namespace Prisma {
     userId?: IntNullableFilter<"History"> | number | null
     departmentId?: IntNullableFilter<"History"> | number | null
     comment?: StringNullableFilter<"History"> | string | null
+    createdAt?: DateTimeFilter<"History"> | Date | string
+    createdByUserId?: IntNullableFilter<"History"> | number | null
+    createdByDepartmentId?: IntNullableFilter<"History"> | number | null
+    hoursSpent?: FloatNullableFilter<"History"> | number | null
     task?: XOR<TaskScalarRelationFilter, TaskWhereInput>
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     department?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
+    createdByUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    createdByDepartment?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
   }
 
   export type HistoryOrderByWithRelationInput = {
@@ -16807,9 +17071,15 @@ export namespace Prisma {
     userId?: SortOrderInput | SortOrder
     departmentId?: SortOrderInput | SortOrder
     comment?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    createdByUserId?: SortOrderInput | SortOrder
+    createdByDepartmentId?: SortOrderInput | SortOrder
+    hoursSpent?: SortOrderInput | SortOrder
     task?: TaskOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
     department?: DepartmentOrderByWithRelationInput
+    createdByUser?: UserOrderByWithRelationInput
+    createdByDepartment?: DepartmentOrderByWithRelationInput
   }
 
   export type HistoryWhereUniqueInput = Prisma.AtLeast<{
@@ -16821,9 +17091,15 @@ export namespace Prisma {
     userId?: IntNullableFilter<"History"> | number | null
     departmentId?: IntNullableFilter<"History"> | number | null
     comment?: StringNullableFilter<"History"> | string | null
+    createdAt?: DateTimeFilter<"History"> | Date | string
+    createdByUserId?: IntNullableFilter<"History"> | number | null
+    createdByDepartmentId?: IntNullableFilter<"History"> | number | null
+    hoursSpent?: FloatNullableFilter<"History"> | number | null
     task?: XOR<TaskScalarRelationFilter, TaskWhereInput>
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     department?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
+    createdByUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    createdByDepartment?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
   }, "historyId">
 
   export type HistoryOrderByWithAggregationInput = {
@@ -16832,6 +17108,10 @@ export namespace Prisma {
     userId?: SortOrderInput | SortOrder
     departmentId?: SortOrderInput | SortOrder
     comment?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    createdByUserId?: SortOrderInput | SortOrder
+    createdByDepartmentId?: SortOrderInput | SortOrder
+    hoursSpent?: SortOrderInput | SortOrder
     _count?: HistoryCountOrderByAggregateInput
     _avg?: HistoryAvgOrderByAggregateInput
     _max?: HistoryMaxOrderByAggregateInput
@@ -16848,6 +17128,10 @@ export namespace Prisma {
     userId?: IntNullableWithAggregatesFilter<"History"> | number | null
     departmentId?: IntNullableWithAggregatesFilter<"History"> | number | null
     comment?: StringNullableWithAggregatesFilter<"History"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"History"> | Date | string
+    createdByUserId?: IntNullableWithAggregatesFilter<"History"> | number | null
+    createdByDepartmentId?: IntNullableWithAggregatesFilter<"History"> | number | null
+    hoursSpent?: FloatNullableWithAggregatesFilter<"History"> | number | null
   }
 
   export type ReportTaskWhereInput = {
@@ -16855,6 +17139,8 @@ export namespace Prisma {
     OR?: ReportTaskWhereInput[]
     NOT?: ReportTaskWhereInput | ReportTaskWhereInput[]
     reportId?: IntFilter<"ReportTask"> | number
+    title?: StringNullableFilter<"ReportTask"> | string | null
+    type?: StringNullableFilter<"ReportTask"> | string | null
     taskId?: IntFilter<"ReportTask"> | number
     reportProjectId?: IntFilter<"ReportTask"> | number
     generatedDate?: DateTimeFilter<"ReportTask"> | Date | string
@@ -16866,6 +17152,8 @@ export namespace Prisma {
 
   export type ReportTaskOrderByWithRelationInput = {
     reportId?: SortOrder
+    title?: SortOrderInput | SortOrder
+    type?: SortOrderInput | SortOrder
     taskId?: SortOrder
     reportProjectId?: SortOrder
     generatedDate?: SortOrder
@@ -16880,6 +17168,8 @@ export namespace Prisma {
     AND?: ReportTaskWhereInput | ReportTaskWhereInput[]
     OR?: ReportTaskWhereInput[]
     NOT?: ReportTaskWhereInput | ReportTaskWhereInput[]
+    title?: StringNullableFilter<"ReportTask"> | string | null
+    type?: StringNullableFilter<"ReportTask"> | string | null
     taskId?: IntFilter<"ReportTask"> | number
     reportProjectId?: IntFilter<"ReportTask"> | number
     generatedDate?: DateTimeFilter<"ReportTask"> | Date | string
@@ -16891,6 +17181,8 @@ export namespace Prisma {
 
   export type ReportTaskOrderByWithAggregationInput = {
     reportId?: SortOrder
+    title?: SortOrderInput | SortOrder
+    type?: SortOrderInput | SortOrder
     taskId?: SortOrder
     reportProjectId?: SortOrder
     generatedDate?: SortOrder
@@ -16908,6 +17200,8 @@ export namespace Prisma {
     OR?: ReportTaskScalarWhereWithAggregatesInput[]
     NOT?: ReportTaskScalarWhereWithAggregatesInput | ReportTaskScalarWhereWithAggregatesInput[]
     reportId?: IntWithAggregatesFilter<"ReportTask"> | number
+    title?: StringNullableWithAggregatesFilter<"ReportTask"> | string | null
+    type?: StringNullableWithAggregatesFilter<"ReportTask"> | string | null
     taskId?: IntWithAggregatesFilter<"ReportTask"> | number
     reportProjectId?: IntWithAggregatesFilter<"ReportTask"> | number
     generatedDate?: DateTimeWithAggregatesFilter<"ReportTask"> | Date | string
@@ -16922,6 +17216,8 @@ export namespace Prisma {
     reportId?: IntFilter<"ReportProject"> | number
     projectId?: IntFilter<"ReportProject"> | number
     generatedDate?: DateTimeFilter<"ReportProject"> | Date | string
+    title?: StringNullableFilter<"ReportProject"> | string | null
+    type?: StringNullableFilter<"ReportProject"> | string | null
     content?: StringNullableFilter<"ReportProject"> | string | null
     performanceAnalysis?: StringNullableFilter<"ReportProject"> | string | null
     completedTasks?: IntNullableFilter<"ReportProject"> | number | null
@@ -16937,6 +17233,8 @@ export namespace Prisma {
     reportId?: SortOrder
     projectId?: SortOrder
     generatedDate?: SortOrder
+    title?: SortOrderInput | SortOrder
+    type?: SortOrderInput | SortOrder
     content?: SortOrderInput | SortOrder
     performanceAnalysis?: SortOrderInput | SortOrder
     completedTasks?: SortOrderInput | SortOrder
@@ -16955,6 +17253,8 @@ export namespace Prisma {
     NOT?: ReportProjectWhereInput | ReportProjectWhereInput[]
     projectId?: IntFilter<"ReportProject"> | number
     generatedDate?: DateTimeFilter<"ReportProject"> | Date | string
+    title?: StringNullableFilter<"ReportProject"> | string | null
+    type?: StringNullableFilter<"ReportProject"> | string | null
     content?: StringNullableFilter<"ReportProject"> | string | null
     performanceAnalysis?: StringNullableFilter<"ReportProject"> | string | null
     completedTasks?: IntNullableFilter<"ReportProject"> | number | null
@@ -16970,6 +17270,8 @@ export namespace Prisma {
     reportId?: SortOrder
     projectId?: SortOrder
     generatedDate?: SortOrder
+    title?: SortOrderInput | SortOrder
+    type?: SortOrderInput | SortOrder
     content?: SortOrderInput | SortOrder
     performanceAnalysis?: SortOrderInput | SortOrder
     completedTasks?: SortOrderInput | SortOrder
@@ -16991,6 +17293,8 @@ export namespace Prisma {
     reportId?: IntWithAggregatesFilter<"ReportProject"> | number
     projectId?: IntWithAggregatesFilter<"ReportProject"> | number
     generatedDate?: DateTimeWithAggregatesFilter<"ReportProject"> | Date | string
+    title?: StringNullableWithAggregatesFilter<"ReportProject"> | string | null
+    type?: StringNullableWithAggregatesFilter<"ReportProject"> | string | null
     content?: StringNullableWithAggregatesFilter<"ReportProject"> | string | null
     performanceAnalysis?: StringNullableWithAggregatesFilter<"ReportProject"> | string | null
     completedTasks?: IntNullableWithAggregatesFilter<"ReportProject"> | number | null
@@ -17047,6 +17351,7 @@ export namespace Prisma {
     name: string
     users?: UserCreateNestedManyWithoutDepartmentInput
     history?: HistoryCreateNestedManyWithoutDepartmentInput
+    createdHistories?: HistoryCreateNestedManyWithoutCreatedByDepartmentInput
     Task?: TaskCreateNestedManyWithoutDepartmentInput
   }
 
@@ -17055,6 +17360,7 @@ export namespace Prisma {
     name: string
     users?: UserUncheckedCreateNestedManyWithoutDepartmentInput
     history?: HistoryUncheckedCreateNestedManyWithoutDepartmentInput
+    createdHistories?: HistoryUncheckedCreateNestedManyWithoutCreatedByDepartmentInput
     Task?: TaskUncheckedCreateNestedManyWithoutDepartmentInput
   }
 
@@ -17062,6 +17368,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     users?: UserUpdateManyWithoutDepartmentNestedInput
     history?: HistoryUpdateManyWithoutDepartmentNestedInput
+    createdHistories?: HistoryUpdateManyWithoutCreatedByDepartmentNestedInput
     Task?: TaskUpdateManyWithoutDepartmentNestedInput
   }
 
@@ -17070,6 +17377,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     users?: UserUncheckedUpdateManyWithoutDepartmentNestedInput
     history?: HistoryUncheckedUpdateManyWithoutDepartmentNestedInput
+    createdHistories?: HistoryUncheckedUpdateManyWithoutCreatedByDepartmentNestedInput
     Task?: TaskUncheckedUpdateManyWithoutDepartmentNestedInput
   }
 
@@ -17099,6 +17407,7 @@ export namespace Prisma {
     tasks?: TaskCreateNestedManyWithoutUserInput
     history?: HistoryCreateNestedManyWithoutUserInput
     projects?: ProjectUserCreateNestedManyWithoutUserInput
+    createdHistories?: HistoryCreateNestedManyWithoutCreatedByUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -17114,6 +17423,7 @@ export namespace Prisma {
     tasks?: TaskUncheckedCreateNestedManyWithoutUserInput
     history?: HistoryUncheckedCreateNestedManyWithoutUserInput
     projects?: ProjectUserUncheckedCreateNestedManyWithoutUserInput
+    createdHistories?: HistoryUncheckedCreateNestedManyWithoutCreatedByUserInput
   }
 
   export type UserUpdateInput = {
@@ -17128,6 +17438,7 @@ export namespace Prisma {
     tasks?: TaskUpdateManyWithoutUserNestedInput
     history?: HistoryUpdateManyWithoutUserNestedInput
     projects?: ProjectUserUpdateManyWithoutUserNestedInput
+    createdHistories?: HistoryUpdateManyWithoutCreatedByUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -17143,6 +17454,7 @@ export namespace Prisma {
     tasks?: TaskUncheckedUpdateManyWithoutUserNestedInput
     history?: HistoryUncheckedUpdateManyWithoutUserNestedInput
     projects?: ProjectUserUncheckedUpdateManyWithoutUserNestedInput
+    createdHistories?: HistoryUncheckedUpdateManyWithoutCreatedByUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -17509,9 +17821,13 @@ export namespace Prisma {
 
   export type HistoryCreateInput = {
     comment?: string | null
+    createdAt?: Date | string
+    hoursSpent?: number | null
     task: TaskCreateNestedOneWithoutHistoryInput
     user?: UserCreateNestedOneWithoutHistoryInput
     department?: DepartmentCreateNestedOneWithoutHistoryInput
+    createdByUser?: UserCreateNestedOneWithoutCreatedHistoriesInput
+    createdByDepartment?: DepartmentCreateNestedOneWithoutCreatedHistoriesInput
   }
 
   export type HistoryUncheckedCreateInput = {
@@ -17520,13 +17836,21 @@ export namespace Prisma {
     userId?: number | null
     departmentId?: number | null
     comment?: string | null
+    createdAt?: Date | string
+    createdByUserId?: number | null
+    createdByDepartmentId?: number | null
+    hoursSpent?: number | null
   }
 
   export type HistoryUpdateInput = {
     comment?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hoursSpent?: NullableFloatFieldUpdateOperationsInput | number | null
     task?: TaskUpdateOneRequiredWithoutHistoryNestedInput
     user?: UserUpdateOneWithoutHistoryNestedInput
     department?: DepartmentUpdateOneWithoutHistoryNestedInput
+    createdByUser?: UserUpdateOneWithoutCreatedHistoriesNestedInput
+    createdByDepartment?: DepartmentUpdateOneWithoutCreatedHistoriesNestedInput
   }
 
   export type HistoryUncheckedUpdateInput = {
@@ -17535,6 +17859,10 @@ export namespace Prisma {
     userId?: NullableIntFieldUpdateOperationsInput | number | null
     departmentId?: NullableIntFieldUpdateOperationsInput | number | null
     comment?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdByDepartmentId?: NullableIntFieldUpdateOperationsInput | number | null
+    hoursSpent?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type HistoryCreateManyInput = {
@@ -17543,10 +17871,16 @@ export namespace Prisma {
     userId?: number | null
     departmentId?: number | null
     comment?: string | null
+    createdAt?: Date | string
+    createdByUserId?: number | null
+    createdByDepartmentId?: number | null
+    hoursSpent?: number | null
   }
 
   export type HistoryUpdateManyMutationInput = {
     comment?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hoursSpent?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type HistoryUncheckedUpdateManyInput = {
@@ -17555,9 +17889,15 @@ export namespace Prisma {
     userId?: NullableIntFieldUpdateOperationsInput | number | null
     departmentId?: NullableIntFieldUpdateOperationsInput | number | null
     comment?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdByDepartmentId?: NullableIntFieldUpdateOperationsInput | number | null
+    hoursSpent?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type ReportTaskCreateInput = {
+    title?: string | null
+    type?: string | null
     generatedDate?: Date | string
     content?: string | null
     performanceAnalysis?: string | null
@@ -17567,6 +17907,8 @@ export namespace Prisma {
 
   export type ReportTaskUncheckedCreateInput = {
     reportId?: number
+    title?: string | null
+    type?: string | null
     taskId: number
     reportProjectId: number
     generatedDate?: Date | string
@@ -17575,6 +17917,8 @@ export namespace Prisma {
   }
 
   export type ReportTaskUpdateInput = {
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     generatedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     content?: NullableStringFieldUpdateOperationsInput | string | null
     performanceAnalysis?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17584,6 +17928,8 @@ export namespace Prisma {
 
   export type ReportTaskUncheckedUpdateInput = {
     reportId?: IntFieldUpdateOperationsInput | number
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     taskId?: IntFieldUpdateOperationsInput | number
     reportProjectId?: IntFieldUpdateOperationsInput | number
     generatedDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17593,6 +17939,8 @@ export namespace Prisma {
 
   export type ReportTaskCreateManyInput = {
     reportId?: number
+    title?: string | null
+    type?: string | null
     taskId: number
     reportProjectId: number
     generatedDate?: Date | string
@@ -17601,6 +17949,8 @@ export namespace Prisma {
   }
 
   export type ReportTaskUpdateManyMutationInput = {
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     generatedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     content?: NullableStringFieldUpdateOperationsInput | string | null
     performanceAnalysis?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17608,6 +17958,8 @@ export namespace Prisma {
 
   export type ReportTaskUncheckedUpdateManyInput = {
     reportId?: IntFieldUpdateOperationsInput | number
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     taskId?: IntFieldUpdateOperationsInput | number
     reportProjectId?: IntFieldUpdateOperationsInput | number
     generatedDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17617,6 +17969,8 @@ export namespace Prisma {
 
   export type ReportProjectCreateInput = {
     generatedDate?: Date | string
+    title?: string | null
+    type?: string | null
     content?: string | null
     performanceAnalysis?: string | null
     completedTasks?: number | null
@@ -17632,6 +17986,8 @@ export namespace Prisma {
     reportId?: number
     projectId: number
     generatedDate?: Date | string
+    title?: string | null
+    type?: string | null
     content?: string | null
     performanceAnalysis?: string | null
     completedTasks?: number | null
@@ -17644,6 +18000,8 @@ export namespace Prisma {
 
   export type ReportProjectUpdateInput = {
     generatedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
     performanceAnalysis?: NullableStringFieldUpdateOperationsInput | string | null
     completedTasks?: NullableIntFieldUpdateOperationsInput | number | null
@@ -17659,6 +18017,8 @@ export namespace Prisma {
     reportId?: IntFieldUpdateOperationsInput | number
     projectId?: IntFieldUpdateOperationsInput | number
     generatedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
     performanceAnalysis?: NullableStringFieldUpdateOperationsInput | string | null
     completedTasks?: NullableIntFieldUpdateOperationsInput | number | null
@@ -17673,6 +18033,8 @@ export namespace Prisma {
     reportId?: number
     projectId: number
     generatedDate?: Date | string
+    title?: string | null
+    type?: string | null
     content?: string | null
     performanceAnalysis?: string | null
     completedTasks?: number | null
@@ -17684,6 +18046,8 @@ export namespace Prisma {
 
   export type ReportProjectUpdateManyMutationInput = {
     generatedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
     performanceAnalysis?: NullableStringFieldUpdateOperationsInput | string | null
     completedTasks?: NullableIntFieldUpdateOperationsInput | number | null
@@ -17697,6 +18061,8 @@ export namespace Prisma {
     reportId?: IntFieldUpdateOperationsInput | number
     projectId?: IntFieldUpdateOperationsInput | number
     generatedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
     performanceAnalysis?: NullableStringFieldUpdateOperationsInput | string | null
     completedTasks?: NullableIntFieldUpdateOperationsInput | number | null
@@ -18353,6 +18719,17 @@ export namespace Prisma {
     permissionsId?: SortOrder
   }
 
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type TaskScalarRelationFilter = {
     is?: TaskWhereInput
     isNot?: TaskWhereInput
@@ -18364,6 +18741,10 @@ export namespace Prisma {
     userId?: SortOrder
     departmentId?: SortOrder
     comment?: SortOrder
+    createdAt?: SortOrder
+    createdByUserId?: SortOrder
+    createdByDepartmentId?: SortOrder
+    hoursSpent?: SortOrder
   }
 
   export type HistoryAvgOrderByAggregateInput = {
@@ -18371,6 +18752,9 @@ export namespace Prisma {
     taskId?: SortOrder
     userId?: SortOrder
     departmentId?: SortOrder
+    createdByUserId?: SortOrder
+    createdByDepartmentId?: SortOrder
+    hoursSpent?: SortOrder
   }
 
   export type HistoryMaxOrderByAggregateInput = {
@@ -18379,6 +18763,10 @@ export namespace Prisma {
     userId?: SortOrder
     departmentId?: SortOrder
     comment?: SortOrder
+    createdAt?: SortOrder
+    createdByUserId?: SortOrder
+    createdByDepartmentId?: SortOrder
+    hoursSpent?: SortOrder
   }
 
   export type HistoryMinOrderByAggregateInput = {
@@ -18387,6 +18775,10 @@ export namespace Prisma {
     userId?: SortOrder
     departmentId?: SortOrder
     comment?: SortOrder
+    createdAt?: SortOrder
+    createdByUserId?: SortOrder
+    createdByDepartmentId?: SortOrder
+    hoursSpent?: SortOrder
   }
 
   export type HistorySumOrderByAggregateInput = {
@@ -18394,6 +18786,25 @@ export namespace Prisma {
     taskId?: SortOrder
     userId?: SortOrder
     departmentId?: SortOrder
+    createdByUserId?: SortOrder
+    createdByDepartmentId?: SortOrder
+    hoursSpent?: SortOrder
+  }
+
+  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type ReportProjectScalarRelationFilter = {
@@ -18403,6 +18814,8 @@ export namespace Prisma {
 
   export type ReportTaskCountOrderByAggregateInput = {
     reportId?: SortOrder
+    title?: SortOrder
+    type?: SortOrder
     taskId?: SortOrder
     reportProjectId?: SortOrder
     generatedDate?: SortOrder
@@ -18418,6 +18831,8 @@ export namespace Prisma {
 
   export type ReportTaskMaxOrderByAggregateInput = {
     reportId?: SortOrder
+    title?: SortOrder
+    type?: SortOrder
     taskId?: SortOrder
     reportProjectId?: SortOrder
     generatedDate?: SortOrder
@@ -18427,6 +18842,8 @@ export namespace Prisma {
 
   export type ReportTaskMinOrderByAggregateInput = {
     reportId?: SortOrder
+    title?: SortOrder
+    type?: SortOrder
     taskId?: SortOrder
     reportProjectId?: SortOrder
     generatedDate?: SortOrder
@@ -18440,21 +18857,12 @@ export namespace Prisma {
     reportProjectId?: SortOrder
   }
 
-  export type FloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
   export type ReportProjectCountOrderByAggregateInput = {
     reportId?: SortOrder
     projectId?: SortOrder
     generatedDate?: SortOrder
+    title?: SortOrder
+    type?: SortOrder
     content?: SortOrder
     performanceAnalysis?: SortOrder
     completedTasks?: SortOrder
@@ -18476,6 +18884,8 @@ export namespace Prisma {
     reportId?: SortOrder
     projectId?: SortOrder
     generatedDate?: SortOrder
+    title?: SortOrder
+    type?: SortOrder
     content?: SortOrder
     performanceAnalysis?: SortOrder
     completedTasks?: SortOrder
@@ -18489,6 +18899,8 @@ export namespace Prisma {
     reportId?: SortOrder
     projectId?: SortOrder
     generatedDate?: SortOrder
+    title?: SortOrder
+    type?: SortOrder
     content?: SortOrder
     performanceAnalysis?: SortOrder
     completedTasks?: SortOrder
@@ -18504,22 +18916,6 @@ export namespace Prisma {
     completedTasks?: SortOrder
     averageTimePerTask?: SortOrder
     totalTasks?: SortOrder
-  }
-
-  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedFloatNullableFilter<$PrismaModel>
-    _min?: NestedFloatNullableFilter<$PrismaModel>
-    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type UserCreateNestedManyWithoutTimezoneInput = {
@@ -18590,6 +18986,13 @@ export namespace Prisma {
     connect?: HistoryWhereUniqueInput | HistoryWhereUniqueInput[]
   }
 
+  export type HistoryCreateNestedManyWithoutCreatedByDepartmentInput = {
+    create?: XOR<HistoryCreateWithoutCreatedByDepartmentInput, HistoryUncheckedCreateWithoutCreatedByDepartmentInput> | HistoryCreateWithoutCreatedByDepartmentInput[] | HistoryUncheckedCreateWithoutCreatedByDepartmentInput[]
+    connectOrCreate?: HistoryCreateOrConnectWithoutCreatedByDepartmentInput | HistoryCreateOrConnectWithoutCreatedByDepartmentInput[]
+    createMany?: HistoryCreateManyCreatedByDepartmentInputEnvelope
+    connect?: HistoryWhereUniqueInput | HistoryWhereUniqueInput[]
+  }
+
   export type TaskCreateNestedManyWithoutDepartmentInput = {
     create?: XOR<TaskCreateWithoutDepartmentInput, TaskUncheckedCreateWithoutDepartmentInput> | TaskCreateWithoutDepartmentInput[] | TaskUncheckedCreateWithoutDepartmentInput[]
     connectOrCreate?: TaskCreateOrConnectWithoutDepartmentInput | TaskCreateOrConnectWithoutDepartmentInput[]
@@ -18608,6 +19011,13 @@ export namespace Prisma {
     create?: XOR<HistoryCreateWithoutDepartmentInput, HistoryUncheckedCreateWithoutDepartmentInput> | HistoryCreateWithoutDepartmentInput[] | HistoryUncheckedCreateWithoutDepartmentInput[]
     connectOrCreate?: HistoryCreateOrConnectWithoutDepartmentInput | HistoryCreateOrConnectWithoutDepartmentInput[]
     createMany?: HistoryCreateManyDepartmentInputEnvelope
+    connect?: HistoryWhereUniqueInput | HistoryWhereUniqueInput[]
+  }
+
+  export type HistoryUncheckedCreateNestedManyWithoutCreatedByDepartmentInput = {
+    create?: XOR<HistoryCreateWithoutCreatedByDepartmentInput, HistoryUncheckedCreateWithoutCreatedByDepartmentInput> | HistoryCreateWithoutCreatedByDepartmentInput[] | HistoryUncheckedCreateWithoutCreatedByDepartmentInput[]
+    connectOrCreate?: HistoryCreateOrConnectWithoutCreatedByDepartmentInput | HistoryCreateOrConnectWithoutCreatedByDepartmentInput[]
+    createMany?: HistoryCreateManyCreatedByDepartmentInputEnvelope
     connect?: HistoryWhereUniqueInput | HistoryWhereUniqueInput[]
   }
 
@@ -18643,6 +19053,20 @@ export namespace Prisma {
     connect?: HistoryWhereUniqueInput | HistoryWhereUniqueInput[]
     update?: HistoryUpdateWithWhereUniqueWithoutDepartmentInput | HistoryUpdateWithWhereUniqueWithoutDepartmentInput[]
     updateMany?: HistoryUpdateManyWithWhereWithoutDepartmentInput | HistoryUpdateManyWithWhereWithoutDepartmentInput[]
+    deleteMany?: HistoryScalarWhereInput | HistoryScalarWhereInput[]
+  }
+
+  export type HistoryUpdateManyWithoutCreatedByDepartmentNestedInput = {
+    create?: XOR<HistoryCreateWithoutCreatedByDepartmentInput, HistoryUncheckedCreateWithoutCreatedByDepartmentInput> | HistoryCreateWithoutCreatedByDepartmentInput[] | HistoryUncheckedCreateWithoutCreatedByDepartmentInput[]
+    connectOrCreate?: HistoryCreateOrConnectWithoutCreatedByDepartmentInput | HistoryCreateOrConnectWithoutCreatedByDepartmentInput[]
+    upsert?: HistoryUpsertWithWhereUniqueWithoutCreatedByDepartmentInput | HistoryUpsertWithWhereUniqueWithoutCreatedByDepartmentInput[]
+    createMany?: HistoryCreateManyCreatedByDepartmentInputEnvelope
+    set?: HistoryWhereUniqueInput | HistoryWhereUniqueInput[]
+    disconnect?: HistoryWhereUniqueInput | HistoryWhereUniqueInput[]
+    delete?: HistoryWhereUniqueInput | HistoryWhereUniqueInput[]
+    connect?: HistoryWhereUniqueInput | HistoryWhereUniqueInput[]
+    update?: HistoryUpdateWithWhereUniqueWithoutCreatedByDepartmentInput | HistoryUpdateWithWhereUniqueWithoutCreatedByDepartmentInput[]
+    updateMany?: HistoryUpdateManyWithWhereWithoutCreatedByDepartmentInput | HistoryUpdateManyWithWhereWithoutCreatedByDepartmentInput[]
     deleteMany?: HistoryScalarWhereInput | HistoryScalarWhereInput[]
   }
 
@@ -18685,6 +19109,20 @@ export namespace Prisma {
     connect?: HistoryWhereUniqueInput | HistoryWhereUniqueInput[]
     update?: HistoryUpdateWithWhereUniqueWithoutDepartmentInput | HistoryUpdateWithWhereUniqueWithoutDepartmentInput[]
     updateMany?: HistoryUpdateManyWithWhereWithoutDepartmentInput | HistoryUpdateManyWithWhereWithoutDepartmentInput[]
+    deleteMany?: HistoryScalarWhereInput | HistoryScalarWhereInput[]
+  }
+
+  export type HistoryUncheckedUpdateManyWithoutCreatedByDepartmentNestedInput = {
+    create?: XOR<HistoryCreateWithoutCreatedByDepartmentInput, HistoryUncheckedCreateWithoutCreatedByDepartmentInput> | HistoryCreateWithoutCreatedByDepartmentInput[] | HistoryUncheckedCreateWithoutCreatedByDepartmentInput[]
+    connectOrCreate?: HistoryCreateOrConnectWithoutCreatedByDepartmentInput | HistoryCreateOrConnectWithoutCreatedByDepartmentInput[]
+    upsert?: HistoryUpsertWithWhereUniqueWithoutCreatedByDepartmentInput | HistoryUpsertWithWhereUniqueWithoutCreatedByDepartmentInput[]
+    createMany?: HistoryCreateManyCreatedByDepartmentInputEnvelope
+    set?: HistoryWhereUniqueInput | HistoryWhereUniqueInput[]
+    disconnect?: HistoryWhereUniqueInput | HistoryWhereUniqueInput[]
+    delete?: HistoryWhereUniqueInput | HistoryWhereUniqueInput[]
+    connect?: HistoryWhereUniqueInput | HistoryWhereUniqueInput[]
+    update?: HistoryUpdateWithWhereUniqueWithoutCreatedByDepartmentInput | HistoryUpdateWithWhereUniqueWithoutCreatedByDepartmentInput[]
+    updateMany?: HistoryUpdateManyWithWhereWithoutCreatedByDepartmentInput | HistoryUpdateManyWithWhereWithoutCreatedByDepartmentInput[]
     deleteMany?: HistoryScalarWhereInput | HistoryScalarWhereInput[]
   }
 
@@ -18741,6 +19179,13 @@ export namespace Prisma {
     connect?: ProjectUserWhereUniqueInput | ProjectUserWhereUniqueInput[]
   }
 
+  export type HistoryCreateNestedManyWithoutCreatedByUserInput = {
+    create?: XOR<HistoryCreateWithoutCreatedByUserInput, HistoryUncheckedCreateWithoutCreatedByUserInput> | HistoryCreateWithoutCreatedByUserInput[] | HistoryUncheckedCreateWithoutCreatedByUserInput[]
+    connectOrCreate?: HistoryCreateOrConnectWithoutCreatedByUserInput | HistoryCreateOrConnectWithoutCreatedByUserInput[]
+    createMany?: HistoryCreateManyCreatedByUserInputEnvelope
+    connect?: HistoryWhereUniqueInput | HistoryWhereUniqueInput[]
+  }
+
   export type TaskUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<TaskCreateWithoutUserInput, TaskUncheckedCreateWithoutUserInput> | TaskCreateWithoutUserInput[] | TaskUncheckedCreateWithoutUserInput[]
     connectOrCreate?: TaskCreateOrConnectWithoutUserInput | TaskCreateOrConnectWithoutUserInput[]
@@ -18760,6 +19205,13 @@ export namespace Prisma {
     connectOrCreate?: ProjectUserCreateOrConnectWithoutUserInput | ProjectUserCreateOrConnectWithoutUserInput[]
     createMany?: ProjectUserCreateManyUserInputEnvelope
     connect?: ProjectUserWhereUniqueInput | ProjectUserWhereUniqueInput[]
+  }
+
+  export type HistoryUncheckedCreateNestedManyWithoutCreatedByUserInput = {
+    create?: XOR<HistoryCreateWithoutCreatedByUserInput, HistoryUncheckedCreateWithoutCreatedByUserInput> | HistoryCreateWithoutCreatedByUserInput[] | HistoryUncheckedCreateWithoutCreatedByUserInput[]
+    connectOrCreate?: HistoryCreateOrConnectWithoutCreatedByUserInput | HistoryCreateOrConnectWithoutCreatedByUserInput[]
+    createMany?: HistoryCreateManyCreatedByUserInputEnvelope
+    connect?: HistoryWhereUniqueInput | HistoryWhereUniqueInput[]
   }
 
   export type BoolFieldUpdateOperationsInput = {
@@ -18834,6 +19286,20 @@ export namespace Prisma {
     deleteMany?: ProjectUserScalarWhereInput | ProjectUserScalarWhereInput[]
   }
 
+  export type HistoryUpdateManyWithoutCreatedByUserNestedInput = {
+    create?: XOR<HistoryCreateWithoutCreatedByUserInput, HistoryUncheckedCreateWithoutCreatedByUserInput> | HistoryCreateWithoutCreatedByUserInput[] | HistoryUncheckedCreateWithoutCreatedByUserInput[]
+    connectOrCreate?: HistoryCreateOrConnectWithoutCreatedByUserInput | HistoryCreateOrConnectWithoutCreatedByUserInput[]
+    upsert?: HistoryUpsertWithWhereUniqueWithoutCreatedByUserInput | HistoryUpsertWithWhereUniqueWithoutCreatedByUserInput[]
+    createMany?: HistoryCreateManyCreatedByUserInputEnvelope
+    set?: HistoryWhereUniqueInput | HistoryWhereUniqueInput[]
+    disconnect?: HistoryWhereUniqueInput | HistoryWhereUniqueInput[]
+    delete?: HistoryWhereUniqueInput | HistoryWhereUniqueInput[]
+    connect?: HistoryWhereUniqueInput | HistoryWhereUniqueInput[]
+    update?: HistoryUpdateWithWhereUniqueWithoutCreatedByUserInput | HistoryUpdateWithWhereUniqueWithoutCreatedByUserInput[]
+    updateMany?: HistoryUpdateManyWithWhereWithoutCreatedByUserInput | HistoryUpdateManyWithWhereWithoutCreatedByUserInput[]
+    deleteMany?: HistoryScalarWhereInput | HistoryScalarWhereInput[]
+  }
+
   export type NullableIntFieldUpdateOperationsInput = {
     set?: number | null
     increment?: number
@@ -18882,6 +19348,20 @@ export namespace Prisma {
     update?: ProjectUserUpdateWithWhereUniqueWithoutUserInput | ProjectUserUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: ProjectUserUpdateManyWithWhereWithoutUserInput | ProjectUserUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: ProjectUserScalarWhereInput | ProjectUserScalarWhereInput[]
+  }
+
+  export type HistoryUncheckedUpdateManyWithoutCreatedByUserNestedInput = {
+    create?: XOR<HistoryCreateWithoutCreatedByUserInput, HistoryUncheckedCreateWithoutCreatedByUserInput> | HistoryCreateWithoutCreatedByUserInput[] | HistoryUncheckedCreateWithoutCreatedByUserInput[]
+    connectOrCreate?: HistoryCreateOrConnectWithoutCreatedByUserInput | HistoryCreateOrConnectWithoutCreatedByUserInput[]
+    upsert?: HistoryUpsertWithWhereUniqueWithoutCreatedByUserInput | HistoryUpsertWithWhereUniqueWithoutCreatedByUserInput[]
+    createMany?: HistoryCreateManyCreatedByUserInputEnvelope
+    set?: HistoryWhereUniqueInput | HistoryWhereUniqueInput[]
+    disconnect?: HistoryWhereUniqueInput | HistoryWhereUniqueInput[]
+    delete?: HistoryWhereUniqueInput | HistoryWhereUniqueInput[]
+    connect?: HistoryWhereUniqueInput | HistoryWhereUniqueInput[]
+    update?: HistoryUpdateWithWhereUniqueWithoutCreatedByUserInput | HistoryUpdateWithWhereUniqueWithoutCreatedByUserInput[]
+    updateMany?: HistoryUpdateManyWithWhereWithoutCreatedByUserInput | HistoryUpdateManyWithWhereWithoutCreatedByUserInput[]
+    deleteMany?: HistoryScalarWhereInput | HistoryScalarWhereInput[]
   }
 
   export type ProjectUserCreateNestedManyWithoutProjectInput = {
@@ -19360,6 +19840,26 @@ export namespace Prisma {
     connect?: DepartmentWhereUniqueInput
   }
 
+  export type UserCreateNestedOneWithoutCreatedHistoriesInput = {
+    create?: XOR<UserCreateWithoutCreatedHistoriesInput, UserUncheckedCreateWithoutCreatedHistoriesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedHistoriesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type DepartmentCreateNestedOneWithoutCreatedHistoriesInput = {
+    create?: XOR<DepartmentCreateWithoutCreatedHistoriesInput, DepartmentUncheckedCreateWithoutCreatedHistoriesInput>
+    connectOrCreate?: DepartmentCreateOrConnectWithoutCreatedHistoriesInput
+    connect?: DepartmentWhereUniqueInput
+  }
+
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type TaskUpdateOneRequiredWithoutHistoryNestedInput = {
     create?: XOR<TaskCreateWithoutHistoryInput, TaskUncheckedCreateWithoutHistoryInput>
     connectOrCreate?: TaskCreateOrConnectWithoutHistoryInput
@@ -19386,6 +19886,26 @@ export namespace Prisma {
     delete?: DepartmentWhereInput | boolean
     connect?: DepartmentWhereUniqueInput
     update?: XOR<XOR<DepartmentUpdateToOneWithWhereWithoutHistoryInput, DepartmentUpdateWithoutHistoryInput>, DepartmentUncheckedUpdateWithoutHistoryInput>
+  }
+
+  export type UserUpdateOneWithoutCreatedHistoriesNestedInput = {
+    create?: XOR<UserCreateWithoutCreatedHistoriesInput, UserUncheckedCreateWithoutCreatedHistoriesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedHistoriesInput
+    upsert?: UserUpsertWithoutCreatedHistoriesInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCreatedHistoriesInput, UserUpdateWithoutCreatedHistoriesInput>, UserUncheckedUpdateWithoutCreatedHistoriesInput>
+  }
+
+  export type DepartmentUpdateOneWithoutCreatedHistoriesNestedInput = {
+    create?: XOR<DepartmentCreateWithoutCreatedHistoriesInput, DepartmentUncheckedCreateWithoutCreatedHistoriesInput>
+    connectOrCreate?: DepartmentCreateOrConnectWithoutCreatedHistoriesInput
+    upsert?: DepartmentUpsertWithoutCreatedHistoriesInput
+    disconnect?: DepartmentWhereInput | boolean
+    delete?: DepartmentWhereInput | boolean
+    connect?: DepartmentWhereUniqueInput
+    update?: XOR<XOR<DepartmentUpdateToOneWithWhereWithoutCreatedHistoriesInput, DepartmentUpdateWithoutCreatedHistoriesInput>, DepartmentUncheckedUpdateWithoutCreatedHistoriesInput>
   }
 
   export type TaskCreateNestedOneWithoutReportsInput = {
@@ -19434,14 +19954,6 @@ export namespace Prisma {
     connectOrCreate?: ReportTaskCreateOrConnectWithoutReportProjectInput | ReportTaskCreateOrConnectWithoutReportProjectInput[]
     createMany?: ReportTaskCreateManyReportProjectInputEnvelope
     connect?: ReportTaskWhereUniqueInput | ReportTaskWhereUniqueInput[]
-  }
-
-  export type NullableFloatFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type ProjectUpdateOneRequiredWithoutReportsNestedInput = {
@@ -19742,6 +20254,7 @@ export namespace Prisma {
     tasks?: TaskCreateNestedManyWithoutUserInput
     history?: HistoryCreateNestedManyWithoutUserInput
     projects?: ProjectUserCreateNestedManyWithoutUserInput
+    createdHistories?: HistoryCreateNestedManyWithoutCreatedByUserInput
   }
 
   export type UserUncheckedCreateWithoutTimezoneInput = {
@@ -19756,6 +20269,7 @@ export namespace Prisma {
     tasks?: TaskUncheckedCreateNestedManyWithoutUserInput
     history?: HistoryUncheckedCreateNestedManyWithoutUserInput
     projects?: ProjectUserUncheckedCreateNestedManyWithoutUserInput
+    createdHistories?: HistoryUncheckedCreateNestedManyWithoutCreatedByUserInput
   }
 
   export type UserCreateOrConnectWithoutTimezoneInput = {
@@ -19810,6 +20324,7 @@ export namespace Prisma {
     tasks?: TaskCreateNestedManyWithoutUserInput
     history?: HistoryCreateNestedManyWithoutUserInput
     projects?: ProjectUserCreateNestedManyWithoutUserInput
+    createdHistories?: HistoryCreateNestedManyWithoutCreatedByUserInput
   }
 
   export type UserUncheckedCreateWithoutDepartmentInput = {
@@ -19824,6 +20339,7 @@ export namespace Prisma {
     tasks?: TaskUncheckedCreateNestedManyWithoutUserInput
     history?: HistoryUncheckedCreateNestedManyWithoutUserInput
     projects?: ProjectUserUncheckedCreateNestedManyWithoutUserInput
+    createdHistories?: HistoryUncheckedCreateNestedManyWithoutCreatedByUserInput
   }
 
   export type UserCreateOrConnectWithoutDepartmentInput = {
@@ -19838,8 +20354,12 @@ export namespace Prisma {
 
   export type HistoryCreateWithoutDepartmentInput = {
     comment?: string | null
+    createdAt?: Date | string
+    hoursSpent?: number | null
     task: TaskCreateNestedOneWithoutHistoryInput
     user?: UserCreateNestedOneWithoutHistoryInput
+    createdByUser?: UserCreateNestedOneWithoutCreatedHistoriesInput
+    createdByDepartment?: DepartmentCreateNestedOneWithoutCreatedHistoriesInput
   }
 
   export type HistoryUncheckedCreateWithoutDepartmentInput = {
@@ -19847,6 +20367,10 @@ export namespace Prisma {
     taskId: number
     userId?: number | null
     comment?: string | null
+    createdAt?: Date | string
+    createdByUserId?: number | null
+    createdByDepartmentId?: number | null
+    hoursSpent?: number | null
   }
 
   export type HistoryCreateOrConnectWithoutDepartmentInput = {
@@ -19856,6 +20380,37 @@ export namespace Prisma {
 
   export type HistoryCreateManyDepartmentInputEnvelope = {
     data: HistoryCreateManyDepartmentInput | HistoryCreateManyDepartmentInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type HistoryCreateWithoutCreatedByDepartmentInput = {
+    comment?: string | null
+    createdAt?: Date | string
+    hoursSpent?: number | null
+    task: TaskCreateNestedOneWithoutHistoryInput
+    user?: UserCreateNestedOneWithoutHistoryInput
+    department?: DepartmentCreateNestedOneWithoutHistoryInput
+    createdByUser?: UserCreateNestedOneWithoutCreatedHistoriesInput
+  }
+
+  export type HistoryUncheckedCreateWithoutCreatedByDepartmentInput = {
+    historyId?: number
+    taskId: number
+    userId?: number | null
+    departmentId?: number | null
+    comment?: string | null
+    createdAt?: Date | string
+    createdByUserId?: number | null
+    hoursSpent?: number | null
+  }
+
+  export type HistoryCreateOrConnectWithoutCreatedByDepartmentInput = {
+    where: HistoryWhereUniqueInput
+    create: XOR<HistoryCreateWithoutCreatedByDepartmentInput, HistoryUncheckedCreateWithoutCreatedByDepartmentInput>
+  }
+
+  export type HistoryCreateManyCreatedByDepartmentInputEnvelope = {
+    data: HistoryCreateManyCreatedByDepartmentInput | HistoryCreateManyCreatedByDepartmentInput[]
     skipDuplicates?: boolean
   }
 
@@ -19943,6 +20498,26 @@ export namespace Prisma {
     userId?: IntNullableFilter<"History"> | number | null
     departmentId?: IntNullableFilter<"History"> | number | null
     comment?: StringNullableFilter<"History"> | string | null
+    createdAt?: DateTimeFilter<"History"> | Date | string
+    createdByUserId?: IntNullableFilter<"History"> | number | null
+    createdByDepartmentId?: IntNullableFilter<"History"> | number | null
+    hoursSpent?: FloatNullableFilter<"History"> | number | null
+  }
+
+  export type HistoryUpsertWithWhereUniqueWithoutCreatedByDepartmentInput = {
+    where: HistoryWhereUniqueInput
+    update: XOR<HistoryUpdateWithoutCreatedByDepartmentInput, HistoryUncheckedUpdateWithoutCreatedByDepartmentInput>
+    create: XOR<HistoryCreateWithoutCreatedByDepartmentInput, HistoryUncheckedCreateWithoutCreatedByDepartmentInput>
+  }
+
+  export type HistoryUpdateWithWhereUniqueWithoutCreatedByDepartmentInput = {
+    where: HistoryWhereUniqueInput
+    data: XOR<HistoryUpdateWithoutCreatedByDepartmentInput, HistoryUncheckedUpdateWithoutCreatedByDepartmentInput>
+  }
+
+  export type HistoryUpdateManyWithWhereWithoutCreatedByDepartmentInput = {
+    where: HistoryScalarWhereInput
+    data: XOR<HistoryUpdateManyMutationInput, HistoryUncheckedUpdateManyWithoutCreatedByDepartmentInput>
   }
 
   export type TaskUpsertWithWhereUniqueWithoutDepartmentInput = {
@@ -19999,6 +20574,7 @@ export namespace Prisma {
   export type DepartmentCreateWithoutUsersInput = {
     name: string
     history?: HistoryCreateNestedManyWithoutDepartmentInput
+    createdHistories?: HistoryCreateNestedManyWithoutCreatedByDepartmentInput
     Task?: TaskCreateNestedManyWithoutDepartmentInput
   }
 
@@ -20006,6 +20582,7 @@ export namespace Prisma {
     departmentId?: number
     name: string
     history?: HistoryUncheckedCreateNestedManyWithoutDepartmentInput
+    createdHistories?: HistoryUncheckedCreateNestedManyWithoutCreatedByDepartmentInput
     Task?: TaskUncheckedCreateNestedManyWithoutDepartmentInput
   }
 
@@ -20075,8 +20652,12 @@ export namespace Prisma {
 
   export type HistoryCreateWithoutUserInput = {
     comment?: string | null
+    createdAt?: Date | string
+    hoursSpent?: number | null
     task: TaskCreateNestedOneWithoutHistoryInput
     department?: DepartmentCreateNestedOneWithoutHistoryInput
+    createdByUser?: UserCreateNestedOneWithoutCreatedHistoriesInput
+    createdByDepartment?: DepartmentCreateNestedOneWithoutCreatedHistoriesInput
   }
 
   export type HistoryUncheckedCreateWithoutUserInput = {
@@ -20084,6 +20665,10 @@ export namespace Prisma {
     taskId: number
     departmentId?: number | null
     comment?: string | null
+    createdAt?: Date | string
+    createdByUserId?: number | null
+    createdByDepartmentId?: number | null
+    hoursSpent?: number | null
   }
 
   export type HistoryCreateOrConnectWithoutUserInput = {
@@ -20111,6 +20696,37 @@ export namespace Prisma {
 
   export type ProjectUserCreateManyUserInputEnvelope = {
     data: ProjectUserCreateManyUserInput | ProjectUserCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type HistoryCreateWithoutCreatedByUserInput = {
+    comment?: string | null
+    createdAt?: Date | string
+    hoursSpent?: number | null
+    task: TaskCreateNestedOneWithoutHistoryInput
+    user?: UserCreateNestedOneWithoutHistoryInput
+    department?: DepartmentCreateNestedOneWithoutHistoryInput
+    createdByDepartment?: DepartmentCreateNestedOneWithoutCreatedHistoriesInput
+  }
+
+  export type HistoryUncheckedCreateWithoutCreatedByUserInput = {
+    historyId?: number
+    taskId: number
+    userId?: number | null
+    departmentId?: number | null
+    comment?: string | null
+    createdAt?: Date | string
+    createdByDepartmentId?: number | null
+    hoursSpent?: number | null
+  }
+
+  export type HistoryCreateOrConnectWithoutCreatedByUserInput = {
+    where: HistoryWhereUniqueInput
+    create: XOR<HistoryCreateWithoutCreatedByUserInput, HistoryUncheckedCreateWithoutCreatedByUserInput>
+  }
+
+  export type HistoryCreateManyCreatedByUserInputEnvelope = {
+    data: HistoryCreateManyCreatedByUserInput | HistoryCreateManyCreatedByUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -20150,6 +20766,7 @@ export namespace Prisma {
   export type DepartmentUpdateWithoutUsersInput = {
     name?: StringFieldUpdateOperationsInput | string
     history?: HistoryUpdateManyWithoutDepartmentNestedInput
+    createdHistories?: HistoryUpdateManyWithoutCreatedByDepartmentNestedInput
     Task?: TaskUpdateManyWithoutDepartmentNestedInput
   }
 
@@ -20157,6 +20774,7 @@ export namespace Prisma {
     departmentId?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     history?: HistoryUncheckedUpdateManyWithoutDepartmentNestedInput
+    createdHistories?: HistoryUncheckedUpdateManyWithoutCreatedByDepartmentNestedInput
     Task?: TaskUncheckedUpdateManyWithoutDepartmentNestedInput
   }
 
@@ -20238,6 +20856,22 @@ export namespace Prisma {
     projectId?: IntFilter<"ProjectUser"> | number
   }
 
+  export type HistoryUpsertWithWhereUniqueWithoutCreatedByUserInput = {
+    where: HistoryWhereUniqueInput
+    update: XOR<HistoryUpdateWithoutCreatedByUserInput, HistoryUncheckedUpdateWithoutCreatedByUserInput>
+    create: XOR<HistoryCreateWithoutCreatedByUserInput, HistoryUncheckedCreateWithoutCreatedByUserInput>
+  }
+
+  export type HistoryUpdateWithWhereUniqueWithoutCreatedByUserInput = {
+    where: HistoryWhereUniqueInput
+    data: XOR<HistoryUpdateWithoutCreatedByUserInput, HistoryUncheckedUpdateWithoutCreatedByUserInput>
+  }
+
+  export type HistoryUpdateManyWithWhereWithoutCreatedByUserInput = {
+    where: HistoryScalarWhereInput
+    data: XOR<HistoryUpdateManyMutationInput, HistoryUncheckedUpdateManyWithoutCreatedByUserInput>
+  }
+
   export type ProjectUserCreateWithoutProjectInput = {
     user: UserCreateNestedOneWithoutProjectsInput
   }
@@ -20301,6 +20935,8 @@ export namespace Prisma {
 
   export type ReportProjectCreateWithoutProjectInput = {
     generatedDate?: Date | string
+    title?: string | null
+    type?: string | null
     content?: string | null
     performanceAnalysis?: string | null
     completedTasks?: number | null
@@ -20314,6 +20950,8 @@ export namespace Prisma {
   export type ReportProjectUncheckedCreateWithoutProjectInput = {
     reportId?: number
     generatedDate?: Date | string
+    title?: string | null
+    type?: string | null
     content?: string | null
     performanceAnalysis?: string | null
     completedTasks?: number | null
@@ -20389,6 +21027,8 @@ export namespace Prisma {
     reportId?: IntFilter<"ReportProject"> | number
     projectId?: IntFilter<"ReportProject"> | number
     generatedDate?: DateTimeFilter<"ReportProject"> | Date | string
+    title?: StringNullableFilter<"ReportProject"> | string | null
+    type?: StringNullableFilter<"ReportProject"> | string | null
     content?: StringNullableFilter<"ReportProject"> | string | null
     performanceAnalysis?: StringNullableFilter<"ReportProject"> | string | null
     completedTasks?: IntNullableFilter<"ReportProject"> | number | null
@@ -20409,6 +21049,7 @@ export namespace Prisma {
     role?: RoleCreateNestedOneWithoutUsersInput
     tasks?: TaskCreateNestedManyWithoutUserInput
     history?: HistoryCreateNestedManyWithoutUserInput
+    createdHistories?: HistoryCreateNestedManyWithoutCreatedByUserInput
   }
 
   export type UserUncheckedCreateWithoutProjectsInput = {
@@ -20423,6 +21064,7 @@ export namespace Prisma {
     isActive?: boolean
     tasks?: TaskUncheckedCreateNestedManyWithoutUserInput
     history?: HistoryUncheckedCreateNestedManyWithoutUserInput
+    createdHistories?: HistoryUncheckedCreateNestedManyWithoutCreatedByUserInput
   }
 
   export type UserCreateOrConnectWithoutProjectsInput = {
@@ -20478,6 +21120,7 @@ export namespace Prisma {
     role?: RoleUpdateOneWithoutUsersNestedInput
     tasks?: TaskUpdateManyWithoutUserNestedInput
     history?: HistoryUpdateManyWithoutUserNestedInput
+    createdHistories?: HistoryUpdateManyWithoutCreatedByUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProjectsInput = {
@@ -20492,6 +21135,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     tasks?: TaskUncheckedUpdateManyWithoutUserNestedInput
     history?: HistoryUncheckedUpdateManyWithoutUserNestedInput
+    createdHistories?: HistoryUncheckedUpdateManyWithoutCreatedByUserNestedInput
   }
 
   export type ProjectUpsertWithoutUsersInput = {
@@ -20563,6 +21207,7 @@ export namespace Prisma {
     role?: RoleCreateNestedOneWithoutUsersInput
     history?: HistoryCreateNestedManyWithoutUserInput
     projects?: ProjectUserCreateNestedManyWithoutUserInput
+    createdHistories?: HistoryCreateNestedManyWithoutCreatedByUserInput
   }
 
   export type UserUncheckedCreateWithoutTasksInput = {
@@ -20577,6 +21222,7 @@ export namespace Prisma {
     isActive?: boolean
     history?: HistoryUncheckedCreateNestedManyWithoutUserInput
     projects?: ProjectUserUncheckedCreateNestedManyWithoutUserInput
+    createdHistories?: HistoryUncheckedCreateNestedManyWithoutCreatedByUserInput
   }
 
   export type UserCreateOrConnectWithoutTasksInput = {
@@ -20588,6 +21234,7 @@ export namespace Prisma {
     name: string
     users?: UserCreateNestedManyWithoutDepartmentInput
     history?: HistoryCreateNestedManyWithoutDepartmentInput
+    createdHistories?: HistoryCreateNestedManyWithoutCreatedByDepartmentInput
   }
 
   export type DepartmentUncheckedCreateWithoutTaskInput = {
@@ -20595,6 +21242,7 @@ export namespace Prisma {
     name: string
     users?: UserUncheckedCreateNestedManyWithoutDepartmentInput
     history?: HistoryUncheckedCreateNestedManyWithoutDepartmentInput
+    createdHistories?: HistoryUncheckedCreateNestedManyWithoutCreatedByDepartmentInput
   }
 
   export type DepartmentCreateOrConnectWithoutTaskInput = {
@@ -20604,8 +21252,12 @@ export namespace Prisma {
 
   export type HistoryCreateWithoutTaskInput = {
     comment?: string | null
+    createdAt?: Date | string
+    hoursSpent?: number | null
     user?: UserCreateNestedOneWithoutHistoryInput
     department?: DepartmentCreateNestedOneWithoutHistoryInput
+    createdByUser?: UserCreateNestedOneWithoutCreatedHistoriesInput
+    createdByDepartment?: DepartmentCreateNestedOneWithoutCreatedHistoriesInput
   }
 
   export type HistoryUncheckedCreateWithoutTaskInput = {
@@ -20613,6 +21265,10 @@ export namespace Prisma {
     userId?: number | null
     departmentId?: number | null
     comment?: string | null
+    createdAt?: Date | string
+    createdByUserId?: number | null
+    createdByDepartmentId?: number | null
+    hoursSpent?: number | null
   }
 
   export type HistoryCreateOrConnectWithoutTaskInput = {
@@ -20626,6 +21282,8 @@ export namespace Prisma {
   }
 
   export type ReportTaskCreateWithoutTaskInput = {
+    title?: string | null
+    type?: string | null
     generatedDate?: Date | string
     content?: string | null
     performanceAnalysis?: string | null
@@ -20634,6 +21292,8 @@ export namespace Prisma {
 
   export type ReportTaskUncheckedCreateWithoutTaskInput = {
     reportId?: number
+    title?: string | null
+    type?: string | null
     reportProjectId: number
     generatedDate?: Date | string
     content?: string | null
@@ -20704,6 +21364,7 @@ export namespace Prisma {
     role?: RoleUpdateOneWithoutUsersNestedInput
     history?: HistoryUpdateManyWithoutUserNestedInput
     projects?: ProjectUserUpdateManyWithoutUserNestedInput
+    createdHistories?: HistoryUpdateManyWithoutCreatedByUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTasksInput = {
@@ -20718,6 +21379,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     history?: HistoryUncheckedUpdateManyWithoutUserNestedInput
     projects?: ProjectUserUncheckedUpdateManyWithoutUserNestedInput
+    createdHistories?: HistoryUncheckedUpdateManyWithoutCreatedByUserNestedInput
   }
 
   export type DepartmentUpsertWithoutTaskInput = {
@@ -20735,6 +21397,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     users?: UserUpdateManyWithoutDepartmentNestedInput
     history?: HistoryUpdateManyWithoutDepartmentNestedInput
+    createdHistories?: HistoryUpdateManyWithoutCreatedByDepartmentNestedInput
   }
 
   export type DepartmentUncheckedUpdateWithoutTaskInput = {
@@ -20742,6 +21405,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     users?: UserUncheckedUpdateManyWithoutDepartmentNestedInput
     history?: HistoryUncheckedUpdateManyWithoutDepartmentNestedInput
+    createdHistories?: HistoryUncheckedUpdateManyWithoutCreatedByDepartmentNestedInput
   }
 
   export type HistoryUpsertWithWhereUniqueWithoutTaskInput = {
@@ -20781,6 +21445,8 @@ export namespace Prisma {
     OR?: ReportTaskScalarWhereInput[]
     NOT?: ReportTaskScalarWhereInput | ReportTaskScalarWhereInput[]
     reportId?: IntFilter<"ReportTask"> | number
+    title?: StringNullableFilter<"ReportTask"> | string | null
+    type?: StringNullableFilter<"ReportTask"> | string | null
     taskId?: IntFilter<"ReportTask"> | number
     reportProjectId?: IntFilter<"ReportTask"> | number
     generatedDate?: DateTimeFilter<"ReportTask"> | Date | string
@@ -20799,6 +21465,7 @@ export namespace Prisma {
     tasks?: TaskCreateNestedManyWithoutUserInput
     history?: HistoryCreateNestedManyWithoutUserInput
     projects?: ProjectUserCreateNestedManyWithoutUserInput
+    createdHistories?: HistoryCreateNestedManyWithoutCreatedByUserInput
   }
 
   export type UserUncheckedCreateWithoutRoleInput = {
@@ -20813,6 +21480,7 @@ export namespace Prisma {
     tasks?: TaskUncheckedCreateNestedManyWithoutUserInput
     history?: HistoryUncheckedCreateNestedManyWithoutUserInput
     projects?: ProjectUserUncheckedCreateNestedManyWithoutUserInput
+    createdHistories?: HistoryUncheckedCreateNestedManyWithoutCreatedByUserInput
   }
 
   export type UserCreateOrConnectWithoutRoleInput = {
@@ -21038,6 +21706,7 @@ export namespace Prisma {
     role?: RoleCreateNestedOneWithoutUsersInput
     tasks?: TaskCreateNestedManyWithoutUserInput
     projects?: ProjectUserCreateNestedManyWithoutUserInput
+    createdHistories?: HistoryCreateNestedManyWithoutCreatedByUserInput
   }
 
   export type UserUncheckedCreateWithoutHistoryInput = {
@@ -21052,6 +21721,7 @@ export namespace Prisma {
     isActive?: boolean
     tasks?: TaskUncheckedCreateNestedManyWithoutUserInput
     projects?: ProjectUserUncheckedCreateNestedManyWithoutUserInput
+    createdHistories?: HistoryUncheckedCreateNestedManyWithoutCreatedByUserInput
   }
 
   export type UserCreateOrConnectWithoutHistoryInput = {
@@ -21062,6 +21732,7 @@ export namespace Prisma {
   export type DepartmentCreateWithoutHistoryInput = {
     name: string
     users?: UserCreateNestedManyWithoutDepartmentInput
+    createdHistories?: HistoryCreateNestedManyWithoutCreatedByDepartmentInput
     Task?: TaskCreateNestedManyWithoutDepartmentInput
   }
 
@@ -21069,12 +21740,67 @@ export namespace Prisma {
     departmentId?: number
     name: string
     users?: UserUncheckedCreateNestedManyWithoutDepartmentInput
+    createdHistories?: HistoryUncheckedCreateNestedManyWithoutCreatedByDepartmentInput
     Task?: TaskUncheckedCreateNestedManyWithoutDepartmentInput
   }
 
   export type DepartmentCreateOrConnectWithoutHistoryInput = {
     where: DepartmentWhereUniqueInput
     create: XOR<DepartmentCreateWithoutHistoryInput, DepartmentUncheckedCreateWithoutHistoryInput>
+  }
+
+  export type UserCreateWithoutCreatedHistoriesInput = {
+    name: string
+    email: string
+    password: string
+    isAdmin?: boolean
+    isActive?: boolean
+    timezone: TimeZoneCreateNestedOneWithoutUsersInput
+    department: DepartmentCreateNestedOneWithoutUsersInput
+    role?: RoleCreateNestedOneWithoutUsersInput
+    tasks?: TaskCreateNestedManyWithoutUserInput
+    history?: HistoryCreateNestedManyWithoutUserInput
+    projects?: ProjectUserCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutCreatedHistoriesInput = {
+    userId?: number
+    timezoneId: number
+    departmentId: number
+    name: string
+    email: string
+    password: string
+    roleId?: number | null
+    isAdmin?: boolean
+    isActive?: boolean
+    tasks?: TaskUncheckedCreateNestedManyWithoutUserInput
+    history?: HistoryUncheckedCreateNestedManyWithoutUserInput
+    projects?: ProjectUserUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutCreatedHistoriesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCreatedHistoriesInput, UserUncheckedCreateWithoutCreatedHistoriesInput>
+  }
+
+  export type DepartmentCreateWithoutCreatedHistoriesInput = {
+    name: string
+    users?: UserCreateNestedManyWithoutDepartmentInput
+    history?: HistoryCreateNestedManyWithoutDepartmentInput
+    Task?: TaskCreateNestedManyWithoutDepartmentInput
+  }
+
+  export type DepartmentUncheckedCreateWithoutCreatedHistoriesInput = {
+    departmentId?: number
+    name: string
+    users?: UserUncheckedCreateNestedManyWithoutDepartmentInput
+    history?: HistoryUncheckedCreateNestedManyWithoutDepartmentInput
+    Task?: TaskUncheckedCreateNestedManyWithoutDepartmentInput
+  }
+
+  export type DepartmentCreateOrConnectWithoutCreatedHistoriesInput = {
+    where: DepartmentWhereUniqueInput
+    create: XOR<DepartmentCreateWithoutCreatedHistoriesInput, DepartmentUncheckedCreateWithoutCreatedHistoriesInput>
   }
 
   export type TaskUpsertWithoutHistoryInput = {
@@ -21143,6 +21869,7 @@ export namespace Prisma {
     role?: RoleUpdateOneWithoutUsersNestedInput
     tasks?: TaskUpdateManyWithoutUserNestedInput
     projects?: ProjectUserUpdateManyWithoutUserNestedInput
+    createdHistories?: HistoryUpdateManyWithoutCreatedByUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutHistoryInput = {
@@ -21157,6 +21884,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     tasks?: TaskUncheckedUpdateManyWithoutUserNestedInput
     projects?: ProjectUserUncheckedUpdateManyWithoutUserNestedInput
+    createdHistories?: HistoryUncheckedUpdateManyWithoutCreatedByUserNestedInput
   }
 
   export type DepartmentUpsertWithoutHistoryInput = {
@@ -21173,6 +21901,7 @@ export namespace Prisma {
   export type DepartmentUpdateWithoutHistoryInput = {
     name?: StringFieldUpdateOperationsInput | string
     users?: UserUpdateManyWithoutDepartmentNestedInput
+    createdHistories?: HistoryUpdateManyWithoutCreatedByDepartmentNestedInput
     Task?: TaskUpdateManyWithoutDepartmentNestedInput
   }
 
@@ -21180,6 +21909,73 @@ export namespace Prisma {
     departmentId?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     users?: UserUncheckedUpdateManyWithoutDepartmentNestedInput
+    createdHistories?: HistoryUncheckedUpdateManyWithoutCreatedByDepartmentNestedInput
+    Task?: TaskUncheckedUpdateManyWithoutDepartmentNestedInput
+  }
+
+  export type UserUpsertWithoutCreatedHistoriesInput = {
+    update: XOR<UserUpdateWithoutCreatedHistoriesInput, UserUncheckedUpdateWithoutCreatedHistoriesInput>
+    create: XOR<UserCreateWithoutCreatedHistoriesInput, UserUncheckedCreateWithoutCreatedHistoriesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCreatedHistoriesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCreatedHistoriesInput, UserUncheckedUpdateWithoutCreatedHistoriesInput>
+  }
+
+  export type UserUpdateWithoutCreatedHistoriesInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    timezone?: TimeZoneUpdateOneRequiredWithoutUsersNestedInput
+    department?: DepartmentUpdateOneRequiredWithoutUsersNestedInput
+    role?: RoleUpdateOneWithoutUsersNestedInput
+    tasks?: TaskUpdateManyWithoutUserNestedInput
+    history?: HistoryUpdateManyWithoutUserNestedInput
+    projects?: ProjectUserUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCreatedHistoriesInput = {
+    userId?: IntFieldUpdateOperationsInput | number
+    timezoneId?: IntFieldUpdateOperationsInput | number
+    departmentId?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    roleId?: NullableIntFieldUpdateOperationsInput | number | null
+    isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    tasks?: TaskUncheckedUpdateManyWithoutUserNestedInput
+    history?: HistoryUncheckedUpdateManyWithoutUserNestedInput
+    projects?: ProjectUserUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type DepartmentUpsertWithoutCreatedHistoriesInput = {
+    update: XOR<DepartmentUpdateWithoutCreatedHistoriesInput, DepartmentUncheckedUpdateWithoutCreatedHistoriesInput>
+    create: XOR<DepartmentCreateWithoutCreatedHistoriesInput, DepartmentUncheckedCreateWithoutCreatedHistoriesInput>
+    where?: DepartmentWhereInput
+  }
+
+  export type DepartmentUpdateToOneWithWhereWithoutCreatedHistoriesInput = {
+    where?: DepartmentWhereInput
+    data: XOR<DepartmentUpdateWithoutCreatedHistoriesInput, DepartmentUncheckedUpdateWithoutCreatedHistoriesInput>
+  }
+
+  export type DepartmentUpdateWithoutCreatedHistoriesInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    users?: UserUpdateManyWithoutDepartmentNestedInput
+    history?: HistoryUpdateManyWithoutDepartmentNestedInput
+    Task?: TaskUpdateManyWithoutDepartmentNestedInput
+  }
+
+  export type DepartmentUncheckedUpdateWithoutCreatedHistoriesInput = {
+    departmentId?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    users?: UserUncheckedUpdateManyWithoutDepartmentNestedInput
+    history?: HistoryUncheckedUpdateManyWithoutDepartmentNestedInput
     Task?: TaskUncheckedUpdateManyWithoutDepartmentNestedInput
   }
 
@@ -21223,6 +22019,8 @@ export namespace Prisma {
 
   export type ReportProjectCreateWithoutReportsInput = {
     generatedDate?: Date | string
+    title?: string | null
+    type?: string | null
     content?: string | null
     performanceAnalysis?: string | null
     completedTasks?: number | null
@@ -21237,6 +22035,8 @@ export namespace Prisma {
     reportId?: number
     projectId: number
     generatedDate?: Date | string
+    title?: string | null
+    type?: string | null
     content?: string | null
     performanceAnalysis?: string | null
     completedTasks?: number | null
@@ -21308,6 +22108,8 @@ export namespace Prisma {
 
   export type ReportProjectUpdateWithoutReportsInput = {
     generatedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
     performanceAnalysis?: NullableStringFieldUpdateOperationsInput | string | null
     completedTasks?: NullableIntFieldUpdateOperationsInput | number | null
@@ -21322,6 +22124,8 @@ export namespace Prisma {
     reportId?: IntFieldUpdateOperationsInput | number
     projectId?: IntFieldUpdateOperationsInput | number
     generatedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
     performanceAnalysis?: NullableStringFieldUpdateOperationsInput | string | null
     completedTasks?: NullableIntFieldUpdateOperationsInput | number | null
@@ -21358,6 +22162,8 @@ export namespace Prisma {
   }
 
   export type ReportTaskCreateWithoutReportProjectInput = {
+    title?: string | null
+    type?: string | null
     generatedDate?: Date | string
     content?: string | null
     performanceAnalysis?: string | null
@@ -21366,6 +22172,8 @@ export namespace Prisma {
 
   export type ReportTaskUncheckedCreateWithoutReportProjectInput = {
     reportId?: number
+    title?: string | null
+    type?: string | null
     taskId: number
     generatedDate?: Date | string
     content?: string | null
@@ -21452,6 +22260,7 @@ export namespace Prisma {
     tasks?: TaskUpdateManyWithoutUserNestedInput
     history?: HistoryUpdateManyWithoutUserNestedInput
     projects?: ProjectUserUpdateManyWithoutUserNestedInput
+    createdHistories?: HistoryUpdateManyWithoutCreatedByUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTimezoneInput = {
@@ -21466,6 +22275,7 @@ export namespace Prisma {
     tasks?: TaskUncheckedUpdateManyWithoutUserNestedInput
     history?: HistoryUncheckedUpdateManyWithoutUserNestedInput
     projects?: ProjectUserUncheckedUpdateManyWithoutUserNestedInput
+    createdHistories?: HistoryUncheckedUpdateManyWithoutCreatedByUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutTimezoneInput = {
@@ -21495,6 +22305,21 @@ export namespace Prisma {
     taskId: number
     userId?: number | null
     comment?: string | null
+    createdAt?: Date | string
+    createdByUserId?: number | null
+    createdByDepartmentId?: number | null
+    hoursSpent?: number | null
+  }
+
+  export type HistoryCreateManyCreatedByDepartmentInput = {
+    historyId?: number
+    taskId: number
+    userId?: number | null
+    departmentId?: number | null
+    comment?: string | null
+    createdAt?: Date | string
+    createdByUserId?: number | null
+    hoursSpent?: number | null
   }
 
   export type TaskCreateManyDepartmentInput = {
@@ -21523,6 +22348,7 @@ export namespace Prisma {
     tasks?: TaskUpdateManyWithoutUserNestedInput
     history?: HistoryUpdateManyWithoutUserNestedInput
     projects?: ProjectUserUpdateManyWithoutUserNestedInput
+    createdHistories?: HistoryUpdateManyWithoutCreatedByUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDepartmentInput = {
@@ -21537,6 +22363,7 @@ export namespace Prisma {
     tasks?: TaskUncheckedUpdateManyWithoutUserNestedInput
     history?: HistoryUncheckedUpdateManyWithoutUserNestedInput
     projects?: ProjectUserUncheckedUpdateManyWithoutUserNestedInput
+    createdHistories?: HistoryUncheckedUpdateManyWithoutCreatedByUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutDepartmentInput = {
@@ -21552,8 +22379,12 @@ export namespace Prisma {
 
   export type HistoryUpdateWithoutDepartmentInput = {
     comment?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hoursSpent?: NullableFloatFieldUpdateOperationsInput | number | null
     task?: TaskUpdateOneRequiredWithoutHistoryNestedInput
     user?: UserUpdateOneWithoutHistoryNestedInput
+    createdByUser?: UserUpdateOneWithoutCreatedHistoriesNestedInput
+    createdByDepartment?: DepartmentUpdateOneWithoutCreatedHistoriesNestedInput
   }
 
   export type HistoryUncheckedUpdateWithoutDepartmentInput = {
@@ -21561,6 +22392,10 @@ export namespace Prisma {
     taskId?: IntFieldUpdateOperationsInput | number
     userId?: NullableIntFieldUpdateOperationsInput | number | null
     comment?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdByDepartmentId?: NullableIntFieldUpdateOperationsInput | number | null
+    hoursSpent?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type HistoryUncheckedUpdateManyWithoutDepartmentInput = {
@@ -21568,6 +22403,42 @@ export namespace Prisma {
     taskId?: IntFieldUpdateOperationsInput | number
     userId?: NullableIntFieldUpdateOperationsInput | number | null
     comment?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdByDepartmentId?: NullableIntFieldUpdateOperationsInput | number | null
+    hoursSpent?: NullableFloatFieldUpdateOperationsInput | number | null
+  }
+
+  export type HistoryUpdateWithoutCreatedByDepartmentInput = {
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hoursSpent?: NullableFloatFieldUpdateOperationsInput | number | null
+    task?: TaskUpdateOneRequiredWithoutHistoryNestedInput
+    user?: UserUpdateOneWithoutHistoryNestedInput
+    department?: DepartmentUpdateOneWithoutHistoryNestedInput
+    createdByUser?: UserUpdateOneWithoutCreatedHistoriesNestedInput
+  }
+
+  export type HistoryUncheckedUpdateWithoutCreatedByDepartmentInput = {
+    historyId?: IntFieldUpdateOperationsInput | number
+    taskId?: IntFieldUpdateOperationsInput | number
+    userId?: NullableIntFieldUpdateOperationsInput | number | null
+    departmentId?: NullableIntFieldUpdateOperationsInput | number | null
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    hoursSpent?: NullableFloatFieldUpdateOperationsInput | number | null
+  }
+
+  export type HistoryUncheckedUpdateManyWithoutCreatedByDepartmentInput = {
+    historyId?: IntFieldUpdateOperationsInput | number
+    taskId?: IntFieldUpdateOperationsInput | number
+    userId?: NullableIntFieldUpdateOperationsInput | number | null
+    departmentId?: NullableIntFieldUpdateOperationsInput | number | null
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    hoursSpent?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type TaskUpdateWithoutDepartmentInput = {
@@ -21638,10 +22509,25 @@ export namespace Prisma {
     taskId: number
     departmentId?: number | null
     comment?: string | null
+    createdAt?: Date | string
+    createdByUserId?: number | null
+    createdByDepartmentId?: number | null
+    hoursSpent?: number | null
   }
 
   export type ProjectUserCreateManyUserInput = {
     projectId: number
+  }
+
+  export type HistoryCreateManyCreatedByUserInput = {
+    historyId?: number
+    taskId: number
+    userId?: number | null
+    departmentId?: number | null
+    comment?: string | null
+    createdAt?: Date | string
+    createdByDepartmentId?: number | null
+    hoursSpent?: number | null
   }
 
   export type TaskUpdateWithoutUserInput = {
@@ -21694,8 +22580,12 @@ export namespace Prisma {
 
   export type HistoryUpdateWithoutUserInput = {
     comment?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hoursSpent?: NullableFloatFieldUpdateOperationsInput | number | null
     task?: TaskUpdateOneRequiredWithoutHistoryNestedInput
     department?: DepartmentUpdateOneWithoutHistoryNestedInput
+    createdByUser?: UserUpdateOneWithoutCreatedHistoriesNestedInput
+    createdByDepartment?: DepartmentUpdateOneWithoutCreatedHistoriesNestedInput
   }
 
   export type HistoryUncheckedUpdateWithoutUserInput = {
@@ -21703,6 +22593,10 @@ export namespace Prisma {
     taskId?: IntFieldUpdateOperationsInput | number
     departmentId?: NullableIntFieldUpdateOperationsInput | number | null
     comment?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdByDepartmentId?: NullableIntFieldUpdateOperationsInput | number | null
+    hoursSpent?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type HistoryUncheckedUpdateManyWithoutUserInput = {
@@ -21710,6 +22604,10 @@ export namespace Prisma {
     taskId?: IntFieldUpdateOperationsInput | number
     departmentId?: NullableIntFieldUpdateOperationsInput | number | null
     comment?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdByDepartmentId?: NullableIntFieldUpdateOperationsInput | number | null
+    hoursSpent?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type ProjectUserUpdateWithoutUserInput = {
@@ -21722,6 +22620,38 @@ export namespace Prisma {
 
   export type ProjectUserUncheckedUpdateManyWithoutUserInput = {
     projectId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type HistoryUpdateWithoutCreatedByUserInput = {
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hoursSpent?: NullableFloatFieldUpdateOperationsInput | number | null
+    task?: TaskUpdateOneRequiredWithoutHistoryNestedInput
+    user?: UserUpdateOneWithoutHistoryNestedInput
+    department?: DepartmentUpdateOneWithoutHistoryNestedInput
+    createdByDepartment?: DepartmentUpdateOneWithoutCreatedHistoriesNestedInput
+  }
+
+  export type HistoryUncheckedUpdateWithoutCreatedByUserInput = {
+    historyId?: IntFieldUpdateOperationsInput | number
+    taskId?: IntFieldUpdateOperationsInput | number
+    userId?: NullableIntFieldUpdateOperationsInput | number | null
+    departmentId?: NullableIntFieldUpdateOperationsInput | number | null
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdByDepartmentId?: NullableIntFieldUpdateOperationsInput | number | null
+    hoursSpent?: NullableFloatFieldUpdateOperationsInput | number | null
+  }
+
+  export type HistoryUncheckedUpdateManyWithoutCreatedByUserInput = {
+    historyId?: IntFieldUpdateOperationsInput | number
+    taskId?: IntFieldUpdateOperationsInput | number
+    userId?: NullableIntFieldUpdateOperationsInput | number | null
+    departmentId?: NullableIntFieldUpdateOperationsInput | number | null
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdByDepartmentId?: NullableIntFieldUpdateOperationsInput | number | null
+    hoursSpent?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type ProjectUserCreateManyProjectInput = {
@@ -21746,6 +22676,8 @@ export namespace Prisma {
   export type ReportProjectCreateManyProjectInput = {
     reportId?: number
     generatedDate?: Date | string
+    title?: string | null
+    type?: string | null
     content?: string | null
     performanceAnalysis?: string | null
     completedTasks?: number | null
@@ -21817,6 +22749,8 @@ export namespace Prisma {
 
   export type ReportProjectUpdateWithoutProjectInput = {
     generatedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
     performanceAnalysis?: NullableStringFieldUpdateOperationsInput | string | null
     completedTasks?: NullableIntFieldUpdateOperationsInput | number | null
@@ -21830,6 +22764,8 @@ export namespace Prisma {
   export type ReportProjectUncheckedUpdateWithoutProjectInput = {
     reportId?: IntFieldUpdateOperationsInput | number
     generatedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
     performanceAnalysis?: NullableStringFieldUpdateOperationsInput | string | null
     completedTasks?: NullableIntFieldUpdateOperationsInput | number | null
@@ -21843,6 +22779,8 @@ export namespace Prisma {
   export type ReportProjectUncheckedUpdateManyWithoutProjectInput = {
     reportId?: IntFieldUpdateOperationsInput | number
     generatedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
     performanceAnalysis?: NullableStringFieldUpdateOperationsInput | string | null
     completedTasks?: NullableIntFieldUpdateOperationsInput | number | null
@@ -21857,10 +22795,16 @@ export namespace Prisma {
     userId?: number | null
     departmentId?: number | null
     comment?: string | null
+    createdAt?: Date | string
+    createdByUserId?: number | null
+    createdByDepartmentId?: number | null
+    hoursSpent?: number | null
   }
 
   export type ReportTaskCreateManyTaskInput = {
     reportId?: number
+    title?: string | null
+    type?: string | null
     reportProjectId: number
     generatedDate?: Date | string
     content?: string | null
@@ -21869,8 +22813,12 @@ export namespace Prisma {
 
   export type HistoryUpdateWithoutTaskInput = {
     comment?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hoursSpent?: NullableFloatFieldUpdateOperationsInput | number | null
     user?: UserUpdateOneWithoutHistoryNestedInput
     department?: DepartmentUpdateOneWithoutHistoryNestedInput
+    createdByUser?: UserUpdateOneWithoutCreatedHistoriesNestedInput
+    createdByDepartment?: DepartmentUpdateOneWithoutCreatedHistoriesNestedInput
   }
 
   export type HistoryUncheckedUpdateWithoutTaskInput = {
@@ -21878,6 +22826,10 @@ export namespace Prisma {
     userId?: NullableIntFieldUpdateOperationsInput | number | null
     departmentId?: NullableIntFieldUpdateOperationsInput | number | null
     comment?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdByDepartmentId?: NullableIntFieldUpdateOperationsInput | number | null
+    hoursSpent?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type HistoryUncheckedUpdateManyWithoutTaskInput = {
@@ -21885,9 +22837,15 @@ export namespace Prisma {
     userId?: NullableIntFieldUpdateOperationsInput | number | null
     departmentId?: NullableIntFieldUpdateOperationsInput | number | null
     comment?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdByDepartmentId?: NullableIntFieldUpdateOperationsInput | number | null
+    hoursSpent?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type ReportTaskUpdateWithoutTaskInput = {
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     generatedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     content?: NullableStringFieldUpdateOperationsInput | string | null
     performanceAnalysis?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21896,6 +22854,8 @@ export namespace Prisma {
 
   export type ReportTaskUncheckedUpdateWithoutTaskInput = {
     reportId?: IntFieldUpdateOperationsInput | number
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     reportProjectId?: IntFieldUpdateOperationsInput | number
     generatedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     content?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21904,6 +22864,8 @@ export namespace Prisma {
 
   export type ReportTaskUncheckedUpdateManyWithoutTaskInput = {
     reportId?: IntFieldUpdateOperationsInput | number
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     reportProjectId?: IntFieldUpdateOperationsInput | number
     generatedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     content?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21936,6 +22898,7 @@ export namespace Prisma {
     tasks?: TaskUpdateManyWithoutUserNestedInput
     history?: HistoryUpdateManyWithoutUserNestedInput
     projects?: ProjectUserUpdateManyWithoutUserNestedInput
+    createdHistories?: HistoryUpdateManyWithoutCreatedByUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRoleInput = {
@@ -21950,6 +22913,7 @@ export namespace Prisma {
     tasks?: TaskUncheckedUpdateManyWithoutUserNestedInput
     history?: HistoryUncheckedUpdateManyWithoutUserNestedInput
     projects?: ProjectUserUncheckedUpdateManyWithoutUserNestedInput
+    createdHistories?: HistoryUncheckedUpdateManyWithoutCreatedByUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutRoleInput = {
@@ -21993,6 +22957,8 @@ export namespace Prisma {
 
   export type ReportTaskCreateManyReportProjectInput = {
     reportId?: number
+    title?: string | null
+    type?: string | null
     taskId: number
     generatedDate?: Date | string
     content?: string | null
@@ -22000,6 +22966,8 @@ export namespace Prisma {
   }
 
   export type ReportTaskUpdateWithoutReportProjectInput = {
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     generatedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     content?: NullableStringFieldUpdateOperationsInput | string | null
     performanceAnalysis?: NullableStringFieldUpdateOperationsInput | string | null
@@ -22008,6 +22976,8 @@ export namespace Prisma {
 
   export type ReportTaskUncheckedUpdateWithoutReportProjectInput = {
     reportId?: IntFieldUpdateOperationsInput | number
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     taskId?: IntFieldUpdateOperationsInput | number
     generatedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     content?: NullableStringFieldUpdateOperationsInput | string | null
@@ -22016,6 +22986,8 @@ export namespace Prisma {
 
   export type ReportTaskUncheckedUpdateManyWithoutReportProjectInput = {
     reportId?: IntFieldUpdateOperationsInput | number
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     taskId?: IntFieldUpdateOperationsInput | number
     generatedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     content?: NullableStringFieldUpdateOperationsInput | string | null

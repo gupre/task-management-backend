@@ -7,7 +7,7 @@ import { PrismaService } from './prisma.service'
 import { ProjectUserModule } from './project-user/project-user.module'
 import { ProjectModule } from './project/project.module'
 import { ReportProjectModule } from './report-project/report-project.module'
-import { ReportTaskModule } from './report-task/report-task.module'
+// import { ReportTaskModule } from './report-task/report-task.module'
 import { RolePermissionsModule } from './role-permissions/role-permissions.module'
 import { RoleModule } from './role/role.module'
 import { TaskModule } from './task/task.module'
@@ -24,7 +24,7 @@ import { RolesGuard } from './role/guards/roles.guard'
     UserModule,
     ProjectUserModule,
     TaskModule,
-    ReportTaskModule,
+    // ReportTaskModule,
     ReportProjectModule,
     HistoryModule,
     departmentModule,

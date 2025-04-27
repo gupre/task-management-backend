@@ -190,11 +190,17 @@ exports.Prisma.HistoryScalarFieldEnum = {
   taskId: 'taskId',
   userId: 'userId',
   departmentId: 'departmentId',
-  comment: 'comment'
+  comment: 'comment',
+  createdAt: 'createdAt',
+  createdByUserId: 'createdByUserId',
+  createdByDepartmentId: 'createdByDepartmentId',
+  hoursSpent: 'hoursSpent'
 };
 
 exports.Prisma.ReportTaskScalarFieldEnum = {
   reportId: 'reportId',
+  title: 'title',
+  type: 'type',
   taskId: 'taskId',
   reportProjectId: 'reportProjectId',
   generatedDate: 'generatedDate',
@@ -206,6 +212,8 @@ exports.Prisma.ReportProjectScalarFieldEnum = {
   reportId: 'reportId',
   projectId: 'projectId',
   generatedDate: 'generatedDate',
+  title: 'title',
+  type: 'type',
   content: 'content',
   performanceAnalysis: 'performanceAnalysis',
   completedTasks: 'completedTasks',

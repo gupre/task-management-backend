@@ -1,33 +1,41 @@
-import { Type } from 'class-transformer'
-import {
-  IsDate,
-  IsInt,
-  IsNotEmpty,
-  IsOptional,
-  IsString
-} from 'class-validator'
+// import { Type } from 'class-transformer'
+// import {
+//   IsDate,
+//   IsInt,
+//   IsNotEmpty,
+//   IsOptional,
+//   IsString
+// } from 'class-validator'
 
-export class ReportTaskDto {
-  @IsInt()
-  @IsNotEmpty()
-  taskId: number
+// export class ReportTaskDto {
+//   @IsInt()
+//   @IsNotEmpty()
+//   taskId: number
 
-  @IsInt()
-  @IsNotEmpty()
-  reportProjectId: number
+//   @IsInt()
+//   @IsNotEmpty()
+//   reportProjectId: number
 
-  @IsOptional()
-  @Type(() => Date)
-  @IsDate()
-  generatedDate?: Date
+//   @IsString()
+//   @IsOptional()
+//   title?: string
 
-  @IsString()
-  @IsOptional()
-  content?: string
+//   @IsString()
+//   @IsOptional()
+//   type?: string
 
-  @IsString()
-  @IsOptional()
-  performanceAnalysis?: string
-}
+//   @IsOptional()
+//   @Type(() => Date)
+//   @IsDate()
+//   generatedDate?: Date
 
-// export class UpdateReportTaskDto extends PartialType(CreateReportTaskDto) {}
+//   @IsString()
+//   @IsOptional()
+//   content?: string
+
+//   @IsString()
+//   @IsOptional()
+//   performanceAnalysis?: string
+// }
+
+// // export class UpdateReportTaskDto extends PartialType(CreateReportTaskDto) {}

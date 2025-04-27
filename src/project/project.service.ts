@@ -111,15 +111,19 @@ export class ProjectService {
 
   async createProjectTask(
     projectId: number,
-    taskData: { name: string; description: string }
+    taskData: { name: string; description: string },
+    user: { userId: number; departmentId: number }
   ) {
-    return this.taskService.create({
-      ...taskData,
-      projectId,
-      status: Status.planned,
-      order: 0,
-      priority: Priority.normal
-    })
+    return this.taskService.create(
+      {
+        ...taskData,
+        projectId,
+        status: Status.planned,
+        order: 0,
+        priority: Priority.normal
+      },
+      user
+    )
   }
 
   // Получение всех отчётов проекта

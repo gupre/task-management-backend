@@ -8,6 +8,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
   UsePipes,
   ValidationPipe
 } from '@nestjs/common'
@@ -44,8 +45,16 @@ export class ReportProjectController {
 
   @Auth()
   @Get('project/:projectId')
-  async findByProjectId(@Param('projectId', ParseIntPipe) projectId: number) {
-    return this.reportProjectService.getReportsByProjectId(+projectId)
+  async findByProjectId(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Query('startDate') startDate?: string, // Получаем startDate из query-параметров
+    @Query('endDate') endDate?: string // Получаем endDate из query-параметров
+  ) {
+    return this.reportProjectService.getReportsByProjectId(
+      projectId,
+      startDate,
+      endDate
+    )
   }
 
   @UsePipes(new ValidationPipe())

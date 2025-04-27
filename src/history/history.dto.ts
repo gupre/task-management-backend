@@ -1,4 +1,10 @@
-import { IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator'
+import {
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString
+} from 'class-validator'
 
 export class HistoryDto {
   @IsInt()
@@ -16,4 +22,20 @@ export class HistoryDto {
   @IsString()
   @IsOptional()
   comment?: string
+
+  @IsString()
+  @IsOptional()
+  createdAt?: string
+
+  @IsInt()
+  @IsOptional()
+  createdByUserId?: number
+
+  @IsInt()
+  @IsOptional()
+  createdByDepartmentId?: number
+
+  @IsNumber()
+  @IsOptional()
+  hoursSpent?: number
 }

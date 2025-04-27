@@ -19,7 +19,12 @@ export class HistoryService {
       where: { taskId },
       include: {
         user: true,
-        department: true
+        department: true,
+        createdByUser: true,
+        createdByDepartment: true
+      },
+      orderBy: {
+        createdAt: 'asc'
       }
     })
   }

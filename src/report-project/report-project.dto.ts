@@ -15,6 +15,14 @@ export class CreateReportProjectDto {
   @IsNotEmpty()
   projectId: number
 
+  @IsString()
+  @IsOptional()
+  title?: string
+
+  @IsString()
+  @IsOptional()
+  type?: string
+
   @IsOptional()
   @IsDate()
   @Type(() => Date)
