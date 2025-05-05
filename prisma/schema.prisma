@@ -40,9 +40,11 @@ model User {
   departmentId Int        @map("department_id")
   department   Department @relation(fields: [departmentId], references: [departmentId])
 
-  name     String
-  email    String @unique
-  password String
+  name             String
+  email            String   @unique
+  password         String
+  unavailableDates String[] @default([])
+  workingHours     Json?
 
   roleId Int?
   role   Role? @relation(fields: [roleId], references: [roleId])
@@ -105,14 +107,15 @@ model Task {
   hoursSpent     Int?      @map("hours_spent")
   dueDate        DateTime? @map("due_date")
   estimatedHours Int?      @map("estimated_hours")
+  progress       Int?      @default(0)
 
   priority Priority
   status   Status
 
   history History[]
-  reports ReportTask[]
+  // reports ReportTask[]
 
-  order Int @default(0) // новое поле
+  order Int @default(0)
 
   @@index([projectId])
   @@index([userId])
@@ -124,31 +127,31 @@ model Role {
   roleId Int    @id @default(autoincrement()) @map("role_id")
   name   String @unique
 
-  users       User[]
-  permissions RolePermissions[]
+  users User[]
+  // permissions RolePermissions[]
 
   @@map("role")
 }
 
-model RolePermissions {
-  roleId Int
-  role   Role @relation(fields: [roleId], references: [roleId], onDelete: Cascade)
+// model RolePermissions {
+//   roleId Int
+//   role   Role @relation(fields: [roleId], references: [roleId], onDelete: Cascade)
 
-  permissionsId Int
-  permission    Permissions @relation(fields: [permissionsId], references: [permissionsId], onDelete: Cascade)
+//   permissionsId Int
+//   permission    Permissions @relation(fields: [permissionsId], references: [permissionsId], onDelete: Cascade)
 
-  @@id([roleId, permissionsId]) // Композитный ключ
-  @@map("role_permissions")
-}
+//   @@id([roleId, permissionsId]) // Композитный ключ
+//   @@map("role_permissions")
+// }
 
-model Permissions {
-  permissionsId Int    @id @default(autoincrement()) @map("permissions_id")
-  name          String @unique
+// model Permissions {
+//   permissionsId Int    @id @default(autoincrement()) @map("permissions_id")
+//   name          String @unique
 
-  roles RolePermissions[]
+//   roles RolePermissions[]
 
-  @@map("permissions")
-}
+//   @@map("permissions")
+// }
 
 model History {
   historyId Int @id @default(autoincrement()) @map("history_id")
@@ -180,24 +183,24 @@ model History {
   @@map("history")
 }
 
-model ReportTask {
-  reportId Int @id @default(autoincrement()) @map("report_id")
+// model ReportTask {
+//   reportId Int @id @default(autoincrement()) @map("report_id")
 
-  title String?
-  type  String?
+//   title String?
+//   type  String?
 
-  taskId Int  @map("task_id")
-  task   Task @relation(fields: [taskId], references: [taskId], onDelete: Cascade)
+//   taskId Int  @map("task_id")
+//   task   Task @relation(fields: [taskId], references: [taskId], onDelete: Cascade)
 
-  reportProjectId Int           @map("report_project_id")
-  reportProject   ReportProject @relation(fields: [reportProjectId], references: [reportId])
+//   reportProjectId Int           @map("report_project_id")
+//   reportProject   ReportProject @relation(fields: [reportProjectId], references: [reportId])
 
-  generatedDate       DateTime @default(now()) @map("generated_date")
-  content             String?
-  performanceAnalysis String?  @map("performance_analysis")
+//   generatedDate       DateTime @default(now()) @map("generated_date")
+//   content             String?
+//   performanceAnalysis String?  @map("performance_analysis")
 
-  @@map("report_task")
-}
+//   @@map("report_task")
+// }
 
 model ReportProject {
   reportId Int @id @default(autoincrement()) @map("report_id")
@@ -218,7 +221,7 @@ model ReportProject {
   teamEfficiency      String? @map("team_efficiency")
   totalTasks          Int?    @map("total_tasks")
 
-  reports ReportTask[]
+  // reports ReportTask[]
 
   @@map("report_project")
 }

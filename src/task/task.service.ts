@@ -34,21 +34,34 @@ export class TaskService {
 
   // private pythonApiUrl = 'http://localhost:8000/assign-tasks/'
 
-  private getEmployeeLoad(employee) {
-    return employee.tasks.reduce((sum, task) => {
+  private async getEmployeeLoad(employee) {
+    let totalLoad = employee.tasks.reduce((sum, task) => {
       if (STATUS_IN_PROGRESS.includes(task.status)) {
-        const taskHistory = task.history.filter(
-          h => h.userId === employee.userId
-        )
-        const hoursSpentByEmployee = taskHistory.reduce(
-          (sum, record) => sum + (record.hoursSpent ?? 0),
-          0
-        )
-        const remaining = (task.estimatedHours ?? 0) - hoursSpentByEmployee
-        return sum + Math.max(remaining, 0)
+        const dailyLoad = this.getRemainingTime(employee, task)
+        return sum + dailyLoad
       }
       return sum
     }, 0)
+
+    // Учитываем отпуска
+    if (employee.unavailableDates) {
+      const unavailableDays = employee.unavailableDates.length
+      totalLoad += unavailableDays * employee.assigned_hours // добавление "недоступных" часов
+    }
+
+    // Учитываем индивидуальные часы работы
+    if (employee.workingHours) {
+      const dailyHours = this.calculateWorkingHours(employee.workingHours)
+      totalLoad = totalLoad / dailyHours
+    }
+
+    return totalLoad
+  }
+
+  private calculateWorkingHours(workingHours: { start: string; end: string }) {
+    const start = dayjs(workingHours.start, 'HH:mm')
+    const end = dayjs(workingHours.end, 'HH:mm')
+    return end.diff(start, 'hours')
   }
 
   private mapEmployees(employees) {
@@ -56,7 +69,9 @@ export class TaskService {
       id: employee.userId,
       timezone_offset: employee.timezone.offset,
       assigned_hours: this.getEmployeeLoad(employee),
-      department_id: employee.departmentId
+      department_id: employee.departmentId,
+      vacation_days: employee.vacationDays,
+      working_hours: employee.working_hours
     }))
   }
 
@@ -117,38 +132,59 @@ export class TaskService {
       0
     )
 
-    // Теперь нужно учитывать рабочие дни
     const now = new Date()
-    const dueDate = new Date(task.dueDate) // Явно превращаем в Date
-    const daysBetween = (dueDate.getTime() - now.getTime()) / (1000 * 3600 * 24) // количество дней до дедлайна
+    const dueDate = new Date(task.dueDate)
+    const daysBetween = (dueDate.getTime() - now.getTime()) / (1000 * 3600 * 24)
 
-    // Предполагаем, что задача должна быть завершена до дедлайна, и учитываем рабочие дни
     const remaining = Math.max(
       0,
       (task.estimatedHours ?? 0) - hoursSpentByEmployee
     )
-    return remaining
+
+    if (daysBetween <= 0) {
+      return remaining // Дедлайн сегодня/прошёл — нагрузка вся сейчас
+    }
+
+    const dailyLoad = remaining / daysBetween
+    return dailyLoad
   }
 
   private async getEmployeeWeeklyLoad(employeeId: number): Promise<number> {
     dayjs.extend(isoWeek)
-    const startOfWeek = dayjs().startOf('isoWeek').toDate() // Понедельник
-    const endOfWeek = dayjs().endOf('isoWeek').toDate() // Воскресенье
+    const startOfWeek = dayjs().startOf('isoWeek').toDate()
+    const endOfWeek = dayjs().endOf('isoWeek').toDate()
 
-    const histories = await this.prisma.history.findMany({
+    const activeTasks = await this.prisma.task.findMany({
       where: {
-        createdByUserId: employeeId,
-        createdAt: {
-          gte: startOfWeek,
-          lte: endOfWeek
-        },
-        hoursSpent: {
-          not: null
+        userId: employeeId,
+        status: { in: ['progress'] }
+      },
+      select: {
+        estimatedHours: true,
+        dueDate: true,
+        taskId: true,
+        history: {
+          where: { userId: employeeId },
+          select: { hoursSpent: true }
         }
       }
     })
 
-    return histories.reduce((sum, h) => sum + h.hoursSpent, 0)
+    let totalHours = 0
+
+    for (const task of activeTasks) {
+      const spent = task.history.reduce(
+        (sum, record) => sum + (record.hoursSpent ?? 0),
+        0
+      )
+      const remaining = Math.max(0, (task.estimatedHours ?? 0) - spent)
+
+      if (task.dueDate >= startOfWeek) {
+        totalHours += remaining
+      }
+    }
+
+    return totalHours
   }
 
   async create(createTaskDto, createUser) {
@@ -182,7 +218,7 @@ export class TaskService {
 
     if (!task.dueDate) throw new Error('Не указан дедлайн для задачи')
 
-    const employees = this.mapEmployees(
+    const users = this.mapEmployees(
       await this.prisma.user.findMany({
         select: {
           userId: true,
@@ -191,6 +227,19 @@ export class TaskService {
           tasks: {
             select: { hoursSpent: true, estimatedHours: true, status: true }
           }
+        }
+      })
+    )
+
+    // Теперь для каждого сотрудника считаем актуальную нагрузку на неделю
+    const employees = await Promise.all(
+      users.map(async user => {
+        const assignedHours = await this.getEmployeeWeeklyLoad(user.userId)
+        return {
+          userId: user.userId,
+          timezone: user.timezone,
+          departmentId: user.departmentId,
+          assigned_hours: assignedHours
         }
       })
     )
@@ -290,12 +339,17 @@ export class TaskService {
         project: projectId ? { connect: { projectId } } : undefined,
         history: historyIds?.length
           ? { connect: historyIds.map(id => ({ historyId: id })) }
-          : undefined,
-        reports: reportIds?.length
-          ? { connect: reportIds.map(id => ({ reportId: id })) }
           : undefined
+        // reports: reportIds?.length
+        //   ? { connect: reportIds.map(id => ({ reportId: id })) }
+        //   : undefined
       }),
-      include: { user: true, history: true, reports: true, project: true }
+      include: {
+        user: true,
+        history: true,
+        //  reports: true,
+        project: true
+      }
     })
 
     await this.logTaskChanges(
@@ -327,7 +381,12 @@ export class TaskService {
   async getById(id: number) {
     const task = await this.prisma.task.findUnique({
       where: { taskId: id },
-      include: { project: true, user: true, history: true, reports: true }
+      include: {
+        project: true,
+        user: true,
+        history: true
+        // reports: true
+      }
     })
 
     if (!task) throw new NotFoundException('Задача не найдена')
@@ -391,8 +450,8 @@ export class TaskService {
       where: { projectId },
       include: {
         user: true,
-        history: true,
-        reports: true
+        history: true
+        // reports: true
       }
     })
 

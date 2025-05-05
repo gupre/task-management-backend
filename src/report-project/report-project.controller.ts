@@ -51,10 +51,40 @@ export class ReportProjectController {
     @Query('endDate') endDate?: string // Получаем endDate из query-параметров
   ) {
     return this.reportProjectService.getReportsByProjectId(
-      projectId,
+      +projectId,
       startDate,
       endDate
     )
+  }
+
+  @UsePipes(new ValidationPipe())
+  @Auth()
+  @Get('project/:projectId/tasks-for-gantt')
+  async getTasksForGantt(@Param('projectId', ParseIntPipe) projectId: number) {
+    console.log('Received request for projectId:', projectId)
+    return this.reportProjectService.getTasksForGantt(+projectId)
+  }
+
+  @Auth()
+  @Get('project/:projectId/workload')
+  async getWorkloadReport(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Query('startDate') startDate?: string,
+    @Query('endDate') endDate?: string
+  ) {
+    return this.reportProjectService.getWorkloadReport(
+      +projectId,
+      startDate,
+      endDate
+    )
+  }
+
+  @Auth()
+  @Get('project/:projectId/team-report')
+  async getTeamMemberReport(
+    @Param('projectId', ParseIntPipe) projectId: number
+  ) {
+    return this.reportProjectService.getTeamMemberReport(+projectId)
   }
 
   @UsePipes(new ValidationPipe())

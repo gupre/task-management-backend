@@ -1,14 +1,14 @@
 import {
+  IsArray,
   IsBoolean,
   IsEmail,
   IsInt,
+  IsObject,
   IsOptional,
   IsString,
   Matches,
   MinLength
 } from 'class-validator'
-
-//Администратор (admin): флаг, указывающий, является ли пользователь системным администратором.
 
 export class UserDto {
   @IsOptional()
@@ -62,6 +62,18 @@ export class UserDto {
   @IsOptional()
   @IsBoolean()
   isAdmin?: boolean
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  unavailableDates?: string[] // Добавлено для отпуска
+
+  @IsOptional()
+  @IsObject()
+  workingHours?: {
+    start: string
+    end: string
+  } // Добавлено для индивидуального графика
 }
 
 export class CheckPasswordDto {

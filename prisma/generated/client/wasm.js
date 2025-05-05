@@ -135,6 +135,8 @@ exports.Prisma.UserScalarFieldEnum = {
   name: 'name',
   email: 'email',
   password: 'password',
+  unavailableDates: 'unavailableDates',
+  workingHours: 'workingHours',
   roleId: 'roleId',
   isAdmin: 'isAdmin',
   isActive: 'isActive'
@@ -165,6 +167,7 @@ exports.Prisma.TaskScalarFieldEnum = {
   hoursSpent: 'hoursSpent',
   dueDate: 'dueDate',
   estimatedHours: 'estimatedHours',
+  progress: 'progress',
   priority: 'priority',
   status: 'status',
   order: 'order'
@@ -172,16 +175,6 @@ exports.Prisma.TaskScalarFieldEnum = {
 
 exports.Prisma.RoleScalarFieldEnum = {
   roleId: 'roleId',
-  name: 'name'
-};
-
-exports.Prisma.RolePermissionsScalarFieldEnum = {
-  roleId: 'roleId',
-  permissionsId: 'permissionsId'
-};
-
-exports.Prisma.PermissionsScalarFieldEnum = {
-  permissionsId: 'permissionsId',
   name: 'name'
 };
 
@@ -195,17 +188,6 @@ exports.Prisma.HistoryScalarFieldEnum = {
   createdByUserId: 'createdByUserId',
   createdByDepartmentId: 'createdByDepartmentId',
   hoursSpent: 'hoursSpent'
-};
-
-exports.Prisma.ReportTaskScalarFieldEnum = {
-  reportId: 'reportId',
-  title: 'title',
-  type: 'type',
-  taskId: 'taskId',
-  reportProjectId: 'reportProjectId',
-  generatedDate: 'generatedDate',
-  content: 'content',
-  performanceAnalysis: 'performanceAnalysis'
 };
 
 exports.Prisma.ReportProjectScalarFieldEnum = {
@@ -228,9 +210,20 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
 };
 
 exports.Prisma.NullsOrder = {
@@ -258,10 +251,7 @@ exports.Prisma.ModelName = {
   ProjectUser: 'ProjectUser',
   Task: 'Task',
   Role: 'Role',
-  RolePermissions: 'RolePermissions',
-  Permissions: 'Permissions',
   History: 'History',
-  ReportTask: 'ReportTask',
   ReportProject: 'ReportProject'
 };
 

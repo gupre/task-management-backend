@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from 'src/prisma.service'
-import { RolePermissionsService } from 'src/role-permissions/role-permissions.service'
+// import { RolePermissionsService } from 'src/role-permissions/role-permissions.service'
 import { CreateRoleDto, UpdateRoleDto } from './role.dto'
 
 @Injectable()
 export class RoleService {
   constructor(
-    private readonly prisma: PrismaService,
-    private readonly rolePermissionsService: RolePermissionsService
+    private readonly prisma: PrismaService
+    // private readonly rolePermissionsService: RolePermissionsService
   ) {}
 
   async create(createRoleDto: CreateRoleDto) {
@@ -23,16 +23,16 @@ export class RoleService {
       }
     })
 
-    // Если разрешения переданы, добавляем их через сервис RolePermissions
-    if (permissionsIds?.length) {
-      await this.rolePermissionsService.addPermissionsToRole(
-        role.roleId,
-        permissionsIds.map(p => ({
-          roleId: role.roleId,
-          permissionsId: p
-        }))
-      )
-    }
+    // // Если разрешения переданы, добавляем их через сервис RolePermissions
+    // if (permissionsIds?.length) {
+    //   await this.rolePermissionsService.addPermissionsToRole(
+    //     role.roleId,
+    //     permissionsIds.map(p => ({
+    //       roleId: role.roleId,
+    //       permissionsId: p
+    //     }))
+    //   )
+    // }
 
     return role
   }
@@ -40,8 +40,8 @@ export class RoleService {
   async findAll() {
     return await this.prisma.role.findMany({
       include: {
-        users: true,
-        permissions: true
+        users: true
+        // permissions: true
       }
     })
   }
@@ -50,8 +50,8 @@ export class RoleService {
     return await this.prisma.role.findUnique({
       where: { roleId },
       include: {
-        users: true,
-        permissions: true
+        users: true
+        // permissions: true
       }
     })
   }
@@ -70,23 +70,23 @@ export class RoleService {
       }
     })
 
-    // Если разрешения переданы, обновляем их через сервис RolePermissions
-    if (permissionsIds?.length) {
-      await this.rolePermissionsService.remove(
-        roleId,
-        permissionsIds.map(p => ({
-          roleId: role.roleId,
-          permissionsId: p
-        }))
-      ) // Удаляем старые разрешения
-      await this.rolePermissionsService.addPermissionsToRole(
-        roleId,
-        permissionsIds.map(p => ({
-          roleId: role.roleId,
-          permissionsId: p
-        }))
-      ) // Добавляем новые разрешения
-    }
+    // // Если разрешения переданы, обновляем их через сервис RolePermissions
+    // if (permissionsIds?.length) {
+    //   await this.rolePermissionsService.remove(
+    //     roleId,
+    //     permissionsIds.map(p => ({
+    //       roleId: role.roleId,
+    //       permissionsId: p
+    //     }))
+    //   ) // Удаляем старые разрешения
+    //   await this.rolePermissionsService.addPermissionsToRole(
+    //     roleId,
+    //     permissionsIds.map(p => ({
+    //       roleId: role.roleId,
+    //       permissionsId: p
+    //     }))
+    //   ) // Добавляем новые разрешения
+    // }
 
     return role
   }

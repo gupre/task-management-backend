@@ -57,6 +57,10 @@ export class CreateTaskDto {
   @IsEnum(Status)
   status: Status
 
+  @IsInt()
+  @IsOptional()
+  progress?: number
+
   @IsArray()
   @IsOptional()
   @IsInt({ each: true })
