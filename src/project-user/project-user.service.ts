@@ -1,16 +1,20 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
+import { NotificationService } from 'src/notification/notification.service'
 import { PrismaService } from '../prisma.service'
 import { CreateProjectUserDto } from './project-user.dto'
 
 @Injectable()
 export class ProjectUserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private notificationService: NotificationService
+  ) {}
 
   async getProjectUsers(projectId: number) {
     return await this.prisma.projectUser.findMany({
       where: { projectId },
       include: {
-        user: true // добавляем информацию о пользователе
+        user: true
       }
     })
   }
@@ -24,12 +28,21 @@ export class ProjectUserService {
     })
   }
 
-  async addUserToProject(dto: CreateProjectUserDto) {
+  async addUserToProject(dto: CreateProjectUserDto, projectName: string) {
     const userExists = await this.prisma.user.findUnique({
       where: { userId: dto.userId }
     })
 
-    if (!userExists) throw new NotFoundException('Пользователь не найден')
+    if (!userExists) {
+      throw new NotFoundException('Пользователь не найден')
+    }
+
+    await this.notificationService.notifyUser(
+      userExists.userId,
+      'Вы добавлены в проект',
+      `Вы были добавлены в проект "${projectName}". Ознакомьтесь с задачами и сроками выполнения.`,
+      'web'
+    )
 
     return this.prisma.projectUser.create({
       data: { projectId: dto.projectId, userId: dto.userId }
@@ -83,13 +96,20 @@ export class ProjectUserService {
     })
   }
 
-  async removeUserFromProject(dto: CreateProjectUserDto) {
+  async removeUserFromProject(dto: CreateProjectUserDto, projectName) {
     const projectUser = await this.prisma.projectUser.findFirst({
       where: { projectId: dto.projectId, userId: dto.userId }
     })
 
     if (!projectUser)
       throw new NotFoundException('Пользователь не привязан к проекту')
+
+    await this.notificationService.notifyUser(
+      projectUser.userId,
+      'Вы добавлены в проект',
+      `Вы были добавлены в проект "${projectName}". Ознакомьтесь с задачами и сроками выполнения.`,
+      'web'
+    )
 
     return this.prisma.projectUser.delete({
       where: {

@@ -13,11 +13,11 @@ import {
 } from '@nestjs/common'
 import { Auth } from 'src/auth/decorators/auth.decorator'
 import { CreateDepartmentDto, UpdateDepartmentDto } from './department.dto'
-import { departmentService } from './department.service'
+import { DepartmentService } from './department.service'
 
 @Controller('department')
-export class departmentController {
-  constructor(private readonly departmentService: departmentService) {}
+export class DepartmentController {
+  constructor(private readonly departmentService: DepartmentService) {}
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)

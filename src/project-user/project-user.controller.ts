@@ -38,8 +38,11 @@ export class ProjectUserController {
   @HttpCode(200)
   @Auth()
   @Post()
-  async addUserToProject(@Body() dto: CreateProjectUserDto) {
-    return this.projectUserService.addUserToProject(dto)
+  async addUserToProject(
+    @Body() dto: CreateProjectUserDto,
+    projectName: string
+  ) {
+    return this.projectUserService.addUserToProject(dto, projectName)
   }
 
   @UsePipes(new ValidationPipe())
@@ -77,7 +80,10 @@ export class ProjectUserController {
   @HttpCode(200)
   @Auth()
   @Delete()
-  async removeUserFromProject(@Body() dto: CreateProjectUserDto) {
-    return this.projectUserService.removeUserFromProject(dto)
+  async removeUserFromProject(
+    @Body() dto: CreateProjectUserDto,
+    projectName: string
+  ) {
+    return this.projectUserService.removeUserFromProject(dto, projectName)
   }
 }

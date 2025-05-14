@@ -1,11 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
-import axios from 'axios'
-import dayjs from 'dayjs'
-import isoWeek from 'dayjs/plugin/isoWeek'
-import { Prisma } from 'prisma/generated/client'
+import { Cron, CronExpression } from '@nestjs/schedule'
+import { Prisma, Status } from 'prisma/generated/client'
 import { HistoryService } from 'src/history/history.service'
 import { PrismaService } from 'src/prisma.service'
 // import { ReportTaskService } from 'src/report-task/report-task.service'
+import axios from 'axios'
+import { eachWeekOfInterval, formatISO, startOfISOWeek } from 'date-fns'
+import { NotificationService } from 'src/notification/notification.service'
 import { UserService } from 'src/user/user.service'
 
 const STATUS_IN_PROGRESS = ['created', 'todo', 'progress']
@@ -29,53 +30,22 @@ export class TaskService {
     private prisma: PrismaService,
     private historyService: HistoryService,
     // private reportTaskService: ReportTaskService,
-    private userService: UserService
+    private userService: UserService,
+    private notificationService: NotificationService
   ) {}
 
   // private pythonApiUrl = 'http://localhost:8000/assign-tasks/'
 
-  private async getEmployeeLoad(employee) {
-    let totalLoad = employee.tasks.reduce((sum, task) => {
-      if (STATUS_IN_PROGRESS.includes(task.status)) {
-        const dailyLoad = this.getRemainingTime(employee, task)
-        return sum + dailyLoad
-      }
-      return sum
-    }, 0)
+  private async distributeTasks(
+    tasks,
+    employees,
+    createUser,
+    oldTask?,
+    fullTasks?
+  ) {
+    console.log(tasks)
+    console.log(employees)
 
-    // Учитываем отпуска
-    if (employee.unavailableDates) {
-      const unavailableDays = employee.unavailableDates.length
-      totalLoad += unavailableDays * employee.assigned_hours // добавление "недоступных" часов
-    }
-
-    // Учитываем индивидуальные часы работы
-    if (employee.workingHours) {
-      const dailyHours = this.calculateWorkingHours(employee.workingHours)
-      totalLoad = totalLoad / dailyHours
-    }
-
-    return totalLoad
-  }
-
-  private calculateWorkingHours(workingHours: { start: string; end: string }) {
-    const start = dayjs(workingHours.start, 'HH:mm')
-    const end = dayjs(workingHours.end, 'HH:mm')
-    return end.diff(start, 'hours')
-  }
-
-  private mapEmployees(employees) {
-    return employees.map(employee => ({
-      id: employee.userId,
-      timezone_offset: employee.timezone.offset,
-      assigned_hours: this.getEmployeeLoad(employee),
-      department_id: employee.departmentId,
-      vacation_days: employee.vacationDays,
-      working_hours: employee.working_hours
-    }))
-  }
-
-  private async distributeTasks(tasks, employees, createUser, oldTask?) {
     const response = await axios.post(process.env.PYTHON_API_URL, {
       tasks,
       employees
@@ -84,6 +54,8 @@ export class TaskService {
 
     for (const updatedTask of response.data.assigned_tasks) {
       if (updatedTask.assigned_to) {
+        const fullTask = fullTasks?.find(t => t.id === updatedTask.id)
+
         await this.prisma.task.update({
           where: { taskId: updatedTask.id },
           data: { userId: updatedTask.assigned_to }
@@ -101,6 +73,21 @@ export class TaskService {
           createdByUserId: createUser.userId,
           createdByDepartmentId: createUser.departmentId
         })
+        if (user) {
+          const dueDate = new Date(fullTask.dueDate)
+          const formattedDate = dueDate.toLocaleDateString('ru-RU', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+          })
+
+          await this.notificationService.notifyUser(
+            user.userId,
+            `${oldTask ? 'Перераспределена задача' : 'Назначена новая задача'}: ${fullTask.name}`,
+            `Вам ${oldTask ? 'переназначена' : 'назначена'} задача "${fullTask.name}". Срок выполнения: ${formattedDate}`,
+            'web'
+          )
+        }
       }
     }
   }
@@ -125,71 +112,99 @@ export class TaskService {
     }
   }
 
-  private getRemainingTime(employee, task) {
-    const taskHistory = task.history.filter(h => h.userId === employee.userId)
-    const hoursSpentByEmployee = taskHistory.reduce(
-      (sum, record) => sum + (record.hoursSpent ?? 0),
-      0
-    )
-
-    const now = new Date()
-    const dueDate = new Date(task.dueDate)
-    const daysBetween = (dueDate.getTime() - now.getTime()) / (1000 * 3600 * 24)
-
-    const remaining = Math.max(
-      0,
-      (task.estimatedHours ?? 0) - hoursSpentByEmployee
-    )
-
-    if (daysBetween <= 0) {
-      return remaining // Дедлайн сегодня/прошёл — нагрузка вся сейчас
-    }
-
-    const dailyLoad = remaining / daysBetween
-    return dailyLoad
-  }
-
-  private async getEmployeeWeeklyLoad(employeeId: number): Promise<number> {
-    dayjs.extend(isoWeek)
-    const startOfWeek = dayjs().startOf('isoWeek').toDate()
-    const endOfWeek = dayjs().endOf('isoWeek').toDate()
-
-    const activeTasks = await this.prisma.task.findMany({
+  async getEmployeesWorkload(departmentId: number, newTaskDueDate: Date) {
+    const employees = await this.prisma.user.findMany({
       where: {
-        userId: employeeId,
-        status: { in: ['progress'] }
+        departmentId,
+        isActive: true
       },
-      select: {
-        estimatedHours: true,
-        dueDate: true,
-        taskId: true,
-        history: {
-          where: { userId: employeeId },
-          select: { hoursSpent: true }
-        }
+      include: {
+        tasks: {
+          where: {
+            status: {
+              in: ['planned', 'progress']
+            }
+          },
+          select: {
+            estimatedHours: true,
+            assignmentDate: true,
+            dueDate: true,
+            hoursSpent: true,
+            history: true
+          }
+        },
+        timezone: true
       }
     })
 
-    let totalHours = 0
+    const now = startOfISOWeek(new Date())
 
-    for (const task of activeTasks) {
-      const spent = task.history.reduce(
-        (sum, record) => sum + (record.hoursSpent ?? 0),
-        0
-      )
-      const remaining = Math.max(0, (task.estimatedHours ?? 0) - spent)
+    return employees.map(user => {
+      const workingHours = (user.workingHours as {
+        start: string
+        end: string
+      }) || { start: '08:00', end: '16:00' }
+      const unavailableDates = user.unavailableDates || []
 
-      if (task.dueDate >= startOfWeek) {
-        totalHours += remaining
+      const assigned_hours_by_week: Record<string, number> = {}
+
+      for (const task of user.tasks) {
+        const assignDate = new Date(task.assignmentDate)
+        const dueDate = new Date(task.dueDate)
+
+        const intervalWeeks = eachWeekOfInterval({
+          start: assignDate,
+          end: dueDate
+        })
+        const totalWeeks = intervalWeeks.length || 1
+
+        // Потраченные часы в рамках каждой недели
+        for (const historyRecord of task.history.filter(
+          h => h.userId === user.userId
+        )) {
+          const weekStart = startOfISOWeek(new Date(historyRecord.createdAt))
+          if (now === weekStart) {
+            const weekKey = formatISO(weekStart, { representation: 'date' })
+            assigned_hours_by_week[weekKey] =
+              (assigned_hours_by_week[weekKey] || 0) +
+              (historyRecord.hoursSpent ?? 0)
+          }
+        }
+
+        // Распределим оставшиеся часы по неделям
+        const remainingHours = Math.max(
+          0,
+          (task.estimatedHours ?? 0) - task.hoursSpent
+        )
+
+        for (const weekDate of intervalWeeks) {
+          const weekKey = formatISO(startOfISOWeek(weekDate), {
+            representation: 'date'
+          })
+          assigned_hours_by_week[weekKey] =
+            (assigned_hours_by_week[weekKey] || 0) + remainingHours / totalWeeks
+        }
       }
-    }
 
-    return totalHours
+      return {
+        id: user.userId,
+        timezone_offset: user.timezone.offset,
+        department_id: user.departmentId,
+        unavailable_dates: unavailableDates,
+        working_hours: workingHours,
+        assigned_hours_by_week
+      }
+    })
   }
-
   async create(createTaskDto, createUser) {
-    const { historyIds, reportIds, assignmentDate, dueDate, ...taskData } =
-      createTaskDto
+    const {
+      historyIds,
+      reportIds,
+      assignmentDate,
+      dueDate,
+      userId,
+      ...taskData
+    } = createTaskDto
 
     const lastTask = await this.prisma.task.findFirst({
       where: {
@@ -202,11 +217,32 @@ export class TaskService {
     const task = await this.prisma.task.create({
       data: {
         ...taskData,
+        userId: userId ? userId : undefined,
         assignmentDate: assignmentDate ? new Date(assignmentDate) : new Date(),
         dueDate: dueDate ? new Date(dueDate) : undefined,
         order: lastTask ? lastTask.order + 1 : 0
       }
     })
+
+    if (userId) {
+      const user = await this.prisma.user.findUnique({
+        where: { userId }
+      })
+
+      const dueDate = new Date(task.dueDate)
+      const formattedDate = dueDate.toLocaleDateString('ru-RU', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      })
+
+      await this.notificationService.notifyUser(
+        userId,
+        `${'Назначена новая задача'}: ${task.name}`,
+        `Вам назначена задача "${user.name}". Срок выполнения: ${formattedDate}`,
+        'web'
+      )
+    }
 
     await this.historyService.create({
       taskId: task.taskId,
@@ -218,46 +254,35 @@ export class TaskService {
 
     if (!task.dueDate) throw new Error('Не указан дедлайн для задачи')
 
-    const users = this.mapEmployees(
-      await this.prisma.user.findMany({
-        select: {
-          userId: true,
-          timezone: { select: { offset: true } },
-          departmentId: true,
-          tasks: {
-            select: { hoursSpent: true, estimatedHours: true, status: true }
-          }
-        }
-      })
-    )
+    if (!userId) {
+      const employees = await this.getEmployeesWorkload(
+        task.departmentId,
+        task.dueDate
+      )
 
-    // Теперь для каждого сотрудника считаем актуальную нагрузку на неделю
-    const employees = await Promise.all(
-      users.map(async user => {
-        const assignedHours = await this.getEmployeeWeeklyLoad(user.userId)
-        return {
-          userId: user.userId,
-          timezone: user.timezone,
-          departmentId: user.departmentId,
-          assigned_hours: assignedHours
-        }
-      })
-    )
+      const taskForPython = {
+        id: task.taskId,
+        deadline: task.dueDate,
+        priority: task.priority,
+        estimated_hours: task.estimatedHours ?? task.hoursSpent ?? 0,
+        started: ['progress', 'end'].includes(task.status),
+        department_id: task.departmentId
+      }
 
-    await this.distributeTasks(
-      [
-        {
-          id: task.taskId,
-          deadline: task.dueDate,
-          priority: task.priority,
-          estimated_hours: task.estimatedHours ?? task.hoursSpent ?? 0,
-          started: ['progress', 'end'].includes(task.status),
-          department_id: task.departmentId
-        }
-      ],
-      employees,
-      createUser
-    )
+      const taskForNotify = {
+        ...taskForPython,
+        name: task.name,
+        dueDate: task.dueDate
+      }
+
+      await this.distributeTasks(
+        [taskForPython],
+        employees,
+        createUser,
+        undefined,
+        [taskForNotify]
+      )
+    }
 
     return task
   }
@@ -275,6 +300,8 @@ export class TaskService {
       departmentId,
       projectId,
       hoursSpent,
+      progress,
+      dueDate,
       ...taskData
     } = updateTaskDto
 
@@ -288,6 +315,10 @@ export class TaskService {
         `Приоритет изменён: ${priorityMap[oldTask.priority]} → ${priorityMap[priority]}`
       )
 
+    if (progress !== undefined && progress !== oldTask.progress) {
+      changes.push(`Прогресс изменён: ${oldTask.progress ?? 0}% → ${progress}%`)
+    }
+
     if (userId && userId !== oldTask.userId) {
       const user = await this.prisma.user.findUnique({ where: { userId } })
       if (user) changes.push(`Задача назначена пользователю: ${user.name}`)
@@ -296,18 +327,9 @@ export class TaskService {
     if (departmentId && departmentId !== oldTask.departmentId) {
       if (!oldTask.dueDate) throw new Error('Не указан дедлайн для задачи')
 
-      const employees = this.mapEmployees(
-        await this.prisma.user.findMany({
-          where: { departmentId },
-          select: {
-            userId: true,
-            timezone: { select: { offset: true } },
-            departmentId: true,
-            tasks: {
-              select: { hoursSpent: true, estimatedHours: true, status: true }
-            }
-          }
-        })
+      const employees = this.getEmployeesWorkload(
+        departmentId,
+        taskData.dueDate ? taskData.dueDate : oldTask.dueDate
       )
 
       await this.distributeTasks(
@@ -339,7 +361,9 @@ export class TaskService {
         project: projectId ? { connect: { projectId } } : undefined,
         history: historyIds?.length
           ? { connect: historyIds.map(id => ({ historyId: id })) }
-          : undefined
+          : undefined,
+        progress: progress ?? oldTask.progress
+
         // reports: reportIds?.length
         //   ? { connect: reportIds.map(id => ({ reportId: id })) }
         //   : undefined
@@ -359,6 +383,83 @@ export class TaskService {
       departmentId || oldTask.departmentId,
       createUser
     )
+
+    // Уведомления при изменении статуса (например, задача выполнена)
+    if (status === Status.end && status !== oldTask.status) {
+      const userToNotify = updatedTask.user
+      if (userToNotify) {
+        const message = `Задача выполнена: ${updatedTask.name}`
+        const detail = `Задача "${updatedTask.name}" была выполнена. Поздравляем!`
+
+        // Уведомляем исполнителя
+        await this.notificationService.notifyUser(
+          userToNotify.userId,
+          message,
+          detail,
+          'web'
+        )
+      }
+
+      // Уведомление для постановщика задачи (по истории)
+      const history = await this.prisma.history.findFirst({
+        where: { taskId, createdByUserId: { not: null } },
+        orderBy: { createdAt: 'asc' }
+      })
+
+      if (history && history.createdByUserId) {
+        const creator = await this.prisma.user.findUnique({
+          where: { userId: history.createdByUserId }
+        })
+
+        if (creator) {
+          const message = `Задача выполнена: ${updatedTask.name}`
+          const detail = `Задача "${updatedTask.name}" была выполнена исполнителем.`
+
+          // Уведомляем постановщика
+          await this.notificationService.notifyUser(
+            creator.userId,
+            message,
+            detail,
+            'web'
+          )
+        }
+      }
+    }
+
+    // Уведомление при изменении приоритета или срока выполнения
+    if (priority && priority !== oldTask.priority) {
+      const userToNotify = updatedTask.user
+      if (userToNotify) {
+        const message = `Обновление задачи: ${updatedTask.name}`
+        const detail = `Приоритет изменён с "${priorityMap[oldTask.priority]}" на "${priorityMap[priority]}".`
+
+        await this.notificationService.notifyUser(
+          userToNotify.userId,
+          message,
+          detail,
+          'web'
+        )
+      }
+    }
+
+    if (
+      dueDate &&
+      new Date(dueDate).toLocaleDateString() !==
+        new Date(oldTask.dueDate).toLocaleDateString()
+    ) {
+      const userToNotify = updatedTask.user
+      if (userToNotify) {
+        const message = `Обновление задачи: ${updatedTask.name}`
+        const detail = `Дедлайн изменён с ${new Date(oldTask.dueDate).toLocaleDateString()} на ${new Date(dueDate).toLocaleDateString()}.`
+
+        await this.notificationService.notifyUser(
+          userToNotify.userId,
+          message,
+          detail,
+          'web'
+        )
+      }
+    }
 
     if (hoursSpent !== undefined && hoursSpent !== oldTask.hoursSpent) {
       const comment = `Потрачено ${hoursSpent - oldTask.hoursSpent} ч. на выполнение задачи.`
@@ -395,12 +496,63 @@ export class TaskService {
   }
 
   async remove(id: number) {
+    const task = await this.prisma.task.findUnique({
+      where: { taskId: id }
+    })
+
+    if (!task) {
+      throw new Error('Задача не найдена')
+    }
+
+    const history = await this.prisma.history.findFirst({
+      where: { taskId: id, createdByUserId: { not: null } },
+      orderBy: { createdAt: 'asc' }
+    })
+
+    if (!history) {
+      throw new Error('Не найдена история создания задачи')
+    }
+
     await this.historyService.remove(id)
     // await this.reportTaskService.remove(id)
 
-    return this.prisma.task.delete({
+    await this.prisma.task.delete({
       where: { taskId: id }
     })
+
+    // Отправляем уведомления исполнителю задачи
+    if (task.userId) {
+      const user = await this.prisma.user.findUnique({
+        where: { userId: task.userId }
+      })
+
+      if (user) {
+        await this.notificationService.notifyUser(
+          user.userId,
+          `Задача удалена: ${task.name}`,
+          `Задача "${task.name}" была удалена. Это уведомление отправлено вам как исполнителю задачи.`,
+          'web'
+        )
+      }
+    }
+
+    // Отправляем уведомление постановщику задачи (по истории)
+    if (history.createdByUserId) {
+      const creator = await this.prisma.user.findUnique({
+        where: { userId: history.createdByUserId }
+      })
+
+      if (creator) {
+        await this.notificationService.notifyUser(
+          creator.userId,
+          `Задача удалена: ${task.name}`,
+          `Задача "${task.name}" была удалена. Это уведомление отправлено вам как постановщику задачи.`,
+          'web'
+        )
+      }
+    }
+
+    return { message: 'Задача удалена и уведомления отправлены' }
   }
 
   // Назначение задачи пользователю с добавлением в историю
@@ -431,6 +583,13 @@ export class TaskService {
       createdByUserId: createUser.userId,
       createdByDepartmentId: createUser.departmentId
     })
+
+    await this.notificationService.notifyUser(
+      user.userId,
+      `${'Назначена новая задача'}: ${updatedTask.name}`,
+      `Вам назначена задача "${user.name}". Срок выполнения: ${updatedTask.dueDate}.`,
+      'web'
+    )
 
     return updatedTask
   }
@@ -468,5 +627,61 @@ export class TaskService {
 
     await Promise.all(updatePromises)
     return { message: 'Порядок задач обновлён' }
+  }
+
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  async checkOverdueTasks() {
+    const now = new Date()
+
+    // Получаем все задачи, у которых deadline меньше текущего времени
+    const overdueTasks = await this.prisma.task.findMany({
+      where: {
+        dueDate: {
+          lt: now
+        },
+        status: { not: 'end' } // Фильтруем только не завершенные задачи
+      }
+    })
+
+    for (const task of overdueTasks) {
+      // Получаем пользователя, который отвечает за задачу
+      const user = await this.prisma.user.findUnique({
+        where: { userId: task.userId }
+      })
+
+      // Если пользователь найден, проверяем его часовой пояс
+      if (user) {
+        const userTimeZone = await this.prisma.timeZone.findUnique({
+          where: { timezoneId: user.timezoneId }
+        })
+
+        const taskDueDate = task.dueDate
+
+        // Преобразуем дату дедлайна в часовой пояс пользователя
+        const taskDueDateInUserTimeZone = this.convertToTimeZone(
+          taskDueDate,
+          userTimeZone.name
+        )
+
+        // Если задача просрочена
+        if (taskDueDateInUserTimeZone < now) {
+          const subject = `Внимание! Задача "${task.name}" просрочена.`
+          const message = `Задача должна была быть завершена до ${taskDueDateInUserTimeZone.toLocaleString()}.`
+
+          // Уведомляем исполнителя
+          await this.notificationService.notifyUser(
+            user.userId,
+            subject,
+            message,
+            'web'
+          )
+        }
+      }
+    }
+  }
+
+  // Метод для преобразования даты в часовой пояс пользователя
+  convertToTimeZone(date: Date, timeZone: string): Date {
+    return new Date(date.toLocaleString('ru-RU', { timeZone }))
   }
 }

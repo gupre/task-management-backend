@@ -20,10 +20,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate({ id }: { id: number }) {
     // return this.userService.getById(+id)
     const user = await this.userService.getById(+id)
+    // console.log('user', user)
+    // console.log('user.roleId', user.roleId)
     if (!user) {
       throw new UnauthorizedException('User not found')
     }
-    // Убедитесь, что roleId передается вместе с user
-    return { ...user, roleId: user.roleId } // добавляем roleId
+
+    return { ...user, roleId: user.roleId }
   }
 }

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
 import { AuthModule } from './auth/auth.module'
-import { departmentModule } from './department/department.module'
+import { DepartmentModule } from './department/department.module'
 import { HistoryModule } from './history/history.module'
 // import { PermissionsModule } from './permissions/permissions.module'
 import { PrismaService } from './prisma.service'
@@ -9,13 +9,12 @@ import { ProjectModule } from './project/project.module'
 import { ReportProjectModule } from './report-project/report-project.module'
 // import { ReportTaskModule } from './report-task/report-task.module'
 // import { RolePermissionsModule } from './role-permissions/role-permissions.module'
+import { EmailModule } from './email/email.module'
+import { NotificationModule } from './notification/notification.module'
 import { RoleModule } from './role/role.module'
 import { TaskModule } from './task/task.module'
 import { TimeZoneModule } from './time-zone/time-zone.module'
 import { UserModule } from './user/user.module'
-
-import { APP_GUARD } from '@nestjs/core'
-import { RolesGuard } from './role/guards/roles.guard'
 
 @Module({
   imports: [
@@ -27,18 +26,20 @@ import { RolesGuard } from './role/guards/roles.guard'
     // ReportTaskModule,
     ReportProjectModule,
     HistoryModule,
-    departmentModule,
+    DepartmentModule,
     RoleModule,
     // RolePermissionsModule,
     // PermissionsModule,
-    TimeZoneModule
+    TimeZoneModule,
+    EmailModule,
+    NotificationModule
   ],
   providers: [
-    PrismaService,
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard
-    }
+    PrismaService
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: RolesGuard
+    // }
   ],
   exports: [PrismaService]
 })

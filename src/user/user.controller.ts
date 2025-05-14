@@ -94,6 +94,7 @@ export class UserController {
     return this.userService.remove(+id)
   }
 
+  @Auth()
   @Roles('admin')
   @Patch(':id/activate')
   async changeActivateUser(
@@ -103,6 +104,7 @@ export class UserController {
     return this.userService.activateUser(+id, status)
   }
 
+  @Auth()
   @Roles('admin')
   @Patch(':id/department/:departmentId')
   async assignDepartment(
@@ -112,6 +114,7 @@ export class UserController {
     return this.userService.assignDepartment(userId, departmentId)
   }
 
+  @Auth()
   @Roles('admin')
   @Patch(':id/role/:roleId')
   async changeUserRole(

@@ -178,6 +178,16 @@ exports.Prisma.RoleScalarFieldEnum = {
   name: 'name'
 };
 
+exports.Prisma.NotificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  message: 'message',
+  subject: 'subject',
+  createdAt: 'createdAt',
+  isRead: 'isRead'
+};
+
 exports.Prisma.HistoryScalarFieldEnum = {
   historyId: 'historyId',
   taskId: 'taskId',
@@ -251,6 +261,7 @@ exports.Prisma.ModelName = {
   ProjectUser: 'ProjectUser',
   Task: 'Task',
   Role: 'Role',
+  Notification: 'Notification',
   History: 'History',
   ReportProject: 'ReportProject'
 };

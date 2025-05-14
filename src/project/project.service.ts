@@ -87,15 +87,27 @@ export class ProjectService {
 
   // Добавление пользователя к проекту
   async addUserToProject(projectId: number, userId: number) {
-    return this.projectUserService.addUserToProject({ projectId, userId })
+    const project = await this.getById(projectId)
+    const projectName = project.name
+
+    return this.projectUserService.addUserToProject(
+      { projectId, userId },
+      projectName
+    )
   }
 
   async removeUserFromProject(projectId: number, userId: number) {
+    const project = await this.getById(projectId)
+    const projectName = project.name
+
     // Удаляем пользователя из проекта
-    const removedUser = await this.projectUserService.removeUserFromProject({
-      projectId,
-      userId
-    })
+    const removedUser = await this.projectUserService.removeUserFromProject(
+      {
+        projectId,
+        userId
+      },
+      projectName
+    )
     if (!removedUser) {
       throw new NotFoundException('Пользователь не найден в проекте')
     }
