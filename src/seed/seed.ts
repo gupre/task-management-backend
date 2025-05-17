@@ -20,7 +20,7 @@ async function main() {
     })
   }
 
-  console.log('Time zones seeded.')
+  // console.log('Time zones seeded.')
 
   // Сеем департамент "Администратор"
   await prisma.department.upsert({
@@ -32,7 +32,7 @@ async function main() {
     }
   })
 
-  console.log('Department "Администратор" seeded.')
+  // console.log('Department "Администратор" seeded.')
 
   // Сеем роли "Пользователь" и "Администратор"
   await prisma.role.upsert({
@@ -53,7 +53,7 @@ async function main() {
     }
   })
 
-  console.log('Roles "Администратор" and "Пользователь" seeded.')
+  // console.log('Roles "Администратор" and "Пользователь" seeded.')
 }
 
 main()

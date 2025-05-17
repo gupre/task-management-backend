@@ -1,16 +1,23 @@
 import {
   BadRequestException,
+  forwardRef,
+  Inject,
   Injectable,
   NotFoundException
 } from '@nestjs/common'
 import { hash } from 'argon2'
 import { RegistrationDto } from 'src/auth/dto/auth.dto'
+import { TaskService } from 'src/task/task.service'
 import { PrismaService } from '../prisma.service'
 import { UserDto } from './user.dto'
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    @Inject(forwardRef(() => TaskService))
+    private taskService: TaskService
+  ) {}
 
   async create(dto: RegistrationDto) {
     const oldUser = await this.prisma.user.findUnique({
@@ -42,13 +49,17 @@ export class UserService {
   }
 
   async findAll() {
-    return this.prisma.user.findMany()
+    return this.prisma.user.findMany({
+      include: {
+        unavailabilityPeriods: true
+      }
+    })
   }
 
   async getById(id: number) {
     const user = await this.prisma.user.findUnique({
       where: { userId: id },
-      include: { role: true }
+      include: { role: true, unavailabilityPeriods: true }
     })
 
     if (!user) throw new NotFoundException('User not found')
@@ -65,16 +76,65 @@ export class UserService {
   }
 
   async update(id: number, dto: UserDto) {
-    let data = dto
+    const {
+      password,
+      timezoneId,
+      departmentId,
+      roleId,
+      unavailabilityPeriods,
+      ...rest
+    } = dto
 
-    if (dto.password) {
-      data = { ...dto, password: await hash(dto.password) }
+    const data: any = {
+      ...rest
     }
 
-    return this.prisma.user.update({
+    if (password) {
+      data.password = await hash(password)
+    }
+
+    if (timezoneId !== undefined) {
+      data.timezone = {
+        connect: { timezoneId }
+      }
+    }
+
+    if (departmentId !== undefined) {
+      data.department = {
+        connect: { departmentId }
+      }
+    }
+
+    if (roleId !== undefined) {
+      data.role = {
+        connect: { roleId }
+      }
+    }
+
+    await this.prisma.unavailability.deleteMany({
+      where: { userId: id }
+    })
+
+    if (dto.unavailabilityPeriods?.length) {
+      data.unavailabilityPeriods = {
+        create: dto.unavailabilityPeriods.map(period => ({
+          type: period.type,
+          start: new Date(period.start),
+          end: period.end ? new Date(period.end) : null,
+          active: period.active
+        }))
+      }
+    }
+
+    const updatedUser = await this.prisma.user.update({
       where: { userId: id },
       data
     })
+
+    // Вызов перераспределения
+    // await this.taskService.reassignTasksForUnavailableUser(id, id)
+
+    return updatedUser
   }
 
   async remove(id: number) {
@@ -83,7 +143,7 @@ export class UserService {
     })
   }
 
-  async activateUser(userId: number, status: boolean) {
+  async activateUser(userId: number, createId: number, status: boolean) {
     const user = await this.prisma.user.findUnique({ where: { userId } })
 
     if (!user) {
@@ -94,10 +154,16 @@ export class UserService {
       throw new BadRequestException('Пользователь уже активирован')
     }
 
-    return this.prisma.user.update({
+    const updatedUser = await this.prisma.user.update({
       where: { userId },
       data: { isActive: status }
     })
+
+    if (!status) {
+      // все задачи убрать!!!!!!!!!!
+      await this.taskService.reassignTasksForUnavailableUser(userId, createId)
+    }
+    return updatedUser
   }
 
   async assignDepartment(userId: number, departmentId: number) {
@@ -122,6 +188,74 @@ export class UserService {
     })
   }
 
+  async updateUserByAdmin(userId: number, createId: number, dto: UserDto) {
+    const user = await this.prisma.user.findUnique({ where: { userId } })
+
+    if (!user) {
+      throw new NotFoundException('Пользователь не найден')
+    }
+
+    const dataToUpdate: any = {}
+
+    if (dto.email) {
+      dataToUpdate.email = dto.email
+    }
+
+    if (dto.workingHours) {
+      dataToUpdate.workingHours = dto.workingHours
+    }
+
+    let updatedUser = await this.prisma.user.update({
+      where: { userId },
+      data: dataToUpdate
+    })
+
+    // Обновляем периоды недоступности, если они переданы
+    if (dto.unavailabilityPeriods?.length) {
+      // Удаляем старые периоды
+      await this.prisma.unavailability.deleteMany({
+        where: { userId }
+      })
+
+      // Добавляем новые
+      await this.prisma.unavailability.createMany({
+        data: dto.unavailabilityPeriods.map(period => ({
+          userId,
+          type: period.type,
+          start: new Date(period.start),
+          end: period.end ? new Date(period.end) : null,
+          active: period.active ?? true
+        }))
+      })
+
+      updatedUser = await this.prisma.user.findUnique({
+        where: { userId },
+        include: {
+          tasks: {
+            where: {
+              status: {
+                in: ['planned', 'progress']
+              }
+            },
+            select: {
+              estimatedHours: true,
+              assignmentDate: true,
+              dueDate: true,
+              hoursSpent: true,
+              history: true
+            }
+          },
+          timezone: true,
+          unavailabilityPeriods: true
+        }
+      })
+      // Перераспределение задач
+      await this.taskService.reassignTasksForUnavailableUser(userId, createId)
+    }
+
+    return updatedUser
+  }
+
   async changeUserRole(userId: number, roleId: number) {
     const user = await this.prisma.user.findUnique({ where: { userId } })
 
@@ -135,9 +269,14 @@ export class UserService {
       throw new NotFoundException('Роль не найдена')
     }
 
+    const isAdmin = roleId === 1
+
     return this.prisma.user.update({
       where: { userId },
-      data: { role: { connect: { roleId } } }
+      data: {
+        role: { connect: { roleId } },
+        isAdmin
+      }
     })
   }
 }

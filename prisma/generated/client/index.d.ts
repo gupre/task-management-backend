@@ -63,6 +63,11 @@ export type History = $Result.DefaultSelection<Prisma.$HistoryPayload>
  * 
  */
 export type ReportProject = $Result.DefaultSelection<Prisma.$ReportProjectPayload>
+/**
+ * Model Unavailability
+ * 
+ */
+export type Unavailability = $Result.DefaultSelection<Prisma.$UnavailabilityPayload>
 
 /**
  * Enums
@@ -320,6 +325,16 @@ export class PrismaClient<
     * ```
     */
   get reportProject(): Prisma.ReportProjectDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.unavailability`: Exposes CRUD operations for the **Unavailability** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Unavailabilities
+    * const unavailabilities = await prisma.unavailability.findMany()
+    * ```
+    */
+  get unavailability(): Prisma.UnavailabilityDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -769,7 +784,8 @@ export namespace Prisma {
     Role: 'Role',
     Notification: 'Notification',
     History: 'History',
-    ReportProject: 'ReportProject'
+    ReportProject: 'ReportProject',
+    Unavailability: 'Unavailability'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -785,7 +801,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "timeZone" | "department" | "user" | "project" | "projectUser" | "task" | "role" | "notification" | "history" | "reportProject"
+      modelProps: "timeZone" | "department" | "user" | "project" | "projectUser" | "task" | "role" | "notification" | "history" | "reportProject" | "unavailability"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1529,6 +1545,80 @@ export namespace Prisma {
           }
         }
       }
+      Unavailability: {
+        payload: Prisma.$UnavailabilityPayload<ExtArgs>
+        fields: Prisma.UnavailabilityFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UnavailabilityFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UnavailabilityPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UnavailabilityFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UnavailabilityPayload>
+          }
+          findFirst: {
+            args: Prisma.UnavailabilityFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UnavailabilityPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UnavailabilityFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UnavailabilityPayload>
+          }
+          findMany: {
+            args: Prisma.UnavailabilityFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UnavailabilityPayload>[]
+          }
+          create: {
+            args: Prisma.UnavailabilityCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UnavailabilityPayload>
+          }
+          createMany: {
+            args: Prisma.UnavailabilityCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.UnavailabilityCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UnavailabilityPayload>[]
+          }
+          delete: {
+            args: Prisma.UnavailabilityDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UnavailabilityPayload>
+          }
+          update: {
+            args: Prisma.UnavailabilityUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UnavailabilityPayload>
+          }
+          deleteMany: {
+            args: Prisma.UnavailabilityDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UnavailabilityUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.UnavailabilityUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UnavailabilityPayload>[]
+          }
+          upsert: {
+            args: Prisma.UnavailabilityUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UnavailabilityPayload>
+          }
+          aggregate: {
+            args: Prisma.UnavailabilityAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUnavailability>
+          }
+          groupBy: {
+            args: Prisma.UnavailabilityGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UnavailabilityGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.UnavailabilityCountArgs<ExtArgs>
+            result: $Utils.Optional<UnavailabilityCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1623,6 +1713,7 @@ export namespace Prisma {
     notification?: NotificationOmit
     history?: HistoryOmit
     reportProject?: ReportProjectOmit
+    unavailability?: UnavailabilityOmit
   }
 
   /* Types for Logging */
@@ -1806,6 +1897,7 @@ export namespace Prisma {
    */
 
   export type UserCountOutputType = {
+    unavailabilityPeriods: number
     tasks: number
     history: number
     projects: number
@@ -1814,6 +1906,7 @@ export namespace Prisma {
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    unavailabilityPeriods?: boolean | UserCountOutputTypeCountUnavailabilityPeriodsArgs
     tasks?: boolean | UserCountOutputTypeCountTasksArgs
     history?: boolean | UserCountOutputTypeCountHistoryArgs
     projects?: boolean | UserCountOutputTypeCountProjectsArgs
@@ -1830,6 +1923,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the UserCountOutputType
      */
     select?: UserCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountUnavailabilityPeriodsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UnavailabilityWhereInput
   }
 
   /**
@@ -4271,7 +4371,6 @@ export namespace Prisma {
     name: number
     email: number
     password: number
-    unavailableDates: number
     workingHours: number
     roleId: number
     isAdmin: number
@@ -4325,7 +4424,6 @@ export namespace Prisma {
     name?: true
     email?: true
     password?: true
-    unavailableDates?: true
     workingHours?: true
     roleId?: true
     isAdmin?: true
@@ -4426,7 +4524,6 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    unavailableDates: string[]
     workingHours: JsonValue | null
     roleId: number | null
     isAdmin: boolean
@@ -4459,13 +4556,13 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     password?: boolean
-    unavailableDates?: boolean
     workingHours?: boolean
     roleId?: boolean
     isAdmin?: boolean
     isActive?: boolean
     timezone?: boolean | TimeZoneDefaultArgs<ExtArgs>
     department?: boolean | DepartmentDefaultArgs<ExtArgs>
+    unavailabilityPeriods?: boolean | User$unavailabilityPeriodsArgs<ExtArgs>
     role?: boolean | User$roleArgs<ExtArgs>
     tasks?: boolean | User$tasksArgs<ExtArgs>
     history?: boolean | User$historyArgs<ExtArgs>
@@ -4482,7 +4579,6 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     password?: boolean
-    unavailableDates?: boolean
     workingHours?: boolean
     roleId?: boolean
     isAdmin?: boolean
@@ -4499,7 +4595,6 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     password?: boolean
-    unavailableDates?: boolean
     workingHours?: boolean
     roleId?: boolean
     isAdmin?: boolean
@@ -4516,17 +4611,17 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     password?: boolean
-    unavailableDates?: boolean
     workingHours?: boolean
     roleId?: boolean
     isAdmin?: boolean
     isActive?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"userId" | "timezoneId" | "departmentId" | "name" | "email" | "password" | "unavailableDates" | "workingHours" | "roleId" | "isAdmin" | "isActive", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"userId" | "timezoneId" | "departmentId" | "name" | "email" | "password" | "workingHours" | "roleId" | "isAdmin" | "isActive", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     timezone?: boolean | TimeZoneDefaultArgs<ExtArgs>
     department?: boolean | DepartmentDefaultArgs<ExtArgs>
+    unavailabilityPeriods?: boolean | User$unavailabilityPeriodsArgs<ExtArgs>
     role?: boolean | User$roleArgs<ExtArgs>
     tasks?: boolean | User$tasksArgs<ExtArgs>
     history?: boolean | User$historyArgs<ExtArgs>
@@ -4551,6 +4646,7 @@ export namespace Prisma {
     objects: {
       timezone: Prisma.$TimeZonePayload<ExtArgs>
       department: Prisma.$DepartmentPayload<ExtArgs>
+      unavailabilityPeriods: Prisma.$UnavailabilityPayload<ExtArgs>[]
       role: Prisma.$RolePayload<ExtArgs> | null
       tasks: Prisma.$TaskPayload<ExtArgs>[]
       history: Prisma.$HistoryPayload<ExtArgs>[]
@@ -4565,7 +4661,6 @@ export namespace Prisma {
       name: string
       email: string
       password: string
-      unavailableDates: string[]
       workingHours: Prisma.JsonValue | null
       roleId: number | null
       isAdmin: boolean
@@ -4966,6 +5061,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     timezone<T extends TimeZoneDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TimeZoneDefaultArgs<ExtArgs>>): Prisma__TimeZoneClient<$Result.GetResult<Prisma.$TimeZonePayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions> | Null, Null, ExtArgs, ClientOptions>
     department<T extends DepartmentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DepartmentDefaultArgs<ExtArgs>>): Prisma__DepartmentClient<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions> | Null, Null, ExtArgs, ClientOptions>
+    unavailabilityPeriods<T extends User$unavailabilityPeriodsArgs<ExtArgs> = {}>(args?: Subset<T, User$unavailabilityPeriodsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UnavailabilityPayload<ExtArgs>, T, "findMany", ClientOptions> | Null>
     role<T extends User$roleArgs<ExtArgs> = {}>(args?: Subset<T, User$roleArgs<ExtArgs>>): Prisma__RoleClient<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions> | null, null, ExtArgs, ClientOptions>
     tasks<T extends User$tasksArgs<ExtArgs> = {}>(args?: Subset<T, User$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", ClientOptions> | Null>
     history<T extends User$historyArgs<ExtArgs> = {}>(args?: Subset<T, User$historyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HistoryPayload<ExtArgs>, T, "findMany", ClientOptions> | Null>
@@ -5007,7 +5103,6 @@ export namespace Prisma {
     readonly name: FieldRef<"User", 'String'>
     readonly email: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
-    readonly unavailableDates: FieldRef<"User", 'String[]'>
     readonly workingHours: FieldRef<"User", 'Json'>
     readonly roleId: FieldRef<"User", 'Int'>
     readonly isAdmin: FieldRef<"User", 'Boolean'>
@@ -5405,6 +5500,30 @@ export namespace Prisma {
      * Limit how many Users to delete.
      */
     limit?: number
+  }
+
+  /**
+   * User.unavailabilityPeriods
+   */
+  export type User$unavailabilityPeriodsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Unavailability
+     */
+    select?: UnavailabilitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Unavailability
+     */
+    omit?: UnavailabilityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UnavailabilityInclude<ExtArgs> | null
+    where?: UnavailabilityWhereInput
+    orderBy?: UnavailabilityOrderByWithRelationInput | UnavailabilityOrderByWithRelationInput[]
+    cursor?: UnavailabilityWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UnavailabilityScalarFieldEnum | UnavailabilityScalarFieldEnum[]
   }
 
   /**
@@ -13787,6 +13906,1115 @@ export namespace Prisma {
 
 
   /**
+   * Model Unavailability
+   */
+
+  export type AggregateUnavailability = {
+    _count: UnavailabilityCountAggregateOutputType | null
+    _avg: UnavailabilityAvgAggregateOutputType | null
+    _sum: UnavailabilitySumAggregateOutputType | null
+    _min: UnavailabilityMinAggregateOutputType | null
+    _max: UnavailabilityMaxAggregateOutputType | null
+  }
+
+  export type UnavailabilityAvgAggregateOutputType = {
+    id: number | null
+    userId: number | null
+  }
+
+  export type UnavailabilitySumAggregateOutputType = {
+    id: number | null
+    userId: number | null
+  }
+
+  export type UnavailabilityMinAggregateOutputType = {
+    id: number | null
+    type: string | null
+    start: Date | null
+    end: Date | null
+    active: boolean | null
+    userId: number | null
+  }
+
+  export type UnavailabilityMaxAggregateOutputType = {
+    id: number | null
+    type: string | null
+    start: Date | null
+    end: Date | null
+    active: boolean | null
+    userId: number | null
+  }
+
+  export type UnavailabilityCountAggregateOutputType = {
+    id: number
+    type: number
+    start: number
+    end: number
+    active: number
+    userId: number
+    _all: number
+  }
+
+
+  export type UnavailabilityAvgAggregateInputType = {
+    id?: true
+    userId?: true
+  }
+
+  export type UnavailabilitySumAggregateInputType = {
+    id?: true
+    userId?: true
+  }
+
+  export type UnavailabilityMinAggregateInputType = {
+    id?: true
+    type?: true
+    start?: true
+    end?: true
+    active?: true
+    userId?: true
+  }
+
+  export type UnavailabilityMaxAggregateInputType = {
+    id?: true
+    type?: true
+    start?: true
+    end?: true
+    active?: true
+    userId?: true
+  }
+
+  export type UnavailabilityCountAggregateInputType = {
+    id?: true
+    type?: true
+    start?: true
+    end?: true
+    active?: true
+    userId?: true
+    _all?: true
+  }
+
+  export type UnavailabilityAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Unavailability to aggregate.
+     */
+    where?: UnavailabilityWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Unavailabilities to fetch.
+     */
+    orderBy?: UnavailabilityOrderByWithRelationInput | UnavailabilityOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UnavailabilityWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Unavailabilities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Unavailabilities.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Unavailabilities
+    **/
+    _count?: true | UnavailabilityCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: UnavailabilityAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UnavailabilitySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UnavailabilityMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UnavailabilityMaxAggregateInputType
+  }
+
+  export type GetUnavailabilityAggregateType<T extends UnavailabilityAggregateArgs> = {
+        [P in keyof T & keyof AggregateUnavailability]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUnavailability[P]>
+      : GetScalarType<T[P], AggregateUnavailability[P]>
+  }
+
+
+
+
+  export type UnavailabilityGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UnavailabilityWhereInput
+    orderBy?: UnavailabilityOrderByWithAggregationInput | UnavailabilityOrderByWithAggregationInput[]
+    by: UnavailabilityScalarFieldEnum[] | UnavailabilityScalarFieldEnum
+    having?: UnavailabilityScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UnavailabilityCountAggregateInputType | true
+    _avg?: UnavailabilityAvgAggregateInputType
+    _sum?: UnavailabilitySumAggregateInputType
+    _min?: UnavailabilityMinAggregateInputType
+    _max?: UnavailabilityMaxAggregateInputType
+  }
+
+  export type UnavailabilityGroupByOutputType = {
+    id: number
+    type: string
+    start: Date
+    end: Date | null
+    active: boolean
+    userId: number
+    _count: UnavailabilityCountAggregateOutputType | null
+    _avg: UnavailabilityAvgAggregateOutputType | null
+    _sum: UnavailabilitySumAggregateOutputType | null
+    _min: UnavailabilityMinAggregateOutputType | null
+    _max: UnavailabilityMaxAggregateOutputType | null
+  }
+
+  type GetUnavailabilityGroupByPayload<T extends UnavailabilityGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UnavailabilityGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UnavailabilityGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UnavailabilityGroupByOutputType[P]>
+            : GetScalarType<T[P], UnavailabilityGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UnavailabilitySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    type?: boolean
+    start?: boolean
+    end?: boolean
+    active?: boolean
+    userId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["unavailability"]>
+
+  export type UnavailabilitySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    type?: boolean
+    start?: boolean
+    end?: boolean
+    active?: boolean
+    userId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["unavailability"]>
+
+  export type UnavailabilitySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    type?: boolean
+    start?: boolean
+    end?: boolean
+    active?: boolean
+    userId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["unavailability"]>
+
+  export type UnavailabilitySelectScalar = {
+    id?: boolean
+    type?: boolean
+    start?: boolean
+    end?: boolean
+    active?: boolean
+    userId?: boolean
+  }
+
+  export type UnavailabilityOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "type" | "start" | "end" | "active" | "userId", ExtArgs["result"]["unavailability"]>
+  export type UnavailabilityInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type UnavailabilityIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type UnavailabilityIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $UnavailabilityPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Unavailability"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      type: string
+      start: Date
+      end: Date | null
+      active: boolean
+      userId: number
+    }, ExtArgs["result"]["unavailability"]>
+    composites: {}
+  }
+
+  type UnavailabilityGetPayload<S extends boolean | null | undefined | UnavailabilityDefaultArgs> = $Result.GetResult<Prisma.$UnavailabilityPayload, S>
+
+  type UnavailabilityCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UnavailabilityFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UnavailabilityCountAggregateInputType | true
+    }
+
+  export interface UnavailabilityDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Unavailability'], meta: { name: 'Unavailability' } }
+    /**
+     * Find zero or one Unavailability that matches the filter.
+     * @param {UnavailabilityFindUniqueArgs} args - Arguments to find a Unavailability
+     * @example
+     * // Get one Unavailability
+     * const unavailability = await prisma.unavailability.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UnavailabilityFindUniqueArgs>(args: SelectSubset<T, UnavailabilityFindUniqueArgs<ExtArgs>>): Prisma__UnavailabilityClient<$Result.GetResult<Prisma.$UnavailabilityPayload<ExtArgs>, T, "findUnique", ClientOptions> | null, null, ExtArgs, ClientOptions>
+
+    /**
+     * Find one Unavailability that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {UnavailabilityFindUniqueOrThrowArgs} args - Arguments to find a Unavailability
+     * @example
+     * // Get one Unavailability
+     * const unavailability = await prisma.unavailability.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UnavailabilityFindUniqueOrThrowArgs>(args: SelectSubset<T, UnavailabilityFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UnavailabilityClient<$Result.GetResult<Prisma.$UnavailabilityPayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions>, never, ExtArgs, ClientOptions>
+
+    /**
+     * Find the first Unavailability that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnavailabilityFindFirstArgs} args - Arguments to find a Unavailability
+     * @example
+     * // Get one Unavailability
+     * const unavailability = await prisma.unavailability.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UnavailabilityFindFirstArgs>(args?: SelectSubset<T, UnavailabilityFindFirstArgs<ExtArgs>>): Prisma__UnavailabilityClient<$Result.GetResult<Prisma.$UnavailabilityPayload<ExtArgs>, T, "findFirst", ClientOptions> | null, null, ExtArgs, ClientOptions>
+
+    /**
+     * Find the first Unavailability that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnavailabilityFindFirstOrThrowArgs} args - Arguments to find a Unavailability
+     * @example
+     * // Get one Unavailability
+     * const unavailability = await prisma.unavailability.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UnavailabilityFindFirstOrThrowArgs>(args?: SelectSubset<T, UnavailabilityFindFirstOrThrowArgs<ExtArgs>>): Prisma__UnavailabilityClient<$Result.GetResult<Prisma.$UnavailabilityPayload<ExtArgs>, T, "findFirstOrThrow", ClientOptions>, never, ExtArgs, ClientOptions>
+
+    /**
+     * Find zero or more Unavailabilities that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnavailabilityFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Unavailabilities
+     * const unavailabilities = await prisma.unavailability.findMany()
+     * 
+     * // Get first 10 Unavailabilities
+     * const unavailabilities = await prisma.unavailability.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const unavailabilityWithIdOnly = await prisma.unavailability.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends UnavailabilityFindManyArgs>(args?: SelectSubset<T, UnavailabilityFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UnavailabilityPayload<ExtArgs>, T, "findMany", ClientOptions>>
+
+    /**
+     * Create a Unavailability.
+     * @param {UnavailabilityCreateArgs} args - Arguments to create a Unavailability.
+     * @example
+     * // Create one Unavailability
+     * const Unavailability = await prisma.unavailability.create({
+     *   data: {
+     *     // ... data to create a Unavailability
+     *   }
+     * })
+     * 
+     */
+    create<T extends UnavailabilityCreateArgs>(args: SelectSubset<T, UnavailabilityCreateArgs<ExtArgs>>): Prisma__UnavailabilityClient<$Result.GetResult<Prisma.$UnavailabilityPayload<ExtArgs>, T, "create", ClientOptions>, never, ExtArgs, ClientOptions>
+
+    /**
+     * Create many Unavailabilities.
+     * @param {UnavailabilityCreateManyArgs} args - Arguments to create many Unavailabilities.
+     * @example
+     * // Create many Unavailabilities
+     * const unavailability = await prisma.unavailability.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends UnavailabilityCreateManyArgs>(args?: SelectSubset<T, UnavailabilityCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Unavailabilities and returns the data saved in the database.
+     * @param {UnavailabilityCreateManyAndReturnArgs} args - Arguments to create many Unavailabilities.
+     * @example
+     * // Create many Unavailabilities
+     * const unavailability = await prisma.unavailability.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Unavailabilities and only return the `id`
+     * const unavailabilityWithIdOnly = await prisma.unavailability.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends UnavailabilityCreateManyAndReturnArgs>(args?: SelectSubset<T, UnavailabilityCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UnavailabilityPayload<ExtArgs>, T, "createManyAndReturn", ClientOptions>>
+
+    /**
+     * Delete a Unavailability.
+     * @param {UnavailabilityDeleteArgs} args - Arguments to delete one Unavailability.
+     * @example
+     * // Delete one Unavailability
+     * const Unavailability = await prisma.unavailability.delete({
+     *   where: {
+     *     // ... filter to delete one Unavailability
+     *   }
+     * })
+     * 
+     */
+    delete<T extends UnavailabilityDeleteArgs>(args: SelectSubset<T, UnavailabilityDeleteArgs<ExtArgs>>): Prisma__UnavailabilityClient<$Result.GetResult<Prisma.$UnavailabilityPayload<ExtArgs>, T, "delete", ClientOptions>, never, ExtArgs, ClientOptions>
+
+    /**
+     * Update one Unavailability.
+     * @param {UnavailabilityUpdateArgs} args - Arguments to update one Unavailability.
+     * @example
+     * // Update one Unavailability
+     * const unavailability = await prisma.unavailability.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends UnavailabilityUpdateArgs>(args: SelectSubset<T, UnavailabilityUpdateArgs<ExtArgs>>): Prisma__UnavailabilityClient<$Result.GetResult<Prisma.$UnavailabilityPayload<ExtArgs>, T, "update", ClientOptions>, never, ExtArgs, ClientOptions>
+
+    /**
+     * Delete zero or more Unavailabilities.
+     * @param {UnavailabilityDeleteManyArgs} args - Arguments to filter Unavailabilities to delete.
+     * @example
+     * // Delete a few Unavailabilities
+     * const { count } = await prisma.unavailability.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends UnavailabilityDeleteManyArgs>(args?: SelectSubset<T, UnavailabilityDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Unavailabilities.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnavailabilityUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Unavailabilities
+     * const unavailability = await prisma.unavailability.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends UnavailabilityUpdateManyArgs>(args: SelectSubset<T, UnavailabilityUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Unavailabilities and returns the data updated in the database.
+     * @param {UnavailabilityUpdateManyAndReturnArgs} args - Arguments to update many Unavailabilities.
+     * @example
+     * // Update many Unavailabilities
+     * const unavailability = await prisma.unavailability.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Unavailabilities and only return the `id`
+     * const unavailabilityWithIdOnly = await prisma.unavailability.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends UnavailabilityUpdateManyAndReturnArgs>(args: SelectSubset<T, UnavailabilityUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UnavailabilityPayload<ExtArgs>, T, "updateManyAndReturn", ClientOptions>>
+
+    /**
+     * Create or update one Unavailability.
+     * @param {UnavailabilityUpsertArgs} args - Arguments to update or create a Unavailability.
+     * @example
+     * // Update or create a Unavailability
+     * const unavailability = await prisma.unavailability.upsert({
+     *   create: {
+     *     // ... data to create a Unavailability
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Unavailability we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UnavailabilityUpsertArgs>(args: SelectSubset<T, UnavailabilityUpsertArgs<ExtArgs>>): Prisma__UnavailabilityClient<$Result.GetResult<Prisma.$UnavailabilityPayload<ExtArgs>, T, "upsert", ClientOptions>, never, ExtArgs, ClientOptions>
+
+
+    /**
+     * Count the number of Unavailabilities.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnavailabilityCountArgs} args - Arguments to filter Unavailabilities to count.
+     * @example
+     * // Count the number of Unavailabilities
+     * const count = await prisma.unavailability.count({
+     *   where: {
+     *     // ... the filter for the Unavailabilities we want to count
+     *   }
+     * })
+    **/
+    count<T extends UnavailabilityCountArgs>(
+      args?: Subset<T, UnavailabilityCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UnavailabilityCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Unavailability.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnavailabilityAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UnavailabilityAggregateArgs>(args: Subset<T, UnavailabilityAggregateArgs>): Prisma.PrismaPromise<GetUnavailabilityAggregateType<T>>
+
+    /**
+     * Group by Unavailability.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnavailabilityGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UnavailabilityGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UnavailabilityGroupByArgs['orderBy'] }
+        : { orderBy?: UnavailabilityGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UnavailabilityGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUnavailabilityGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Unavailability model
+   */
+  readonly fields: UnavailabilityFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Unavailability.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UnavailabilityClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions> | Null, Null, ExtArgs, ClientOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Unavailability model
+   */ 
+  interface UnavailabilityFieldRefs {
+    readonly id: FieldRef<"Unavailability", 'Int'>
+    readonly type: FieldRef<"Unavailability", 'String'>
+    readonly start: FieldRef<"Unavailability", 'DateTime'>
+    readonly end: FieldRef<"Unavailability", 'DateTime'>
+    readonly active: FieldRef<"Unavailability", 'Boolean'>
+    readonly userId: FieldRef<"Unavailability", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Unavailability findUnique
+   */
+  export type UnavailabilityFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Unavailability
+     */
+    select?: UnavailabilitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Unavailability
+     */
+    omit?: UnavailabilityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UnavailabilityInclude<ExtArgs> | null
+    /**
+     * Filter, which Unavailability to fetch.
+     */
+    where: UnavailabilityWhereUniqueInput
+  }
+
+  /**
+   * Unavailability findUniqueOrThrow
+   */
+  export type UnavailabilityFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Unavailability
+     */
+    select?: UnavailabilitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Unavailability
+     */
+    omit?: UnavailabilityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UnavailabilityInclude<ExtArgs> | null
+    /**
+     * Filter, which Unavailability to fetch.
+     */
+    where: UnavailabilityWhereUniqueInput
+  }
+
+  /**
+   * Unavailability findFirst
+   */
+  export type UnavailabilityFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Unavailability
+     */
+    select?: UnavailabilitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Unavailability
+     */
+    omit?: UnavailabilityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UnavailabilityInclude<ExtArgs> | null
+    /**
+     * Filter, which Unavailability to fetch.
+     */
+    where?: UnavailabilityWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Unavailabilities to fetch.
+     */
+    orderBy?: UnavailabilityOrderByWithRelationInput | UnavailabilityOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Unavailabilities.
+     */
+    cursor?: UnavailabilityWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Unavailabilities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Unavailabilities.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Unavailabilities.
+     */
+    distinct?: UnavailabilityScalarFieldEnum | UnavailabilityScalarFieldEnum[]
+  }
+
+  /**
+   * Unavailability findFirstOrThrow
+   */
+  export type UnavailabilityFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Unavailability
+     */
+    select?: UnavailabilitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Unavailability
+     */
+    omit?: UnavailabilityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UnavailabilityInclude<ExtArgs> | null
+    /**
+     * Filter, which Unavailability to fetch.
+     */
+    where?: UnavailabilityWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Unavailabilities to fetch.
+     */
+    orderBy?: UnavailabilityOrderByWithRelationInput | UnavailabilityOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Unavailabilities.
+     */
+    cursor?: UnavailabilityWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Unavailabilities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Unavailabilities.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Unavailabilities.
+     */
+    distinct?: UnavailabilityScalarFieldEnum | UnavailabilityScalarFieldEnum[]
+  }
+
+  /**
+   * Unavailability findMany
+   */
+  export type UnavailabilityFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Unavailability
+     */
+    select?: UnavailabilitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Unavailability
+     */
+    omit?: UnavailabilityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UnavailabilityInclude<ExtArgs> | null
+    /**
+     * Filter, which Unavailabilities to fetch.
+     */
+    where?: UnavailabilityWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Unavailabilities to fetch.
+     */
+    orderBy?: UnavailabilityOrderByWithRelationInput | UnavailabilityOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Unavailabilities.
+     */
+    cursor?: UnavailabilityWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Unavailabilities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Unavailabilities.
+     */
+    skip?: number
+    distinct?: UnavailabilityScalarFieldEnum | UnavailabilityScalarFieldEnum[]
+  }
+
+  /**
+   * Unavailability create
+   */
+  export type UnavailabilityCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Unavailability
+     */
+    select?: UnavailabilitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Unavailability
+     */
+    omit?: UnavailabilityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UnavailabilityInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Unavailability.
+     */
+    data: XOR<UnavailabilityCreateInput, UnavailabilityUncheckedCreateInput>
+  }
+
+  /**
+   * Unavailability createMany
+   */
+  export type UnavailabilityCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Unavailabilities.
+     */
+    data: UnavailabilityCreateManyInput | UnavailabilityCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Unavailability createManyAndReturn
+   */
+  export type UnavailabilityCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Unavailability
+     */
+    select?: UnavailabilitySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Unavailability
+     */
+    omit?: UnavailabilityOmit<ExtArgs> | null
+    /**
+     * The data used to create many Unavailabilities.
+     */
+    data: UnavailabilityCreateManyInput | UnavailabilityCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UnavailabilityIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Unavailability update
+   */
+  export type UnavailabilityUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Unavailability
+     */
+    select?: UnavailabilitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Unavailability
+     */
+    omit?: UnavailabilityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UnavailabilityInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Unavailability.
+     */
+    data: XOR<UnavailabilityUpdateInput, UnavailabilityUncheckedUpdateInput>
+    /**
+     * Choose, which Unavailability to update.
+     */
+    where: UnavailabilityWhereUniqueInput
+  }
+
+  /**
+   * Unavailability updateMany
+   */
+  export type UnavailabilityUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Unavailabilities.
+     */
+    data: XOR<UnavailabilityUpdateManyMutationInput, UnavailabilityUncheckedUpdateManyInput>
+    /**
+     * Filter which Unavailabilities to update
+     */
+    where?: UnavailabilityWhereInput
+    /**
+     * Limit how many Unavailabilities to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Unavailability updateManyAndReturn
+   */
+  export type UnavailabilityUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Unavailability
+     */
+    select?: UnavailabilitySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Unavailability
+     */
+    omit?: UnavailabilityOmit<ExtArgs> | null
+    /**
+     * The data used to update Unavailabilities.
+     */
+    data: XOR<UnavailabilityUpdateManyMutationInput, UnavailabilityUncheckedUpdateManyInput>
+    /**
+     * Filter which Unavailabilities to update
+     */
+    where?: UnavailabilityWhereInput
+    /**
+     * Limit how many Unavailabilities to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UnavailabilityIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Unavailability upsert
+   */
+  export type UnavailabilityUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Unavailability
+     */
+    select?: UnavailabilitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Unavailability
+     */
+    omit?: UnavailabilityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UnavailabilityInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Unavailability to update in case it exists.
+     */
+    where: UnavailabilityWhereUniqueInput
+    /**
+     * In case the Unavailability found by the `where` argument doesn't exist, create a new Unavailability with this data.
+     */
+    create: XOR<UnavailabilityCreateInput, UnavailabilityUncheckedCreateInput>
+    /**
+     * In case the Unavailability was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UnavailabilityUpdateInput, UnavailabilityUncheckedUpdateInput>
+  }
+
+  /**
+   * Unavailability delete
+   */
+  export type UnavailabilityDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Unavailability
+     */
+    select?: UnavailabilitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Unavailability
+     */
+    omit?: UnavailabilityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UnavailabilityInclude<ExtArgs> | null
+    /**
+     * Filter which Unavailability to delete.
+     */
+    where: UnavailabilityWhereUniqueInput
+  }
+
+  /**
+   * Unavailability deleteMany
+   */
+  export type UnavailabilityDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Unavailabilities to delete
+     */
+    where?: UnavailabilityWhereInput
+    /**
+     * Limit how many Unavailabilities to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Unavailability without action
+   */
+  export type UnavailabilityDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Unavailability
+     */
+    select?: UnavailabilitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Unavailability
+     */
+    omit?: UnavailabilityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UnavailabilityInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -13824,7 +15052,6 @@ export namespace Prisma {
     name: 'name',
     email: 'email',
     password: 'password',
-    unavailableDates: 'unavailableDates',
     workingHours: 'workingHours',
     roleId: 'roleId',
     isAdmin: 'isAdmin',
@@ -13926,6 +15153,18 @@ export namespace Prisma {
   };
 
   export type ReportProjectScalarFieldEnum = (typeof ReportProjectScalarFieldEnum)[keyof typeof ReportProjectScalarFieldEnum]
+
+
+  export const UnavailabilityScalarFieldEnum: {
+    id: 'id',
+    type: 'type',
+    start: 'start',
+    end: 'end',
+    active: 'active',
+    userId: 'userId'
+  };
+
+  export type UnavailabilityScalarFieldEnum = (typeof UnavailabilityScalarFieldEnum)[keyof typeof UnavailabilityScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -14183,13 +15422,13 @@ export namespace Prisma {
     name?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
-    unavailableDates?: StringNullableListFilter<"User">
     workingHours?: JsonNullableFilter<"User">
     roleId?: IntNullableFilter<"User"> | number | null
     isAdmin?: BoolFilter<"User"> | boolean
     isActive?: BoolFilter<"User"> | boolean
     timezone?: XOR<TimeZoneScalarRelationFilter, TimeZoneWhereInput>
     department?: XOR<DepartmentScalarRelationFilter, DepartmentWhereInput>
+    unavailabilityPeriods?: UnavailabilityListRelationFilter
     role?: XOR<RoleNullableScalarRelationFilter, RoleWhereInput> | null
     tasks?: TaskListRelationFilter
     history?: HistoryListRelationFilter
@@ -14205,13 +15444,13 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     password?: SortOrder
-    unavailableDates?: SortOrder
     workingHours?: SortOrderInput | SortOrder
     roleId?: SortOrderInput | SortOrder
     isAdmin?: SortOrder
     isActive?: SortOrder
     timezone?: TimeZoneOrderByWithRelationInput
     department?: DepartmentOrderByWithRelationInput
+    unavailabilityPeriods?: UnavailabilityOrderByRelationAggregateInput
     role?: RoleOrderByWithRelationInput
     tasks?: TaskOrderByRelationAggregateInput
     history?: HistoryOrderByRelationAggregateInput
@@ -14230,13 +15469,13 @@ export namespace Prisma {
     departmentId?: IntFilter<"User"> | number
     name?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
-    unavailableDates?: StringNullableListFilter<"User">
     workingHours?: JsonNullableFilter<"User">
     roleId?: IntNullableFilter<"User"> | number | null
     isAdmin?: BoolFilter<"User"> | boolean
     isActive?: BoolFilter<"User"> | boolean
     timezone?: XOR<TimeZoneScalarRelationFilter, TimeZoneWhereInput>
     department?: XOR<DepartmentScalarRelationFilter, DepartmentWhereInput>
+    unavailabilityPeriods?: UnavailabilityListRelationFilter
     role?: XOR<RoleNullableScalarRelationFilter, RoleWhereInput> | null
     tasks?: TaskListRelationFilter
     history?: HistoryListRelationFilter
@@ -14252,7 +15491,6 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     password?: SortOrder
-    unavailableDates?: SortOrder
     workingHours?: SortOrderInput | SortOrder
     roleId?: SortOrderInput | SortOrder
     isAdmin?: SortOrder
@@ -14274,7 +15512,6 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"User"> | string
     email?: StringWithAggregatesFilter<"User"> | string
     password?: StringWithAggregatesFilter<"User"> | string
-    unavailableDates?: StringNullableListFilter<"User">
     workingHours?: JsonNullableWithAggregatesFilter<"User">
     roleId?: IntNullableWithAggregatesFilter<"User"> | number | null
     isAdmin?: BoolWithAggregatesFilter<"User"> | boolean
@@ -14796,6 +16033,68 @@ export namespace Prisma {
     totalTasks?: IntNullableWithAggregatesFilter<"ReportProject"> | number | null
   }
 
+  export type UnavailabilityWhereInput = {
+    AND?: UnavailabilityWhereInput | UnavailabilityWhereInput[]
+    OR?: UnavailabilityWhereInput[]
+    NOT?: UnavailabilityWhereInput | UnavailabilityWhereInput[]
+    id?: IntFilter<"Unavailability"> | number
+    type?: StringFilter<"Unavailability"> | string
+    start?: DateTimeFilter<"Unavailability"> | Date | string
+    end?: DateTimeNullableFilter<"Unavailability"> | Date | string | null
+    active?: BoolFilter<"Unavailability"> | boolean
+    userId?: IntFilter<"Unavailability"> | number
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type UnavailabilityOrderByWithRelationInput = {
+    id?: SortOrder
+    type?: SortOrder
+    start?: SortOrder
+    end?: SortOrderInput | SortOrder
+    active?: SortOrder
+    userId?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type UnavailabilityWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: UnavailabilityWhereInput | UnavailabilityWhereInput[]
+    OR?: UnavailabilityWhereInput[]
+    NOT?: UnavailabilityWhereInput | UnavailabilityWhereInput[]
+    type?: StringFilter<"Unavailability"> | string
+    start?: DateTimeFilter<"Unavailability"> | Date | string
+    end?: DateTimeNullableFilter<"Unavailability"> | Date | string | null
+    active?: BoolFilter<"Unavailability"> | boolean
+    userId?: IntFilter<"Unavailability"> | number
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type UnavailabilityOrderByWithAggregationInput = {
+    id?: SortOrder
+    type?: SortOrder
+    start?: SortOrder
+    end?: SortOrderInput | SortOrder
+    active?: SortOrder
+    userId?: SortOrder
+    _count?: UnavailabilityCountOrderByAggregateInput
+    _avg?: UnavailabilityAvgOrderByAggregateInput
+    _max?: UnavailabilityMaxOrderByAggregateInput
+    _min?: UnavailabilityMinOrderByAggregateInput
+    _sum?: UnavailabilitySumOrderByAggregateInput
+  }
+
+  export type UnavailabilityScalarWhereWithAggregatesInput = {
+    AND?: UnavailabilityScalarWhereWithAggregatesInput | UnavailabilityScalarWhereWithAggregatesInput[]
+    OR?: UnavailabilityScalarWhereWithAggregatesInput[]
+    NOT?: UnavailabilityScalarWhereWithAggregatesInput | UnavailabilityScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Unavailability"> | number
+    type?: StringWithAggregatesFilter<"Unavailability"> | string
+    start?: DateTimeWithAggregatesFilter<"Unavailability"> | Date | string
+    end?: DateTimeNullableWithAggregatesFilter<"Unavailability"> | Date | string | null
+    active?: BoolWithAggregatesFilter<"Unavailability"> | boolean
+    userId?: IntWithAggregatesFilter<"Unavailability"> | number
+  }
+
   export type TimeZoneCreateInput = {
     name: string
     offset: number
@@ -14891,12 +16190,12 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    unavailableDates?: UserCreateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     isAdmin?: boolean
     isActive?: boolean
     timezone: TimeZoneCreateNestedOneWithoutUsersInput
     department: DepartmentCreateNestedOneWithoutUsersInput
+    unavailabilityPeriods?: UnavailabilityCreateNestedManyWithoutUserInput
     role?: RoleCreateNestedOneWithoutUsersInput
     tasks?: TaskCreateNestedManyWithoutUserInput
     history?: HistoryCreateNestedManyWithoutUserInput
@@ -14912,11 +16211,11 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    unavailableDates?: UserCreateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     roleId?: number | null
     isAdmin?: boolean
     isActive?: boolean
+    unavailabilityPeriods?: UnavailabilityUncheckedCreateNestedManyWithoutUserInput
     tasks?: TaskUncheckedCreateNestedManyWithoutUserInput
     history?: HistoryUncheckedCreateNestedManyWithoutUserInput
     projects?: ProjectUserUncheckedCreateNestedManyWithoutUserInput
@@ -14928,12 +16227,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    unavailableDates?: UserUpdateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     timezone?: TimeZoneUpdateOneRequiredWithoutUsersNestedInput
     department?: DepartmentUpdateOneRequiredWithoutUsersNestedInput
+    unavailabilityPeriods?: UnavailabilityUpdateManyWithoutUserNestedInput
     role?: RoleUpdateOneWithoutUsersNestedInput
     tasks?: TaskUpdateManyWithoutUserNestedInput
     history?: HistoryUpdateManyWithoutUserNestedInput
@@ -14949,11 +16248,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    unavailableDates?: UserUpdateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     roleId?: NullableIntFieldUpdateOperationsInput | number | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    unavailabilityPeriods?: UnavailabilityUncheckedUpdateManyWithoutUserNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutUserNestedInput
     history?: HistoryUncheckedUpdateManyWithoutUserNestedInput
     projects?: ProjectUserUncheckedUpdateManyWithoutUserNestedInput
@@ -14968,7 +16267,6 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    unavailableDates?: UserCreateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     roleId?: number | null
     isAdmin?: boolean
@@ -14979,7 +16277,6 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    unavailableDates?: UserUpdateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -14992,7 +16289,6 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    unavailableDates?: UserUpdateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     roleId?: NullableIntFieldUpdateOperationsInput | number | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
@@ -15501,6 +16797,65 @@ export namespace Prisma {
     totalTasks?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
+  export type UnavailabilityCreateInput = {
+    type: string
+    start: Date | string
+    end?: Date | string | null
+    active?: boolean
+    user: UserCreateNestedOneWithoutUnavailabilityPeriodsInput
+  }
+
+  export type UnavailabilityUncheckedCreateInput = {
+    id?: number
+    type: string
+    start: Date | string
+    end?: Date | string | null
+    active?: boolean
+    userId: number
+  }
+
+  export type UnavailabilityUpdateInput = {
+    type?: StringFieldUpdateOperationsInput | string
+    start?: DateTimeFieldUpdateOperationsInput | Date | string
+    end?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    user?: UserUpdateOneRequiredWithoutUnavailabilityPeriodsNestedInput
+  }
+
+  export type UnavailabilityUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
+    start?: DateTimeFieldUpdateOperationsInput | Date | string
+    end?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    userId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type UnavailabilityCreateManyInput = {
+    id?: number
+    type: string
+    start: Date | string
+    end?: Date | string | null
+    active?: boolean
+    userId: number
+  }
+
+  export type UnavailabilityUpdateManyMutationInput = {
+    type?: StringFieldUpdateOperationsInput | string
+    start?: DateTimeFieldUpdateOperationsInput | Date | string
+    end?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type UnavailabilityUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
+    start?: DateTimeFieldUpdateOperationsInput | Date | string
+    end?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    userId?: IntFieldUpdateOperationsInput | number
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -15641,14 +16996,6 @@ export namespace Prisma {
   export type DepartmentSumOrderByAggregateInput = {
     departmentId?: SortOrder
   }
-
-  export type StringNullableListFilter<$PrismaModel = never> = {
-    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    has?: string | StringFieldRefInput<$PrismaModel> | null
-    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
-    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
-    isEmpty?: boolean
-  }
   export type JsonNullableFilter<$PrismaModel = never> = 
     | PatchUndefined<
         Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
@@ -15698,6 +17045,12 @@ export namespace Prisma {
     isNot?: DepartmentWhereInput
   }
 
+  export type UnavailabilityListRelationFilter = {
+    every?: UnavailabilityWhereInput
+    some?: UnavailabilityWhereInput
+    none?: UnavailabilityWhereInput
+  }
+
   export type RoleNullableScalarRelationFilter = {
     is?: RoleWhereInput | null
     isNot?: RoleWhereInput | null
@@ -15720,6 +17073,10 @@ export namespace Prisma {
     nulls?: NullsOrder
   }
 
+  export type UnavailabilityOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type ProjectUserOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -15735,7 +17092,6 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     password?: SortOrder
-    unavailableDates?: SortOrder
     workingHours?: SortOrder
     roleId?: SortOrder
     isAdmin?: SortOrder
@@ -16326,6 +17682,43 @@ export namespace Prisma {
     totalTasks?: SortOrder
   }
 
+  export type UnavailabilityCountOrderByAggregateInput = {
+    id?: SortOrder
+    type?: SortOrder
+    start?: SortOrder
+    end?: SortOrder
+    active?: SortOrder
+    userId?: SortOrder
+  }
+
+  export type UnavailabilityAvgOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+  }
+
+  export type UnavailabilityMaxOrderByAggregateInput = {
+    id?: SortOrder
+    type?: SortOrder
+    start?: SortOrder
+    end?: SortOrder
+    active?: SortOrder
+    userId?: SortOrder
+  }
+
+  export type UnavailabilityMinOrderByAggregateInput = {
+    id?: SortOrder
+    type?: SortOrder
+    start?: SortOrder
+    end?: SortOrder
+    active?: SortOrder
+    userId?: SortOrder
+  }
+
+  export type UnavailabilitySumOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+  }
+
   export type UserCreateNestedManyWithoutTimezoneInput = {
     create?: XOR<UserCreateWithoutTimezoneInput, UserUncheckedCreateWithoutTimezoneInput> | UserCreateWithoutTimezoneInput[] | UserUncheckedCreateWithoutTimezoneInput[]
     connectOrCreate?: UserCreateOrConnectWithoutTimezoneInput | UserCreateOrConnectWithoutTimezoneInput[]
@@ -16548,10 +17941,6 @@ export namespace Prisma {
     deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
   }
 
-  export type UserCreateunavailableDatesInput = {
-    set: string[]
-  }
-
   export type TimeZoneCreateNestedOneWithoutUsersInput = {
     create?: XOR<TimeZoneCreateWithoutUsersInput, TimeZoneUncheckedCreateWithoutUsersInput>
     connectOrCreate?: TimeZoneCreateOrConnectWithoutUsersInput
@@ -16562,6 +17951,13 @@ export namespace Prisma {
     create?: XOR<DepartmentCreateWithoutUsersInput, DepartmentUncheckedCreateWithoutUsersInput>
     connectOrCreate?: DepartmentCreateOrConnectWithoutUsersInput
     connect?: DepartmentWhereUniqueInput
+  }
+
+  export type UnavailabilityCreateNestedManyWithoutUserInput = {
+    create?: XOR<UnavailabilityCreateWithoutUserInput, UnavailabilityUncheckedCreateWithoutUserInput> | UnavailabilityCreateWithoutUserInput[] | UnavailabilityUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UnavailabilityCreateOrConnectWithoutUserInput | UnavailabilityCreateOrConnectWithoutUserInput[]
+    createMany?: UnavailabilityCreateManyUserInputEnvelope
+    connect?: UnavailabilityWhereUniqueInput | UnavailabilityWhereUniqueInput[]
   }
 
   export type RoleCreateNestedOneWithoutUsersInput = {
@@ -16605,6 +18001,13 @@ export namespace Prisma {
     connect?: HistoryWhereUniqueInput | HistoryWhereUniqueInput[]
   }
 
+  export type UnavailabilityUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<UnavailabilityCreateWithoutUserInput, UnavailabilityUncheckedCreateWithoutUserInput> | UnavailabilityCreateWithoutUserInput[] | UnavailabilityUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UnavailabilityCreateOrConnectWithoutUserInput | UnavailabilityCreateOrConnectWithoutUserInput[]
+    createMany?: UnavailabilityCreateManyUserInputEnvelope
+    connect?: UnavailabilityWhereUniqueInput | UnavailabilityWhereUniqueInput[]
+  }
+
   export type TaskUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<TaskCreateWithoutUserInput, TaskUncheckedCreateWithoutUserInput> | TaskCreateWithoutUserInput[] | TaskUncheckedCreateWithoutUserInput[]
     connectOrCreate?: TaskCreateOrConnectWithoutUserInput | TaskCreateOrConnectWithoutUserInput[]
@@ -16640,11 +18043,6 @@ export namespace Prisma {
     connect?: HistoryWhereUniqueInput | HistoryWhereUniqueInput[]
   }
 
-  export type UserUpdateunavailableDatesInput = {
-    set?: string[]
-    push?: string | string[]
-  }
-
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
   }
@@ -16663,6 +18061,20 @@ export namespace Prisma {
     upsert?: DepartmentUpsertWithoutUsersInput
     connect?: DepartmentWhereUniqueInput
     update?: XOR<XOR<DepartmentUpdateToOneWithWhereWithoutUsersInput, DepartmentUpdateWithoutUsersInput>, DepartmentUncheckedUpdateWithoutUsersInput>
+  }
+
+  export type UnavailabilityUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UnavailabilityCreateWithoutUserInput, UnavailabilityUncheckedCreateWithoutUserInput> | UnavailabilityCreateWithoutUserInput[] | UnavailabilityUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UnavailabilityCreateOrConnectWithoutUserInput | UnavailabilityCreateOrConnectWithoutUserInput[]
+    upsert?: UnavailabilityUpsertWithWhereUniqueWithoutUserInput | UnavailabilityUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UnavailabilityCreateManyUserInputEnvelope
+    set?: UnavailabilityWhereUniqueInput | UnavailabilityWhereUniqueInput[]
+    disconnect?: UnavailabilityWhereUniqueInput | UnavailabilityWhereUniqueInput[]
+    delete?: UnavailabilityWhereUniqueInput | UnavailabilityWhereUniqueInput[]
+    connect?: UnavailabilityWhereUniqueInput | UnavailabilityWhereUniqueInput[]
+    update?: UnavailabilityUpdateWithWhereUniqueWithoutUserInput | UnavailabilityUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UnavailabilityUpdateManyWithWhereWithoutUserInput | UnavailabilityUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UnavailabilityScalarWhereInput | UnavailabilityScalarWhereInput[]
   }
 
   export type RoleUpdateOneWithoutUsersNestedInput = {
@@ -16751,6 +18163,20 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type UnavailabilityUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UnavailabilityCreateWithoutUserInput, UnavailabilityUncheckedCreateWithoutUserInput> | UnavailabilityCreateWithoutUserInput[] | UnavailabilityUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UnavailabilityCreateOrConnectWithoutUserInput | UnavailabilityCreateOrConnectWithoutUserInput[]
+    upsert?: UnavailabilityUpsertWithWhereUniqueWithoutUserInput | UnavailabilityUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UnavailabilityCreateManyUserInputEnvelope
+    set?: UnavailabilityWhereUniqueInput | UnavailabilityWhereUniqueInput[]
+    disconnect?: UnavailabilityWhereUniqueInput | UnavailabilityWhereUniqueInput[]
+    delete?: UnavailabilityWhereUniqueInput | UnavailabilityWhereUniqueInput[]
+    connect?: UnavailabilityWhereUniqueInput | UnavailabilityWhereUniqueInput[]
+    update?: UnavailabilityUpdateWithWhereUniqueWithoutUserInput | UnavailabilityUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UnavailabilityUpdateManyWithWhereWithoutUserInput | UnavailabilityUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UnavailabilityScalarWhereInput | UnavailabilityScalarWhereInput[]
   }
 
   export type TaskUncheckedUpdateManyWithoutUserNestedInput = {
@@ -17241,6 +18667,20 @@ export namespace Prisma {
     update?: XOR<XOR<ProjectUpdateToOneWithWhereWithoutReportsInput, ProjectUpdateWithoutReportsInput>, ProjectUncheckedUpdateWithoutReportsInput>
   }
 
+  export type UserCreateNestedOneWithoutUnavailabilityPeriodsInput = {
+    create?: XOR<UserCreateWithoutUnavailabilityPeriodsInput, UserUncheckedCreateWithoutUnavailabilityPeriodsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutUnavailabilityPeriodsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutUnavailabilityPeriodsNestedInput = {
+    create?: XOR<UserCreateWithoutUnavailabilityPeriodsInput, UserUncheckedCreateWithoutUnavailabilityPeriodsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutUnavailabilityPeriodsInput
+    upsert?: UserUpsertWithoutUnavailabilityPeriodsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutUnavailabilityPeriodsInput, UserUpdateWithoutUnavailabilityPeriodsInput>, UserUncheckedUpdateWithoutUnavailabilityPeriodsInput>
+  }
+
   export type NestedIntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -17518,11 +18958,11 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    unavailableDates?: UserCreateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     isAdmin?: boolean
     isActive?: boolean
     department: DepartmentCreateNestedOneWithoutUsersInput
+    unavailabilityPeriods?: UnavailabilityCreateNestedManyWithoutUserInput
     role?: RoleCreateNestedOneWithoutUsersInput
     tasks?: TaskCreateNestedManyWithoutUserInput
     history?: HistoryCreateNestedManyWithoutUserInput
@@ -17537,11 +18977,11 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    unavailableDates?: UserCreateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     roleId?: number | null
     isAdmin?: boolean
     isActive?: boolean
+    unavailabilityPeriods?: UnavailabilityUncheckedCreateNestedManyWithoutUserInput
     tasks?: TaskUncheckedCreateNestedManyWithoutUserInput
     history?: HistoryUncheckedCreateNestedManyWithoutUserInput
     projects?: ProjectUserUncheckedCreateNestedManyWithoutUserInput
@@ -17585,7 +19025,6 @@ export namespace Prisma {
     name?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
-    unavailableDates?: StringNullableListFilter<"User">
     workingHours?: JsonNullableFilter<"User">
     roleId?: IntNullableFilter<"User"> | number | null
     isAdmin?: BoolFilter<"User"> | boolean
@@ -17596,11 +19035,11 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    unavailableDates?: UserCreateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     isAdmin?: boolean
     isActive?: boolean
     timezone: TimeZoneCreateNestedOneWithoutUsersInput
+    unavailabilityPeriods?: UnavailabilityCreateNestedManyWithoutUserInput
     role?: RoleCreateNestedOneWithoutUsersInput
     tasks?: TaskCreateNestedManyWithoutUserInput
     history?: HistoryCreateNestedManyWithoutUserInput
@@ -17615,11 +19054,11 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    unavailableDates?: UserCreateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     roleId?: number | null
     isAdmin?: boolean
     isActive?: boolean
+    unavailabilityPeriods?: UnavailabilityUncheckedCreateNestedManyWithoutUserInput
     tasks?: TaskUncheckedCreateNestedManyWithoutUserInput
     history?: HistoryUncheckedCreateNestedManyWithoutUserInput
     projects?: ProjectUserUncheckedCreateNestedManyWithoutUserInput
@@ -17877,6 +19316,31 @@ export namespace Prisma {
     create: XOR<DepartmentCreateWithoutUsersInput, DepartmentUncheckedCreateWithoutUsersInput>
   }
 
+  export type UnavailabilityCreateWithoutUserInput = {
+    type: string
+    start: Date | string
+    end?: Date | string | null
+    active?: boolean
+  }
+
+  export type UnavailabilityUncheckedCreateWithoutUserInput = {
+    id?: number
+    type: string
+    start: Date | string
+    end?: Date | string | null
+    active?: boolean
+  }
+
+  export type UnavailabilityCreateOrConnectWithoutUserInput = {
+    where: UnavailabilityWhereUniqueInput
+    create: XOR<UnavailabilityCreateWithoutUserInput, UnavailabilityUncheckedCreateWithoutUserInput>
+  }
+
+  export type UnavailabilityCreateManyUserInputEnvelope = {
+    data: UnavailabilityCreateManyUserInput | UnavailabilityCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type RoleCreateWithoutUsersInput = {
     name: string
   }
@@ -18087,6 +19551,34 @@ export namespace Prisma {
     history?: HistoryUncheckedUpdateManyWithoutDepartmentNestedInput
     createdHistories?: HistoryUncheckedUpdateManyWithoutCreatedByDepartmentNestedInput
     Task?: TaskUncheckedUpdateManyWithoutDepartmentNestedInput
+  }
+
+  export type UnavailabilityUpsertWithWhereUniqueWithoutUserInput = {
+    where: UnavailabilityWhereUniqueInput
+    update: XOR<UnavailabilityUpdateWithoutUserInput, UnavailabilityUncheckedUpdateWithoutUserInput>
+    create: XOR<UnavailabilityCreateWithoutUserInput, UnavailabilityUncheckedCreateWithoutUserInput>
+  }
+
+  export type UnavailabilityUpdateWithWhereUniqueWithoutUserInput = {
+    where: UnavailabilityWhereUniqueInput
+    data: XOR<UnavailabilityUpdateWithoutUserInput, UnavailabilityUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UnavailabilityUpdateManyWithWhereWithoutUserInput = {
+    where: UnavailabilityScalarWhereInput
+    data: XOR<UnavailabilityUpdateManyMutationInput, UnavailabilityUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type UnavailabilityScalarWhereInput = {
+    AND?: UnavailabilityScalarWhereInput | UnavailabilityScalarWhereInput[]
+    OR?: UnavailabilityScalarWhereInput[]
+    NOT?: UnavailabilityScalarWhereInput | UnavailabilityScalarWhereInput[]
+    id?: IntFilter<"Unavailability"> | number
+    type?: StringFilter<"Unavailability"> | string
+    start?: DateTimeFilter<"Unavailability"> | Date | string
+    end?: DateTimeNullableFilter<"Unavailability"> | Date | string | null
+    active?: BoolFilter<"Unavailability"> | boolean
+    userId?: IntFilter<"Unavailability"> | number
   }
 
   export type RoleUpsertWithoutUsersInput = {
@@ -18378,12 +19870,12 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    unavailableDates?: UserCreateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     isAdmin?: boolean
     isActive?: boolean
     timezone: TimeZoneCreateNestedOneWithoutUsersInput
     department: DepartmentCreateNestedOneWithoutUsersInput
+    unavailabilityPeriods?: UnavailabilityCreateNestedManyWithoutUserInput
     role?: RoleCreateNestedOneWithoutUsersInput
     tasks?: TaskCreateNestedManyWithoutUserInput
     history?: HistoryCreateNestedManyWithoutUserInput
@@ -18398,11 +19890,11 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    unavailableDates?: UserCreateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     roleId?: number | null
     isAdmin?: boolean
     isActive?: boolean
+    unavailabilityPeriods?: UnavailabilityUncheckedCreateNestedManyWithoutUserInput
     tasks?: TaskUncheckedCreateNestedManyWithoutUserInput
     history?: HistoryUncheckedCreateNestedManyWithoutUserInput
     notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -18455,12 +19947,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    unavailableDates?: UserUpdateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     timezone?: TimeZoneUpdateOneRequiredWithoutUsersNestedInput
     department?: DepartmentUpdateOneRequiredWithoutUsersNestedInput
+    unavailabilityPeriods?: UnavailabilityUpdateManyWithoutUserNestedInput
     role?: RoleUpdateOneWithoutUsersNestedInput
     tasks?: TaskUpdateManyWithoutUserNestedInput
     history?: HistoryUpdateManyWithoutUserNestedInput
@@ -18475,11 +19967,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    unavailableDates?: UserUpdateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     roleId?: NullableIntFieldUpdateOperationsInput | number | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    unavailabilityPeriods?: UnavailabilityUncheckedUpdateManyWithoutUserNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutUserNestedInput
     history?: HistoryUncheckedUpdateManyWithoutUserNestedInput
     notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -18548,12 +20040,12 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    unavailableDates?: UserCreateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     isAdmin?: boolean
     isActive?: boolean
     timezone: TimeZoneCreateNestedOneWithoutUsersInput
     department: DepartmentCreateNestedOneWithoutUsersInput
+    unavailabilityPeriods?: UnavailabilityCreateNestedManyWithoutUserInput
     role?: RoleCreateNestedOneWithoutUsersInput
     history?: HistoryCreateNestedManyWithoutUserInput
     projects?: ProjectUserCreateNestedManyWithoutUserInput
@@ -18568,11 +20060,11 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    unavailableDates?: UserCreateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     roleId?: number | null
     isAdmin?: boolean
     isActive?: boolean
+    unavailabilityPeriods?: UnavailabilityUncheckedCreateNestedManyWithoutUserInput
     history?: HistoryUncheckedCreateNestedManyWithoutUserInput
     projects?: ProjectUserUncheckedCreateNestedManyWithoutUserInput
     notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -18682,12 +20174,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    unavailableDates?: UserUpdateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     timezone?: TimeZoneUpdateOneRequiredWithoutUsersNestedInput
     department?: DepartmentUpdateOneRequiredWithoutUsersNestedInput
+    unavailabilityPeriods?: UnavailabilityUpdateManyWithoutUserNestedInput
     role?: RoleUpdateOneWithoutUsersNestedInput
     history?: HistoryUpdateManyWithoutUserNestedInput
     projects?: ProjectUserUpdateManyWithoutUserNestedInput
@@ -18702,11 +20194,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    unavailableDates?: UserUpdateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     roleId?: NullableIntFieldUpdateOperationsInput | number | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    unavailabilityPeriods?: UnavailabilityUncheckedUpdateManyWithoutUserNestedInput
     history?: HistoryUncheckedUpdateManyWithoutUserNestedInput
     projects?: ProjectUserUncheckedUpdateManyWithoutUserNestedInput
     notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -18759,12 +20251,12 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    unavailableDates?: UserCreateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     isAdmin?: boolean
     isActive?: boolean
     timezone: TimeZoneCreateNestedOneWithoutUsersInput
     department: DepartmentCreateNestedOneWithoutUsersInput
+    unavailabilityPeriods?: UnavailabilityCreateNestedManyWithoutUserInput
     tasks?: TaskCreateNestedManyWithoutUserInput
     history?: HistoryCreateNestedManyWithoutUserInput
     projects?: ProjectUserCreateNestedManyWithoutUserInput
@@ -18779,10 +20271,10 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    unavailableDates?: UserCreateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     isAdmin?: boolean
     isActive?: boolean
+    unavailabilityPeriods?: UnavailabilityUncheckedCreateNestedManyWithoutUserInput
     tasks?: TaskUncheckedCreateNestedManyWithoutUserInput
     history?: HistoryUncheckedCreateNestedManyWithoutUserInput
     projects?: ProjectUserUncheckedCreateNestedManyWithoutUserInput
@@ -18820,12 +20312,12 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    unavailableDates?: UserCreateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     isAdmin?: boolean
     isActive?: boolean
     timezone: TimeZoneCreateNestedOneWithoutUsersInput
     department: DepartmentCreateNestedOneWithoutUsersInput
+    unavailabilityPeriods?: UnavailabilityCreateNestedManyWithoutUserInput
     role?: RoleCreateNestedOneWithoutUsersInput
     tasks?: TaskCreateNestedManyWithoutUserInput
     history?: HistoryCreateNestedManyWithoutUserInput
@@ -18840,11 +20332,11 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    unavailableDates?: UserCreateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     roleId?: number | null
     isAdmin?: boolean
     isActive?: boolean
+    unavailabilityPeriods?: UnavailabilityUncheckedCreateNestedManyWithoutUserInput
     tasks?: TaskUncheckedCreateNestedManyWithoutUserInput
     history?: HistoryUncheckedCreateNestedManyWithoutUserInput
     projects?: ProjectUserUncheckedCreateNestedManyWithoutUserInput
@@ -18871,12 +20363,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    unavailableDates?: UserUpdateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     timezone?: TimeZoneUpdateOneRequiredWithoutUsersNestedInput
     department?: DepartmentUpdateOneRequiredWithoutUsersNestedInput
+    unavailabilityPeriods?: UnavailabilityUpdateManyWithoutUserNestedInput
     role?: RoleUpdateOneWithoutUsersNestedInput
     tasks?: TaskUpdateManyWithoutUserNestedInput
     history?: HistoryUpdateManyWithoutUserNestedInput
@@ -18891,11 +20383,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    unavailableDates?: UserUpdateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     roleId?: NullableIntFieldUpdateOperationsInput | number | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    unavailabilityPeriods?: UnavailabilityUncheckedUpdateManyWithoutUserNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutUserNestedInput
     history?: HistoryUncheckedUpdateManyWithoutUserNestedInput
     projects?: ProjectUserUncheckedUpdateManyWithoutUserNestedInput
@@ -18944,12 +20436,12 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    unavailableDates?: UserCreateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     isAdmin?: boolean
     isActive?: boolean
     timezone: TimeZoneCreateNestedOneWithoutUsersInput
     department: DepartmentCreateNestedOneWithoutUsersInput
+    unavailabilityPeriods?: UnavailabilityCreateNestedManyWithoutUserInput
     role?: RoleCreateNestedOneWithoutUsersInput
     tasks?: TaskCreateNestedManyWithoutUserInput
     projects?: ProjectUserCreateNestedManyWithoutUserInput
@@ -18964,11 +20456,11 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    unavailableDates?: UserCreateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     roleId?: number | null
     isAdmin?: boolean
     isActive?: boolean
+    unavailabilityPeriods?: UnavailabilityUncheckedCreateNestedManyWithoutUserInput
     tasks?: TaskUncheckedCreateNestedManyWithoutUserInput
     projects?: ProjectUserUncheckedCreateNestedManyWithoutUserInput
     notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -19004,12 +20496,12 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    unavailableDates?: UserCreateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     isAdmin?: boolean
     isActive?: boolean
     timezone: TimeZoneCreateNestedOneWithoutUsersInput
     department: DepartmentCreateNestedOneWithoutUsersInput
+    unavailabilityPeriods?: UnavailabilityCreateNestedManyWithoutUserInput
     role?: RoleCreateNestedOneWithoutUsersInput
     tasks?: TaskCreateNestedManyWithoutUserInput
     history?: HistoryCreateNestedManyWithoutUserInput
@@ -19024,11 +20516,11 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    unavailableDates?: UserCreateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     roleId?: number | null
     isAdmin?: boolean
     isActive?: boolean
+    unavailabilityPeriods?: UnavailabilityUncheckedCreateNestedManyWithoutUserInput
     tasks?: TaskUncheckedCreateNestedManyWithoutUserInput
     history?: HistoryUncheckedCreateNestedManyWithoutUserInput
     projects?: ProjectUserUncheckedCreateNestedManyWithoutUserInput
@@ -19119,12 +20611,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    unavailableDates?: UserUpdateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     timezone?: TimeZoneUpdateOneRequiredWithoutUsersNestedInput
     department?: DepartmentUpdateOneRequiredWithoutUsersNestedInput
+    unavailabilityPeriods?: UnavailabilityUpdateManyWithoutUserNestedInput
     role?: RoleUpdateOneWithoutUsersNestedInput
     tasks?: TaskUpdateManyWithoutUserNestedInput
     projects?: ProjectUserUpdateManyWithoutUserNestedInput
@@ -19139,11 +20631,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    unavailableDates?: UserUpdateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     roleId?: NullableIntFieldUpdateOperationsInput | number | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    unavailabilityPeriods?: UnavailabilityUncheckedUpdateManyWithoutUserNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutUserNestedInput
     projects?: ProjectUserUncheckedUpdateManyWithoutUserNestedInput
     notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -19191,12 +20683,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    unavailableDates?: UserUpdateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     timezone?: TimeZoneUpdateOneRequiredWithoutUsersNestedInput
     department?: DepartmentUpdateOneRequiredWithoutUsersNestedInput
+    unavailabilityPeriods?: UnavailabilityUpdateManyWithoutUserNestedInput
     role?: RoleUpdateOneWithoutUsersNestedInput
     tasks?: TaskUpdateManyWithoutUserNestedInput
     history?: HistoryUpdateManyWithoutUserNestedInput
@@ -19211,11 +20703,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    unavailableDates?: UserUpdateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     roleId?: NullableIntFieldUpdateOperationsInput | number | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    unavailabilityPeriods?: UnavailabilityUncheckedUpdateManyWithoutUserNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutUserNestedInput
     history?: HistoryUncheckedUpdateManyWithoutUserNestedInput
     projects?: ProjectUserUncheckedUpdateManyWithoutUserNestedInput
@@ -19306,13 +20798,98 @@ export namespace Prisma {
     tasks?: TaskUncheckedUpdateManyWithoutProjectNestedInput
   }
 
+  export type UserCreateWithoutUnavailabilityPeriodsInput = {
+    name: string
+    email: string
+    password: string
+    workingHours?: NullableJsonNullValueInput | InputJsonValue
+    isAdmin?: boolean
+    isActive?: boolean
+    timezone: TimeZoneCreateNestedOneWithoutUsersInput
+    department: DepartmentCreateNestedOneWithoutUsersInput
+    role?: RoleCreateNestedOneWithoutUsersInput
+    tasks?: TaskCreateNestedManyWithoutUserInput
+    history?: HistoryCreateNestedManyWithoutUserInput
+    projects?: ProjectUserCreateNestedManyWithoutUserInput
+    notification?: NotificationCreateNestedManyWithoutUserInput
+    createdHistories?: HistoryCreateNestedManyWithoutCreatedByUserInput
+  }
+
+  export type UserUncheckedCreateWithoutUnavailabilityPeriodsInput = {
+    userId?: number
+    timezoneId: number
+    departmentId: number
+    name: string
+    email: string
+    password: string
+    workingHours?: NullableJsonNullValueInput | InputJsonValue
+    roleId?: number | null
+    isAdmin?: boolean
+    isActive?: boolean
+    tasks?: TaskUncheckedCreateNestedManyWithoutUserInput
+    history?: HistoryUncheckedCreateNestedManyWithoutUserInput
+    projects?: ProjectUserUncheckedCreateNestedManyWithoutUserInput
+    notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    createdHistories?: HistoryUncheckedCreateNestedManyWithoutCreatedByUserInput
+  }
+
+  export type UserCreateOrConnectWithoutUnavailabilityPeriodsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutUnavailabilityPeriodsInput, UserUncheckedCreateWithoutUnavailabilityPeriodsInput>
+  }
+
+  export type UserUpsertWithoutUnavailabilityPeriodsInput = {
+    update: XOR<UserUpdateWithoutUnavailabilityPeriodsInput, UserUncheckedUpdateWithoutUnavailabilityPeriodsInput>
+    create: XOR<UserCreateWithoutUnavailabilityPeriodsInput, UserUncheckedCreateWithoutUnavailabilityPeriodsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutUnavailabilityPeriodsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutUnavailabilityPeriodsInput, UserUncheckedUpdateWithoutUnavailabilityPeriodsInput>
+  }
+
+  export type UserUpdateWithoutUnavailabilityPeriodsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    workingHours?: NullableJsonNullValueInput | InputJsonValue
+    isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    timezone?: TimeZoneUpdateOneRequiredWithoutUsersNestedInput
+    department?: DepartmentUpdateOneRequiredWithoutUsersNestedInput
+    role?: RoleUpdateOneWithoutUsersNestedInput
+    tasks?: TaskUpdateManyWithoutUserNestedInput
+    history?: HistoryUpdateManyWithoutUserNestedInput
+    projects?: ProjectUserUpdateManyWithoutUserNestedInput
+    notification?: NotificationUpdateManyWithoutUserNestedInput
+    createdHistories?: HistoryUpdateManyWithoutCreatedByUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutUnavailabilityPeriodsInput = {
+    userId?: IntFieldUpdateOperationsInput | number
+    timezoneId?: IntFieldUpdateOperationsInput | number
+    departmentId?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    workingHours?: NullableJsonNullValueInput | InputJsonValue
+    roleId?: NullableIntFieldUpdateOperationsInput | number | null
+    isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    tasks?: TaskUncheckedUpdateManyWithoutUserNestedInput
+    history?: HistoryUncheckedUpdateManyWithoutUserNestedInput
+    projects?: ProjectUserUncheckedUpdateManyWithoutUserNestedInput
+    notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    createdHistories?: HistoryUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  }
+
   export type UserCreateManyTimezoneInput = {
     userId?: number
     departmentId: number
     name: string
     email: string
     password: string
-    unavailableDates?: UserCreateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     roleId?: number | null
     isAdmin?: boolean
@@ -19323,11 +20900,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    unavailableDates?: UserUpdateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     department?: DepartmentUpdateOneRequiredWithoutUsersNestedInput
+    unavailabilityPeriods?: UnavailabilityUpdateManyWithoutUserNestedInput
     role?: RoleUpdateOneWithoutUsersNestedInput
     tasks?: TaskUpdateManyWithoutUserNestedInput
     history?: HistoryUpdateManyWithoutUserNestedInput
@@ -19342,11 +20919,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    unavailableDates?: UserUpdateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     roleId?: NullableIntFieldUpdateOperationsInput | number | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    unavailabilityPeriods?: UnavailabilityUncheckedUpdateManyWithoutUserNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutUserNestedInput
     history?: HistoryUncheckedUpdateManyWithoutUserNestedInput
     projects?: ProjectUserUncheckedUpdateManyWithoutUserNestedInput
@@ -19360,7 +20937,6 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    unavailableDates?: UserUpdateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     roleId?: NullableIntFieldUpdateOperationsInput | number | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
@@ -19373,7 +20949,6 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    unavailableDates?: UserCreateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     roleId?: number | null
     isAdmin?: boolean
@@ -19422,11 +20997,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    unavailableDates?: UserUpdateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     timezone?: TimeZoneUpdateOneRequiredWithoutUsersNestedInput
+    unavailabilityPeriods?: UnavailabilityUpdateManyWithoutUserNestedInput
     role?: RoleUpdateOneWithoutUsersNestedInput
     tasks?: TaskUpdateManyWithoutUserNestedInput
     history?: HistoryUpdateManyWithoutUserNestedInput
@@ -19441,11 +21016,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    unavailableDates?: UserUpdateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     roleId?: NullableIntFieldUpdateOperationsInput | number | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    unavailabilityPeriods?: UnavailabilityUncheckedUpdateManyWithoutUserNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutUserNestedInput
     history?: HistoryUncheckedUpdateManyWithoutUserNestedInput
     projects?: ProjectUserUncheckedUpdateManyWithoutUserNestedInput
@@ -19459,7 +21034,6 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    unavailableDates?: UserUpdateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     roleId?: NullableIntFieldUpdateOperationsInput | number | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
@@ -19579,6 +21153,14 @@ export namespace Prisma {
     order?: IntFieldUpdateOperationsInput | number
   }
 
+  export type UnavailabilityCreateManyUserInput = {
+    id?: number
+    type: string
+    start: Date | string
+    end?: Date | string | null
+    active?: boolean
+  }
+
   export type TaskCreateManyUserInput = {
     taskId?: number
     projectId: number
@@ -19628,6 +21210,29 @@ export namespace Prisma {
     createdAt?: Date | string
     createdByDepartmentId?: number | null
     hoursSpent?: number | null
+  }
+
+  export type UnavailabilityUpdateWithoutUserInput = {
+    type?: StringFieldUpdateOperationsInput | string
+    start?: DateTimeFieldUpdateOperationsInput | Date | string
+    end?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type UnavailabilityUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
+    start?: DateTimeFieldUpdateOperationsInput | Date | string
+    end?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type UnavailabilityUncheckedUpdateManyWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
+    start?: DateTimeFieldUpdateOperationsInput | Date | string
+    end?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type TaskUpdateWithoutUserInput = {
@@ -19967,7 +21572,6 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    unavailableDates?: UserCreateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     isAdmin?: boolean
     isActive?: boolean
@@ -19977,12 +21581,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    unavailableDates?: UserUpdateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     timezone?: TimeZoneUpdateOneRequiredWithoutUsersNestedInput
     department?: DepartmentUpdateOneRequiredWithoutUsersNestedInput
+    unavailabilityPeriods?: UnavailabilityUpdateManyWithoutUserNestedInput
     tasks?: TaskUpdateManyWithoutUserNestedInput
     history?: HistoryUpdateManyWithoutUserNestedInput
     projects?: ProjectUserUpdateManyWithoutUserNestedInput
@@ -19997,10 +21601,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    unavailableDates?: UserUpdateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    unavailabilityPeriods?: UnavailabilityUncheckedUpdateManyWithoutUserNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutUserNestedInput
     history?: HistoryUncheckedUpdateManyWithoutUserNestedInput
     projects?: ProjectUserUncheckedUpdateManyWithoutUserNestedInput
@@ -20015,7 +21619,6 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    unavailableDates?: UserUpdateunavailableDatesInput | string[]
     workingHours?: NullableJsonNullValueInput | InputJsonValue
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean

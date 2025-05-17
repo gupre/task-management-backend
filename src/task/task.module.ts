@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common'
+import { forwardRef, Module } from '@nestjs/common'
 import { HistoryService } from 'src/history/history.service'
 import { PrismaService } from 'src/prisma.service'
 // import { ReportTaskService } from 'src/report-task/report-task.service'
@@ -8,7 +8,7 @@ import { TaskController } from './task.controller'
 import { TaskService } from './task.service'
 
 @Module({
-  imports: [UserModule, NotificationModule],
+  imports: [forwardRef(() => UserModule), NotificationModule],
   controllers: [TaskController],
   providers: [
     TaskService,

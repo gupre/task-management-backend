@@ -40,11 +40,11 @@ model User {
   departmentId Int        @map("department_id")
   department   Department @relation(fields: [departmentId], references: [departmentId])
 
-  name             String
-  email            String   @unique
-  password         String
-  unavailableDates String[] @default([])
-  workingHours     Json?
+  name                  String
+  email                 String           @unique
+  password              String
+  unavailabilityPeriods Unavailability[]
+  workingHours          Json?
 
   roleId Int?
   role   Role? @relation(fields: [roleId], references: [roleId])
@@ -143,6 +143,8 @@ model Notification {
   subject   String
   createdAt DateTime @default(now())
   isRead    Boolean  @default(false)
+
+  @@map("notification")
 }
 
 model History {
@@ -197,6 +199,19 @@ model ReportProject {
   // reports ReportTask[]
 
   @@map("report_project")
+}
+
+model Unavailability {
+  id     Int       @id @default(autoincrement())
+  type   String
+  start  DateTime
+  end    DateTime?
+  active Boolean   @default(true)
+
+  userId Int
+  user   User @relation(fields: [userId], references: [userId])
+
+  @@map("unavailability")
 }
 
 enum Status {

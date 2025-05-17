@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException
+} from '@nestjs/common'
 import { Cron, CronExpression } from '@nestjs/schedule'
 import { Prisma, Status } from 'prisma/generated/client'
 import { HistoryService } from 'src/history/history.service'
@@ -6,6 +11,7 @@ import { PrismaService } from 'src/prisma.service'
 // import { ReportTaskService } from 'src/report-task/report-task.service'
 import axios from 'axios'
 import { eachWeekOfInterval, formatISO, startOfISOWeek } from 'date-fns'
+import { DateTime, Interval } from 'luxon'
 import { NotificationService } from 'src/notification/notification.service'
 import { UserService } from 'src/user/user.service'
 
@@ -24,12 +30,120 @@ const priorityMap: { [key: string]: string } = {
   low: 'Низкий'
 }
 
+function parseTimeString(
+  timeStr: string | undefined,
+  defaultHour: number,
+  defaultMinute: number
+) {
+  if (!timeStr || !timeStr.includes(':')) {
+    return { hour: defaultHour, minute: defaultMinute }
+  }
+
+  const [hourStr, minuteStr] = timeStr.split(':')
+  const hour = Number(hourStr)
+  const minute = Number(minuteStr)
+
+  return {
+    hour: isNaN(hour) ? defaultHour : hour,
+    minute: isNaN(minute) ? defaultMinute : minute
+  }
+}
+
+function calculateAvailableWorkingHours({
+  workingHours,
+  timezone,
+  unavailabilityPeriods,
+  now,
+  dueDate
+}: {
+  workingHours: { start: string; end: string }
+  timezone: string
+  unavailabilityPeriods: { start: Date; end?: Date }[]
+  now: Date
+  dueDate: Date
+}): number {
+  let totalAvailableHours = 0
+
+  const nowDateTime = DateTime.fromJSDate(now).setZone(timezone)
+  const dueDateTime = DateTime.fromJSDate(dueDate).setZone(timezone)
+
+  let currentDay = nowDateTime.startOf('day')
+
+  while (currentDay <= dueDateTime.startOf('day')) {
+    const { hour: startHour, minute: startMinute } = parseTimeString(
+      workingHours?.start,
+      8,
+      0
+    )
+    const { hour: endHour, minute: endMinute } = parseTimeString(
+      workingHours?.end,
+      16,
+      0
+    )
+
+    const dayStart = currentDay.set({ hour: startHour, minute: startMinute })
+    const dayEnd = currentDay.set({ hour: endHour, minute: endMinute })
+
+    // Пропуск, если конец рабочего дня уже прошёл
+    if (dayEnd < nowDateTime && currentDay.hasSame(nowDateTime, 'day')) {
+      currentDay = currentDay.plus({ days: 1 })
+      continue
+    }
+
+    // Рабочий интервал дня
+    const workInterval = Interval.fromDateTimes(dayStart, dayEnd)
+
+    // Ограничиваем интервал текущим временем и дедлайном
+    const clampedInterval = workInterval.intersection(
+      Interval.fromDateTimes(nowDateTime, dueDateTime)
+    )
+
+    if (!clampedInterval) {
+      currentDay = currentDay.plus({ days: 1 })
+      continue
+    }
+
+    // Вычитаем часы недоступности
+    let availableInterval = clampedInterval
+
+    for (const period of unavailabilityPeriods) {
+      const unavailableStart = DateTime.fromJSDate(period.start).setZone(
+        timezone
+      )
+      const unavailableEnd = period.end
+        ? DateTime.fromJSDate(period.end).setZone(timezone)
+        : dueDateTime
+
+      const unavailabilityInterval = Interval.fromDateTimes(
+        unavailableStart,
+        unavailableEnd
+      )
+      const overlap = availableInterval.intersection(unavailabilityInterval)
+
+      if (overlap) {
+        // "Вырезаем" перекрытие
+        availableInterval = availableInterval.difference(overlap)[0] || null
+        if (!availableInterval) break
+      }
+    }
+
+    if (availableInterval) {
+      totalAvailableHours += availableInterval.length('hours')
+    }
+
+    currentDay = currentDay.plus({ days: 1 })
+  }
+
+  return totalAvailableHours
+}
+
 @Injectable()
 export class TaskService {
   constructor(
     private prisma: PrismaService,
     private historyService: HistoryService,
     // private reportTaskService: ReportTaskService,
+    @Inject(forwardRef(() => UserService))
     private userService: UserService,
     private notificationService: NotificationService
   ) {}
@@ -50,6 +164,7 @@ export class TaskService {
       tasks,
       employees
     })
+    const warnings = response.data.warnings || []
     console.log('Ответ от Python API:', response.data)
 
     for (const updatedTask of response.data.assigned_tasks) {
@@ -85,6 +200,26 @@ export class TaskService {
             user.userId,
             `${oldTask ? 'Перераспределена задача' : 'Назначена новая задача'}: ${fullTask.name}`,
             `Вам ${oldTask ? 'переназначена' : 'назначена'} задача "${fullTask.name}". Срок выполнения: ${formattedDate}`,
+            'web'
+          )
+        }
+      }
+    }
+
+    // Отправка уведомлений о перегрузке
+    if (warnings.length > 0) {
+      for (const warning of warnings) {
+        // Отправляем уведомление о перегрузке
+        const [userId, taskId] = warning.match(/\d+/g) || []
+        const user = await this.prisma.user.findUnique({
+          where: { userId: Number(userId) }
+        })
+
+        if (user) {
+          await this.notificationService.notifyUser(
+            createUser.userId,
+            'Предупреждение о перегрузке',
+            `Сотрудник ${user.name} может быть перегружен на задаче с ID ${tasks.name}. Обратите внимание.`,
             'web'
           )
         }
@@ -133,7 +268,8 @@ export class TaskService {
             history: true
           }
         },
-        timezone: true
+        timezone: true,
+        unavailabilityPeriods: true
       }
     })
 
@@ -144,7 +280,20 @@ export class TaskService {
         start: string
         end: string
       }) || { start: '08:00', end: '16:00' }
-      const unavailableDates = user.unavailableDates || []
+
+      const unavailableDates: string[] = (
+        user.unavailabilityPeriods || []
+      ).flatMap(period => {
+        const start = new Date(period.start)
+        const end = new Date(period.end)
+        const dates: string[] = []
+
+        for (let d = start; d <= end; d.setDate(d.getDate() + 1)) {
+          dates.push(formatISO(new Date(d), { representation: 'date' }))
+        }
+
+        return dates
+      })
 
       const assigned_hours_by_week: Record<string, number> = {}
 
@@ -287,6 +436,142 @@ export class TaskService {
     return task
   }
 
+  async reassignTasksForUnavailableUser(userId: number, createId: number) {
+    const user = await this.prisma.user.findUnique({
+      where: { userId },
+      include: {
+        unavailabilityPeriods: true,
+        timezone: true,
+        tasks: {
+          where: {
+            status: {
+              in: ['planned', 'progress']
+            }
+          }
+        }
+      }
+    })
+
+    const createUser = await this.prisma.user.findUnique({
+      where: { userId },
+      include: {
+        unavailabilityPeriods: true,
+        timezone: true,
+        tasks: {
+          where: {
+            status: {
+              in: ['planned', 'progress']
+            }
+          }
+        }
+      }
+    })
+    const workingHours = user.workingHours as {
+      start: string
+      end: string
+    } | null
+    const unavailable = user.unavailabilityPeriods.filter(p => p.active)
+
+    const affectedTasks = []
+
+    for (const task of user.tasks) {
+      const taskStart = new Date(task.assignmentDate)
+      const taskEnd = new Date(task.dueDate)
+      const estimateHours = task.estimatedHours ?? 0
+      const remainingTime = estimateHours - (task.hoursSpent ?? 0)
+
+      const overlaps = unavailable.some(period => {
+        const periodStart = new Date(period.start)
+        const periodEnd = period.end ? new Date(period.end) : null
+
+        return (
+          (!periodEnd || taskEnd >= periodStart) &&
+          (!periodEnd || taskStart <= periodEnd)
+        )
+      })
+
+      console.log('overlaps', overlaps)
+      if (!overlaps) continue
+
+      // 1. Если не начата — снять исполнителя и перераспределить
+      if (task.status === 'planned') {
+        await this.prisma.task.update({
+          where: { taskId: task.taskId },
+          data: { userId: null }
+        })
+        affectedTasks.push(task)
+      }
+
+      // 2. Если в процессе — приостановить и перераспределить (если estimate > осталось времени)
+      if (task.status === 'progress') {
+        const taskDue = new Date(task.dueDate)
+        const nowTime = new Date()
+
+        const availableHoursLeft = calculateAvailableWorkingHours({
+          workingHours: user.workingHours as { start: string; end: string },
+          timezone: user.timezone.name,
+          unavailabilityPeriods: user.unavailabilityPeriods,
+          now: nowTime,
+          dueDate: taskDue
+        })
+
+        console.log('availableHoursLeft', availableHoursLeft)
+        console.log('remainingTime', remainingTime)
+
+        if (remainingTime > availableHoursLeft) {
+          await this.prisma.task.update({
+            where: { taskId: task.taskId },
+            data: { userId: null, status: 'planned' }
+          })
+          affectedTasks.push(task)
+
+          await this.notificationService.notifyUser(
+            task.userId,
+            `Задача "${task.name}" приостановлена`,
+            `Задача пересекается с недоступностью и будет перераспределена.`,
+            'web'
+          )
+        }
+      }
+    }
+    console.log('affectedTasks', affectedTasks)
+    // теперь перераспределение
+    if (affectedTasks.length) {
+      const departmentId = user.departmentId
+
+      const employees = await this.getEmployeesWorkload(
+        departmentId,
+        new Date()
+      )
+      const fullTasks = await this.prisma.task.findMany({
+        where: { taskId: { in: affectedTasks.map(t => t.taskId) } }
+      })
+
+      const tasksForPython = affectedTasks.map(task => ({
+        id: task.taskId,
+        deadline: task.dueDate.toISOString(),
+        priority: task.priority,
+        estimated_hours: task.estimatedHours ?? task.hoursSpent ?? 0,
+        started: ['progress', 'end'].includes(task.status),
+        department_id: task.departmentId
+      }))
+
+      const tasksForNotify = affectedTasks.map(task => ({
+        ...tasksForPython.find(t => t.id === task.taskId),
+        name: task.name,
+        dueDate: task.dueDate
+      }))
+
+      await this.distributeTasks(
+        tasksForPython,
+        employees,
+        createUser,
+        true,
+        tasksForNotify
+      )
+    }
+  }
+
   async update(taskId, updateTaskDto, createUser) {
     const oldTask = await this.getById(taskId)
     if (!oldTask) throw new NotFoundException('Задача не найдена')
@@ -332,21 +617,24 @@ export class TaskService {
         taskData.dueDate ? taskData.dueDate : oldTask.dueDate
       )
 
-      await this.distributeTasks(
-        [
-          {
-            id: taskId,
-            deadline: oldTask.dueDate,
-            priority: priority ?? oldTask.priority,
-            estimated_hours: oldTask.estimatedHours ?? oldTask.hoursSpent ?? 0,
-            started: ['progress', 'end'].includes(oldTask.status),
-            department_id: departmentId
-          }
-        ],
-        employees,
-        createUser,
-        oldTask
-      )
+      if (!userId) {
+        await this.distributeTasks(
+          [
+            {
+              id: taskId,
+              deadline: oldTask.dueDate,
+              priority: priority ?? oldTask.priority,
+              estimated_hours:
+                oldTask.estimatedHours ?? oldTask.hoursSpent ?? 0,
+              started: ['progress', 'end'].includes(oldTask.status),
+              department_id: departmentId
+            }
+          ],
+          employees,
+          createUser,
+          oldTask
+        )
+      }
     }
 
     const updatedTask = await this.prisma.task.update({
@@ -356,6 +644,7 @@ export class TaskService {
         hoursSpent: hoursSpent ?? oldTask.hoursSpent,
         status: status ?? oldTask.status,
         priority: priority ?? oldTask.priority,
+        dueDate: dueDate ?? oldTask.dueDate,
         user: userId ? { connect: { userId } } : undefined,
         department: departmentId ? { connect: { departmentId } } : undefined,
         project: projectId ? { connect: { projectId } } : undefined,

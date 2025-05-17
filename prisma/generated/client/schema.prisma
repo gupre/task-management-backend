@@ -40,11 +40,11 @@ model User {
   departmentId Int        @map("department_id")
   department   Department @relation(fields: [departmentId], references: [departmentId])
 
-  name             String
-  email            String   @unique
-  password         String
-  unavailableDates String[] @default([])
-  workingHours     Json?
+  name                  String
+  email                 String           @unique
+  password              String
+  unavailabilityPeriods Unavailability[]
+  workingHours          Json?
 
   roleId Int?
   role   Role? @relation(fields: [roleId], references: [roleId])
@@ -52,7 +52,8 @@ model User {
   tasks            Task[]
   history          History[]
   projects         ProjectUser[]
-  createdHistories History[]     @relation("CreatedByUser")
+  notification     Notification[]
+  createdHistories History[]      @relation("CreatedByUser")
 
   isAdmin  Boolean @default(false)
   isActive Boolean @default(false)
@@ -133,25 +134,16 @@ model Role {
   @@map("role")
 }
 
-// model RolePermissions {
-//   roleId Int
-//   role   Role @relation(fields: [roleId], references: [roleId], onDelete: Cascade)
-
-//   permissionsId Int
-//   permission    Permissions @relation(fields: [permissionsId], references: [permissionsId], onDelete: Cascade)
-
-//   @@id([roleId, permissionsId]) // Композитный ключ
-//   @@map("role_permissions")
-// }
-
-// model Permissions {
-//   permissionsId Int    @id @default(autoincrement()) @map("permissions_id")
-//   name          String @unique
-
-//   roles RolePermissions[]
-
-//   @@map("permissions")
-// }
+model Notification {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [userId])
+  userId    Int
+  type      String
+  message   String
+  subject   String
+  createdAt DateTime @default(now())
+  isRead    Boolean  @default(false)
+}
 
 model History {
   historyId Int @id @default(autoincrement()) @map("history_id")
@@ -183,25 +175,6 @@ model History {
   @@map("history")
 }
 
-// model ReportTask {
-//   reportId Int @id @default(autoincrement()) @map("report_id")
-
-//   title String?
-//   type  String?
-
-//   taskId Int  @map("task_id")
-//   task   Task @relation(fields: [taskId], references: [taskId], onDelete: Cascade)
-
-//   reportProjectId Int           @map("report_project_id")
-//   reportProject   ReportProject @relation(fields: [reportProjectId], references: [reportId])
-
-//   generatedDate       DateTime @default(now()) @map("generated_date")
-//   content             String?
-//   performanceAnalysis String?  @map("performance_analysis")
-
-//   @@map("report_task")
-// }
-
 model ReportProject {
   reportId Int @id @default(autoincrement()) @map("report_id")
 
@@ -226,6 +199,17 @@ model ReportProject {
   @@map("report_project")
 }
 
+model Unavailability {
+  id     Int       @id @default(autoincrement())
+  type   String
+  start  DateTime
+  end    DateTime?
+  active Boolean   @default(true)
+
+  userId Int
+  user   User @relation(fields: [userId], references: [userId])
+}
+
 enum Status {
   planned
   progress
@@ -238,3 +222,42 @@ enum Priority {
   normal
   low
 }
+
+// model RolePermissions {
+//   roleId Int
+//   role   Role @relation(fields: [roleId], references: [roleId], onDelete: Cascade)
+
+//   permissionsId Int
+//   permission    Permissions @relation(fields: [permissionsId], references: [permissionsId], onDelete: Cascade)
+
+//   @@id([roleId, permissionsId]) // Композитный ключ
+//   @@map("role_permissions")
+// }
+
+// model Permissions {
+//   permissionsId Int    @id @default(autoincrement()) @map("permissions_id")
+//   name          String @unique
+
+//   roles RolePermissions[]
+
+//   @@map("permissions")
+// }
+
+// model ReportTask {
+//   reportId Int @id @default(autoincrement()) @map("report_id")
+
+//   title String?
+//   type  String?
+
+//   taskId Int  @map("task_id")
+//   task   Task @relation(fields: [taskId], references: [taskId], onDelete: Cascade)
+
+//   reportProjectId Int           @map("report_project_id")
+//   reportProject   ReportProject @relation(fields: [reportProjectId], references: [reportId])
+
+//   generatedDate       DateTime @default(now()) @map("generated_date")
+//   content             String?
+//   performanceAnalysis String?  @map("performance_analysis")
+
+//   @@map("report_task")
+// }

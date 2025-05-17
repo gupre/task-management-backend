@@ -135,7 +135,6 @@ exports.Prisma.UserScalarFieldEnum = {
   name: 'name',
   email: 'email',
   password: 'password',
-  unavailableDates: 'unavailableDates',
   workingHours: 'workingHours',
   roleId: 'roleId',
   isAdmin: 'isAdmin',
@@ -215,6 +214,15 @@ exports.Prisma.ReportProjectScalarFieldEnum = {
   totalTasks: 'totalTasks'
 };
 
+exports.Prisma.UnavailabilityScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  start: 'start',
+  end: 'end',
+  active: 'active',
+  userId: 'userId'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -263,7 +271,8 @@ exports.Prisma.ModelName = {
   Role: 'Role',
   Notification: 'Notification',
   History: 'History',
-  ReportProject: 'ReportProject'
+  ReportProject: 'ReportProject',
+  Unavailability: 'Unavailability'
 };
 
 /**

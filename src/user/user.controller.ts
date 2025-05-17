@@ -96,12 +96,13 @@ export class UserController {
 
   @Auth()
   @Roles('admin')
-  @Patch(':id/activate')
+  @Patch(':id/activate/')
   async changeActivateUser(
     @Param('id') id: number,
+    @CurrentUser('userId', ParseIntPipe) adminId: number,
     @Query('status') status: boolean
   ) {
-    return this.userService.activateUser(+id, status)
+    return this.userService.activateUser(+id, +adminId, status)
   }
 
   @Auth()
@@ -111,7 +112,7 @@ export class UserController {
     @Param('id', ParseIntPipe) userId: number,
     @Param('departmentId', ParseIntPipe) departmentId: number
   ) {
-    return this.userService.assignDepartment(userId, departmentId)
+    return this.userService.assignDepartment(+userId, departmentId)
   }
 
   @Auth()
@@ -121,6 +122,17 @@ export class UserController {
     @Param('id', ParseIntPipe) userId: number,
     @Param('roleId', ParseIntPipe) roleId: number
   ) {
-    return this.userService.changeUserRole(userId, roleId)
+    return this.userService.changeUserRole(+userId, roleId)
+  }
+
+  @Auth()
+  @Roles('admin')
+  @Patch(':id/admin-update/')
+  async updateUserByAdmin(
+    @Param('id', ParseIntPipe) updateUserId: number,
+    @CurrentUser('userId', ParseIntPipe) adminId: number,
+    @Body() dto: UserDto
+  ) {
+    return this.userService.updateUserByAdmin(+updateUserId, +adminId, dto)
   }
 }

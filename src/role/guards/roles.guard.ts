@@ -7,7 +7,7 @@ export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
-    console.log('RolesGuard called')
+    // console.log('RolesGuard called')
 
     const requiredRoles = this.reflector.get<string[]>(
       ROLES_KEY,
@@ -17,8 +17,8 @@ export class RolesGuard implements CanActivate {
 
     const { user } = context.switchToHttp().getRequest()
 
-    console.log(user)
-    console.log(user.roleId)
+    // console.log(user)
+    // console.log(user.roleId)
 
     const roleIds = {
       admin: 1

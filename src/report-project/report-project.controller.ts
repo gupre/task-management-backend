@@ -61,7 +61,7 @@ export class ReportProjectController {
   @Auth()
   @Get('project/:projectId/tasks-for-gantt')
   async getTasksForGantt(@Param('projectId', ParseIntPipe) projectId: number) {
-    console.log('Received request for projectId:', projectId)
+    // console.log('Received request for projectId:', projectId)
     return this.reportProjectService.getTasksForGantt(+projectId)
   }
 

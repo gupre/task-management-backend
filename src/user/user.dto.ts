@@ -1,13 +1,17 @@
+import { Type } from 'class-transformer'
 import {
   IsArray,
   IsBoolean,
+  IsDateString,
   IsEmail,
+  IsEnum,
   IsInt,
   IsObject,
   IsOptional,
   IsString,
   Matches,
-  MinLength
+  MinLength,
+  ValidateNested
 } from 'class-validator'
 
 export class UserDto {
@@ -63,17 +67,23 @@ export class UserDto {
   @IsBoolean()
   isAdmin?: boolean
 
+  // @IsOptional()
+  // @IsArray()
+  // @IsString({ each: true })
+  // unavailableDates?: string[]
+
   @IsOptional()
   @IsArray()
-  @IsString({ each: true })
-  unavailableDates?: string[] // Добавлено для отпуска
+  @ValidateNested({ each: true })
+  @Type(() => UnavailabilityPeriodDto)
+  unavailabilityPeriods?: UnavailabilityPeriodDto[]
 
   @IsOptional()
   @IsObject()
   workingHours?: {
     start: string
     end: string
-  } // Добавлено для индивидуального графика
+  }
 }
 
 export class CheckPasswordDto {
@@ -89,4 +99,22 @@ export class CheckPasswordDto {
     message: 'Пароль должен содержать хотя бы один специальный символ'
   })
   password: string
+}
+
+export class UnavailabilityPeriodDto {
+  @IsEnum(['vacation', 'sick', 'urgent'], {
+    message: 'Тип недоступности должен быть vacation, sick или urgent'
+  })
+  type: 'vacation' | 'sick' | 'urgent'
+
+  @IsDateString()
+  start: string
+
+  @IsOptional()
+  @IsDateString()
+  end?: string
+
+  @IsOptional()
+  @IsBoolean()
+  active?: boolean // true если период ещё активен
 }

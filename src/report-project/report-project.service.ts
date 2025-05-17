@@ -255,7 +255,7 @@ export class ReportProjectService {
       where: { projectId: Number(projectId) }
     })
 
-    console.log('Fetched tasks for Gantt:', tasks)
+    // console.log('Fetched tasks for Gantt:', tasks)
 
     return tasks.map(task => ({
       id: String(task.taskId),
